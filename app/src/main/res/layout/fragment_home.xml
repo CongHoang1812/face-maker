@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home (Figma 3:438) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_tavern" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay_20" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageButton
+            android:id="@+id/btn_settings"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_settings"
+            android:src="@drawable/ic_settings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/content_top"
+            android:gravity="center"
+            android:text="@string/app_title"
+            android:textAppearance="@style/Text.Logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_maker"
+            style="@style/Widget.FaceMaker.HomeCard"
+            android:layout_marginEnd="@dimen/home_card_half_gap"
+            app:layout_constraintEnd_toStartOf="@id/guide_center"
+            android:layout_marginTop="@dimen/home_cards_top"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_home_maker_bg" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_home_maker" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_home_card_fade_maker" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="@dimen/home_card_label_bottom"
+                android:text="@string/home_maker"
+                android:textAppearance="@style/Text.HomeCard" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_cosplay"
+            style="@style/Widget.FaceMaker.HomeCard"
+            android:layout_marginStart="@dimen/home_card_half_gap"
+            app:layout_constraintStart_toEndOf="@id/guide_center"
+            android:layout_marginTop="@dimen/home_cards_top"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_home_cosplay" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_home_card_fade_cosplay" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="@dimen/home_card_label_bottom"
+                android:text="@string/home_cosplay"
+                android:textAppearance="@style/Text.HomeCard" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_lucky"
+            style="@style/Widget.FaceMaker.HomeCard"
+            android:layout_marginEnd="@dimen/home_card_half_gap"
+            app:layout_constraintEnd_toStartOf="@id/guide_center"
+            android:layout_marginTop="@dimen/home_card_gap"
+            app:layout_constraintTop_toBottomOf="@id/card_maker">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_home_lucky" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_home_card_fade_lucky" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="@dimen/home_card_label_bottom"
+                android:text="@string/home_lucky_roll"
+                android:textAppearance="@style/Text.HomeCard" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_creation"
+            style="@style/Widget.FaceMaker.HomeCard"
+            android:layout_marginStart="@dimen/home_card_half_gap"
+            app:layout_constraintStart_toEndOf="@id/guide_center"
+            android:layout_marginTop="@dimen/home_card_gap"
+            app:layout_constraintTop_toBottomOf="@id/card_cosplay">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_home_creation" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_home_card_fade_creation" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="@dimen/home_card_label_bottom"
+                android:text="@string/my_creation"
+                android:textAppearance="@style/Text.HomeCard" />
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

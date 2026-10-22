@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rate us (Figma 69:339): emoji + tiêu đề + mô tả + 5 sao + Rate / Exit -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/rate_dialog_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rate_dialog"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingVertical="@dimen/dialog_padding"
+    tools:ignore="Overdraw">
+
+    <ImageView
+        android:id="@+id/iv_emoji"
+        android:layout_width="@dimen/rate_emoji"
+        android:layout_height="@dimen/rate_emoji"
+        android:importantForAccessibility="no"
+        android:src="@drawable/img_rate_0" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dialog_padding"
+        android:gravity="center"
+        android:textAppearance="@style/Text.Rate.Title"
+        tools:text="@string/rate_title_default" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/rate_title_gap"
+        android:gravity="center"
+        android:textAppearance="@style/Text.Rate.Message"
+        tools:text="@string/rate_message_default" />
+
+    <LinearLayout
+        android:id="@+id/stars"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/rate_star"
+        android:layout_marginTop="@dimen/dialog_padding"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:id="@+id/btn_rate"
+        android:layout_width="@dimen/rate_button_w"
+        android:layout_height="@dimen/rate_button_h"
+        android:layout_marginTop="@dimen/rate_buttons_gap"
+        android:background="@drawable/bg_rate_button"
+        android:gravity="center"
+        android:text="@string/rate"
+        android:textAppearance="@style/Text.Rate.Button"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/btn_exit"
+        android:layout_width="@dimen/rate_button_w"
+        android:layout_height="@dimen/rate_button_h"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/exit"
+        android:textAppearance="@style/Text.Rate.Button"
+        android:textColor="@color/brown_primary" />
+</LinearLayout>

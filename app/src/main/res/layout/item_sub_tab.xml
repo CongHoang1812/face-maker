@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tab con editor: WoodButton 124 (lõi 116); chọn = cam, không chọn = xám -->
+<com.conght.facemakerapp.core.widget.WoodButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/wood_button_height"
+    android:textAppearance="@style/Text.TabSmall"
+    app:buttonWidth="@dimen/wood_button_tab_width"
+    tools:text="@string/tab_pack" />

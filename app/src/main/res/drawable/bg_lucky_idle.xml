@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Khung Idle Lucky roll (Figma 3:12): nền xám, viền xanh 1dp, bo 4 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/lucky_frame_bg" />
+    <stroke android:width="@dimen/stroke_thin" android:color="@color/lucky_frame_stroke" />
+    <corners android:radius="@dimen/radius_small" />
+</shape>

@@ -1,0 +1,124 @@
+<resources>
+    <string name="app_name">D&amp;D Character Maker</string>
+    <string name="app_title">D&amp;D Character\nMaker</string>
+
+    <string name="next">Próximo</string>
+    <string name="continue_text">Continuar</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="cancel">Cancelar</string>
+    <string name="done">Concluir</string>
+    <string name="exit">Sair</string>
+    <string name="edit">Editar</string>
+    <string name="download">Baixar</string>
+    <string name="random">Aleatório</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="loading">Carregando…</string>
+    <string name="saving">Salvando…</string>
+    <string name="saved">Salvo</string>
+    <string name="save_failed">Falha ao salvar</string>
+    <string name="coming_soon">Em breve</string>
+    <string name="error_generic">Algo deu errado. Tente novamente.</string>
+    <string name="error_no_internet">Sem conexão com a internet</string>
+
+    <string name="splash_ads_notice">Esta ação pode conter anúncios</string>
+    <string name="intro_1">Crie seu próprio avatar\ndo jeito que quiser</string>
+    <string name="intro_2">Desbloqueie seu visual\nestiloso e elegante</string>
+    <string name="intro_3">Expresse-se\npor meio do estilo</string>
+    <string name="permission">Permissões</string>
+    <string name="permission_media">Fotos</string>
+    <string name="permission_notification">Notificações</string>
+
+    <string name="language">Idioma</string>
+
+    <string name="home_maker">Criador D&amp;D</string>
+    <string name="home_cosplay">Cosplay D&amp;D</string>
+    <string name="home_lucky_roll">Rolagem D&amp;D</string>
+    <string name="my_creation">Minhas criações</string>
+    <string name="rate_us">Avalie-nos</string>
+    <string name="share_app">Compartilhar app</string>
+    <string name="privacy_policy">Privacidade e política</string>
+    <string name="share_app_message">Crie seu próprio personagem de D&amp;D com %1$s: %2$s</string>
+
+    <string name="tab_color">Cor</string>
+    <string name="tab_image">Imagem</string>
+    <string name="tab_pack">Pacote</string>
+    <string name="tab_pack_number">Pacote %1$d</string>
+    <string name="text_hint">Olá</string>
+
+    <string name="cosplay">Cosplay</string>
+    <string name="instruction">Instruções</string>
+    <string name="instruction_content">Os jogadores recebem uma imagem de referência aleatória e devem recriar o personagem escolhendo penteados, roupas, cores e acessórios correspondentes. Cada escolha correta aumenta a pontuação percentual: quanto mais o personagem se parecer com a imagem, maior será a pontuação final.</string>
+
+    <string name="lucky_roll_hint">Toque no botão aleatório abaixo para ver\ncomo é o seu personagem!</string>
+
+    <string name="character">Personagem</string>
+    <string name="design">Design</string>
+    <string name="no_character_here">Nenhum personagem aqui</string>
+    <string name="no_design_here">Nenhum design aqui</string>
+    <string name="add_to_telegram">Adicionar ao Telegram</string>
+    <string name="add_to_whatsapp">Adicionar ao WhatsApp</string>
+
+    <string name="dialog_exit_title">Sair</string>
+    <string name="dialog_exit_message">Você ainda não salvou, deseja sair?</string>
+    <string name="dialog_reset_title">Redefinir</string>
+    <string name="dialog_reset_message">Deseja redefinir tudo?</string>
+    <string name="dialog_random_title">Aleatório</string>
+    <string name="dialog_random_message">Assista a um anúncio curto para gerar um personagem aleatório.</string>
+    <string name="watch_ad">Ver anúncio</string>
+    <string name="dialog_delete_title">Excluir</string>
+    <string name="dialog_delete_message">Tem certeza de que deseja excluir este item?</string>
+    <string name="choose_color">Escolher cor</string>
+
+    <string name="rate">Avaliar</string>
+    <string name="rate_title_default">Você gosta do app?</string>
+    <string name="rate_message_default">Conte-nos sua experiência</string>
+    <string name="rate_title_low">Ah, não!</string>
+    <string name="rate_message_low">Por favor, envie sua opinião</string>
+    <string name="rate_title_high">Também amamos você!</string>
+    <string name="rate_message_high">Obrigado pela sua opinião</string>
+
+    <string name="cd_back">Voltar</string>
+    <string name="cd_settings">Configurações</string>
+    <string name="cd_download">Baixar</string>
+    <string name="cd_share">Compartilhar</string>
+    <string name="cd_home">Início</string>
+    <string name="cd_my_creation">Minhas criações</string>
+    <string name="cd_reset">Redefinir</string>
+    <string name="cd_flip">Espelhar</string>
+    <string name="cd_move">Mover</string>
+    <string name="cd_random">Aleatório</string>
+    <string name="cd_info">Instruções</string>
+    <string name="cd_close">Fechar</string>
+    <string name="cd_delete">Excluir</string>
+    <string name="cd_edit">Editar</string>
+    <string name="cd_rotate_left">Girar para a esquerda</string>
+    <string name="cd_rotate_right">Girar para a direita</string>
+    <string name="cd_move_up">Mover para cima</string>
+    <string name="cd_move_down">Mover para baixo</string>
+    <string name="cd_move_left">Mover para a esquerda</string>
+    <string name="cd_move_right">Mover para a direita</string>
+    <string name="cd_zoom_in">Aumentar zoom</string>
+    <string name="cd_zoom_out">Diminuir zoom</string>
+    <string name="cd_none">Nenhum</string>
+    <string name="cd_confirm">Confirmar</string>
+
+    <string name="rate_feedback_subject">Feedback sobre %1$s</string>
+    <plurals name="cd_rate_stars">
+        <item quantity="one">%1$d estrela</item>
+        <item quantity="many">%1$d estrelas</item>
+        <item quantity="other">%1$d estrelas</item>
+    </plurals>
+
+    <string name="cd_tab_background">Fundo</string>
+    <string name="cd_tab_sticker">Adesivo</string>
+    <string name="cd_tab_speech">Balão de fala</string>
+    <string name="cd_tab_text">Texto</string>
+    <string name="cd_color_wheel">Cor personalizada</string>
+    <string name="cd_add_image">Adicionar imagem</string>
+    <string name="cd_font">Fonte</string>
+    <string name="cd_design_canvas">Design</string>
+    <string name="cd_re_edit">Editar novamente</string>
+    <string name="cd_result_image">Sua criação</string>
+    <string name="cd_reference_image">Imagem de referência</string>
+</resources>

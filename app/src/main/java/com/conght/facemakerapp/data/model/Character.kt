@@ -1,0 +1,39 @@
+package com.conght.facemakerapp.data.model
+
+data class CharacterTemplate(val id: String, val name: String, val thumbnailUrl: String)
+
+data class TemplateDetail(
+    val templateId: String,
+    val categories: List<PartCategory>,
+    val defaultConfig: CharacterConfig,
+)
+
+data class PartCategory(
+    val id: String,
+    val name: String,
+    val iconUrl: String,
+    val zIndex: Int,              // thứ tự vẽ layer
+    val isRequired: Boolean,      // vẫn cho phép "None" nếu false; nếu true None = về default
+    val items: List<PartItem>,
+)
+
+data class PartItem(
+    val id: String,
+    val thumbnailUrl: String,
+    val colors: List<PartColor>,  // rỗng = không đổi màu
+)
+
+data class PartColor(val id: String, val hex: String, val layerUrl: String)
+
+data class PartSelection(val itemId: String?, val colorId: String?)   // itemId null = None
+
+data class CharacterTransform(
+    val offsetX: Float = 0f, val offsetY: Float = 0f,
+    val scale: Float = 1f, val rotation: Float = 0f, val flipped: Boolean = false,
+)
+
+data class CharacterConfig(
+    val templateId: String,
+    val selections: Map<String, PartSelection>, // key = categoryId
+    val transform: CharacterTransform = CharacterTransform(),
+)

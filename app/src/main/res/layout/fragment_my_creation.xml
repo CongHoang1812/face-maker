@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- My creation (Figma 3:1229 empty / 3:1257 list / 3:1515 select) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_tavern" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay_20" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Header -->
+        <ImageButton
+            android:id="@+id/btn_back"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_back"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_download"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_download"
+            android:src="@drawable/ic_download"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.conght.facemakerapp.core.widget.RoundIconButton
+            android:id="@+id/btn_share"
+            android:layout_width="@dimen/icon_button_large"
+            android:layout_height="@dimen/icon_button_large"
+            android:layout_marginEnd="@dimen/top_bar_action_gap"
+            android:contentDescription="@string/cd_share"
+            android:visibility="gone"
+            app:icon="@drawable/ic_share"
+            app:layout_constraintEnd_toStartOf="@id/btn_download"
+            app:layout_constraintTop_toTopOf="@id/btn_download" />
+
+        <com.conght.facemakerapp.core.widget.RoundIconButton
+            android:id="@+id/btn_delete"
+            android:layout_width="@dimen/icon_button_large"
+            android:layout_height="@dimen/icon_button_large"
+            android:layout_marginEnd="@dimen/top_bar_action_gap"
+            android:contentDescription="@string/cd_delete"
+            android:visibility="gone"
+            app:icon="@drawable/ic_trash"
+            app:layout_constraintEnd_toStartOf="@id/btn_share"
+            app:layout_constraintTop_toTopOf="@id/btn_download" />
+
+        <!-- Tab giấy: tab chọn nằm cao hơn 8dp và đè lên tab kia -->
+        <TextView
+            android:id="@+id/tab_character"
+            android:layout_width="@dimen/creation_tab_w"
+            android:layout_height="@dimen/creation_tab_h"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/creation_tabs_top"
+            android:background="@drawable/bg_creation_tab"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@string/character"
+            android:textAppearance="@style/Text.Body"
+            android:textColor="@color/text_creation_tab"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tab_design"
+            android:layout_width="@dimen/creation_tab_w"
+            android:layout_height="@dimen/creation_tab_h"
+            android:layout_marginStart="@dimen/creation_tab_second_start"
+            android:layout_marginTop="@dimen/creation_tabs_top"
+            android:background="@drawable/bg_creation_tab"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@string/design"
+            android:textAppearance="@style/Text.Body"
+            android:textColor="@color/text_creation_tab"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Thân nền cream -->
+        <View
+            android:id="@+id/body"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/creation_body_top"
+            android:background="@color/cream"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_creations"
+            android:layout_width="@dimen/creation_grid_w"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/creation_grid_top"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="@dimen/screen_padding"
+            app:layout_constraintBottom_toTopOf="@id/sticker_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_creation" />
+
+        <!-- Empty -->
+        <LinearLayout
+            android:id="@+id/empty_state"
+            android:layout_width="@dimen/creation_empty_image"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/body"
+            tools:visibility="visible">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="@dimen/creation_empty_image"
+                android:layout_height="@dimen/creation_empty_image"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_empty_character"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem" />
+
+            <TextView
+                android:id="@+id/tv_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/creation_empty_gap"
+                android:gravity="center"
+                android:textAppearance="@style/Text.Caption"
+                tools:text="@string/no_character_here" />
+        </LinearLayout>
+
+        <!-- Chế độ chọn – tab Character: xuất sticker (chưa tích hợp) -->
+        <LinearLayout
+            android:id="@+id/sticker_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingVertical="@dimen/screen_padding"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible">
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                android:id="@+id/btn_telegram"
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:text="@string/add_to_telegram"
+                app:buttonWidth="@dimen/wood_button_large_width" />
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                android:id="@+id/btn_whatsapp"
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:layout_marginStart="@dimen/grid_gap"
+                android:text="@string/add_to_whatsapp"
+                app:buttonWidth="@dimen/wood_button_large_width" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -1,0 +1,124 @@
+<resources>
+    <string name="app_name">D&amp;D Character Maker</string>
+    <string name="app_title">D&amp;D Character\nMaker</string>
+
+    <string name="next">Suivant</string>
+    <string name="continue_text">Continuer</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="cancel">Annuler</string>
+    <string name="done">Terminé</string>
+    <string name="exit">Quitter</string>
+    <string name="edit">Modifier</string>
+    <string name="download">Télécharger</string>
+    <string name="random">Aléatoire</string>
+    <string name="retry">Réessayer</string>
+    <string name="loading">Chargement…</string>
+    <string name="saving">Enregistrement…</string>
+    <string name="saved">Enregistré</string>
+    <string name="save_failed">Échec de l\'enregistrement</string>
+    <string name="coming_soon">Bientôt disponible</string>
+    <string name="error_generic">Une erreur s\'est produite. Veuillez réessayer.</string>
+    <string name="error_no_internet">Pas de connexion Internet</string>
+
+    <string name="splash_ads_notice">Cette action peut contenir des publicités</string>
+    <string name="intro_1">Crée ton propre avatar\ncomme tu le souhaites</string>
+    <string name="intro_2">Débloque ton look\nchic et stylé</string>
+    <string name="intro_3">Exprime-toi\npar le style</string>
+    <string name="permission">Autorisations</string>
+    <string name="permission_media">Photos</string>
+    <string name="permission_notification">Notifications</string>
+
+    <string name="language">Langue</string>
+
+    <string name="home_maker">Créateur D&amp;D</string>
+    <string name="home_cosplay">Cosplay D&amp;D</string>
+    <string name="home_lucky_roll">Lancer D&amp;D</string>
+    <string name="my_creation">Mes créations</string>
+    <string name="rate_us">Noter l\'app</string>
+    <string name="share_app">Partager l\'app</string>
+    <string name="privacy_policy">Confidentialité</string>
+    <string name="share_app_message">Crée ton propre personnage D&amp;D avec %1$s : %2$s</string>
+
+    <string name="tab_color">Couleur</string>
+    <string name="tab_image">Image</string>
+    <string name="tab_pack">Pack</string>
+    <string name="tab_pack_number">Pack %1$d</string>
+    <string name="text_hint">Bonjour</string>
+
+    <string name="cosplay">Cosplay</string>
+    <string name="instruction">Instructions</string>
+    <string name="instruction_content">Les joueurs reçoivent une image de référence aléatoire et doivent recréer le personnage en choisissant les coiffures, tenues, couleurs et accessoires correspondants. Chaque bon choix augmente le score en pourcentage : plus le personnage ressemble à l\'image, plus le score final est élevé.</string>
+
+    <string name="lucky_roll_hint">Appuie sur le bouton aléatoire ci-dessous\npour découvrir ton personnage !</string>
+
+    <string name="character">Personnage</string>
+    <string name="design">Design</string>
+    <string name="no_character_here">Aucun personnage ici</string>
+    <string name="no_design_here">Aucun design ici</string>
+    <string name="add_to_telegram">Ajouter à Telegram</string>
+    <string name="add_to_whatsapp">Ajouter à WhatsApp</string>
+
+    <string name="dialog_exit_title">Quitter</string>
+    <string name="dialog_exit_message">Ce n\'est pas encore enregistré, voulez-vous quitter ?</string>
+    <string name="dialog_reset_title">Réinitialiser</string>
+    <string name="dialog_reset_message">Voulez-vous tout réinitialiser ?</string>
+    <string name="dialog_random_title">Aléatoire</string>
+    <string name="dialog_random_message">Regardez une courte publicité pour générer un personnage aléatoire.</string>
+    <string name="watch_ad">Voir la pub</string>
+    <string name="dialog_delete_title">Supprimer</string>
+    <string name="dialog_delete_message">Voulez-vous vraiment supprimer cet élément ?</string>
+    <string name="choose_color">Choisir une couleur</string>
+
+    <string name="rate">Noter</string>
+    <string name="rate_title_default">Vous aimez l\'application ?</string>
+    <string name="rate_message_default">Faites-nous part de votre expérience</string>
+    <string name="rate_title_low">Oh non !</string>
+    <string name="rate_message_low">Merci de nous donner votre avis</string>
+    <string name="rate_title_high">Nous vous aimons aussi !</string>
+    <string name="rate_message_high">Merci pour votre avis</string>
+
+    <string name="cd_back">Retour</string>
+    <string name="cd_settings">Paramètres</string>
+    <string name="cd_download">Télécharger</string>
+    <string name="cd_share">Partager</string>
+    <string name="cd_home">Accueil</string>
+    <string name="cd_my_creation">Mes créations</string>
+    <string name="cd_reset">Réinitialiser</string>
+    <string name="cd_flip">Retourner</string>
+    <string name="cd_move">Déplacer</string>
+    <string name="cd_random">Aléatoire</string>
+    <string name="cd_info">Instructions</string>
+    <string name="cd_close">Fermer</string>
+    <string name="cd_delete">Supprimer</string>
+    <string name="cd_edit">Modifier</string>
+    <string name="cd_rotate_left">Pivoter à gauche</string>
+    <string name="cd_rotate_right">Pivoter à droite</string>
+    <string name="cd_move_up">Déplacer vers le haut</string>
+    <string name="cd_move_down">Déplacer vers le bas</string>
+    <string name="cd_move_left">Déplacer vers la gauche</string>
+    <string name="cd_move_right">Déplacer vers la droite</string>
+    <string name="cd_zoom_in">Zoom avant</string>
+    <string name="cd_zoom_out">Zoom arrière</string>
+    <string name="cd_none">Aucun</string>
+    <string name="cd_confirm">Confirmer</string>
+
+    <string name="rate_feedback_subject">Avis sur %1$s</string>
+    <plurals name="cd_rate_stars">
+        <item quantity="one">%1$d étoile</item>
+        <item quantity="many">%1$d étoiles</item>
+        <item quantity="other">%1$d étoiles</item>
+    </plurals>
+
+    <string name="cd_tab_background">Arrière-plan</string>
+    <string name="cd_tab_sticker">Autocollant</string>
+    <string name="cd_tab_speech">Bulle</string>
+    <string name="cd_tab_text">Texte</string>
+    <string name="cd_color_wheel">Couleur personnalisée</string>
+    <string name="cd_add_image">Ajouter une image</string>
+    <string name="cd_font">Police</string>
+    <string name="cd_design_canvas">Création</string>
+    <string name="cd_re_edit">Modifier à nouveau</string>
+    <string name="cd_result_image">Ta création</string>
+    <string name="cd_reference_image">Image de référence</string>
+</resources>

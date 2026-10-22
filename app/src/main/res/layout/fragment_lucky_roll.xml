@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lucky roll (Figma 3:11 idle / 3:24 kết quả) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_tavern" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay_20" />
+
+    <com.conght.facemakerapp.core.widget.ShimmerFrameLayout
+        android:id="@+id/shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shimmerAutoStart="false"
+        app:shimmerTone="dark">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                style="@style/Widget.FaceMaker.ImageIconButton"
+                android:layout_marginStart="@dimen/screen_padding"
+                android:layout_marginTop="@dimen/top_bar_top"
+                android:contentDescription="@string/cd_back"
+                android:src="@drawable/ic_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                android:id="@+id/btn_edit"
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:layout_marginEnd="@dimen/screen_padding"
+                android:layout_marginTop="@dimen/top_bar_top"
+                android:text="@string/edit"
+                android:visibility="gone"
+                app:buttonWidth="@dimen/next_button_w"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
+            <!-- Idle: khung xám + hướng dẫn + mũi tên xoắn chỉ xuống nút Random -->
+            <FrameLayout
+                android:id="@+id/idle_box"
+                android:layout_width="@dimen/character_size"
+                android:layout_height="@dimen/character_size"
+                android:layout_marginTop="@dimen/content_top"
+                android:background="@drawable/bg_lucky_idle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/lucky_hint_top"
+                    android:gravity="center"
+                    android:text="@string/lucky_roll_hint"
+                    android:textAppearance="@style/Text.Body.White" />
+
+                <ImageView
+                    android:layout_width="@dimen/lucky_arrow_w"
+                    android:layout_height="@dimen/lucky_arrow_h"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/lucky_arrow_top"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/img_lucky_arrow" />
+            </FrameLayout>
+
+            <!-- Loading: skeleton cùng kích thước -->
+            <include
+                android:id="@+id/result_skeleton"
+                layout="@layout/view_skeleton_image"
+                android:layout_width="@dimen/character_size"
+                android:layout_height="@dimen/character_size"
+                android:layout_marginTop="@dimen/content_top"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Kết quả: ảnh nhân vật nền trắng bo 4 -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_result"
+                android:layout_width="@dimen/character_size"
+                android:layout_height="@dimen/character_size"
+                android:layout_marginTop="@dimen/content_top"
+                android:background="@color/white"
+                android:contentDescription="@string/cd_result_image"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem" />
+
+            <com.conght.facemakerapp.core.widget.ErrorStateView
+                android:id="@+id/error_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/idle_box"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/idle_box" />
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                android:id="@+id/btn_random"
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:layout_marginTop="@dimen/cosplay_buttons_top"
+                android:text="@string/random"
+                app:buttonWidth="@dimen/wood_button_large_width"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.conght.facemakerapp.core.widget.ShimmerFrameLayout>
+</FrameLayout>

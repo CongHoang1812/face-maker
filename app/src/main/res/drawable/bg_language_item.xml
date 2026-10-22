@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Item ngôn ngữ / setting / permission: chọn = cam, mặc định = trắng -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <shape>
+            <solid android:color="@color/orange_selected" />
+            <stroke android:width="@dimen/stroke_medium" android:color="@color/brown_dark" />
+            <corners android:radius="@dimen/language_item_radius" />
+        </shape>
+    </item>
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="@color/orange_selected" />
+            <stroke android:width="@dimen/stroke_medium" android:color="@color/brown_dark" />
+            <corners android:radius="@dimen/language_item_radius" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/white" />
+            <stroke android:width="@dimen/stroke_medium" android:color="@color/brown_dark" />
+            <corners android:radius="@dimen/language_item_radius" />
+        </shape>
+    </item>
+</selector>

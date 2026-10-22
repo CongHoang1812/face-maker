@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nội dung của PaperDialogContainer (Figma 69:34) -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="wrap_content"
+    tools:layout_width="@dimen/dialog_width"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <LinearLayout
+        android:id="@+id/panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/radius_medium"
+        android:paddingBottom="@dimen/dialog_padding">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/Text.DialogTitle"
+            tools:text="@string/dialog_exit_title" />
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="@dimen/dialog_message_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dialog_padding"
+            android:gravity="center"
+            android:textAppearance="@style/Text.Caption"
+            tools:text="@string/dialog_exit_message" />
+
+        <!-- Vùng tuỳ biến: nhận các view con khai báo trong <PaperDialogContainer> -->
+        <FrameLayout
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dialog_padding"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dialog_padding"
+            android:orientation="horizontal">
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                android:id="@+id/btn_start"
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:text="@string/yes"
+                app:buttonWidth="@dimen/dialog_button_w" />
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                android:id="@+id/btn_end"
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:layout_marginStart="@dimen/indicator_gap"
+                android:text="@string/no"
+                app:buttonWidth="@dimen/dialog_button_w" />
+        </LinearLayout>
+    </LinearLayout>
+</merge>

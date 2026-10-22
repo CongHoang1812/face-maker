@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dialog chờ (tự thiết kế theo design system): thẻ giấy + vòng xoay nâu + "Saving…" -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/loading_dialog_w"
+    android:layout_height="@dimen/loading_dialog_h"
+    android:background="@drawable/bg_dialog_paper"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:ignore="Overdraw">
+
+    <ProgressBar
+        android:layout_width="@dimen/loading_progress"
+        android:layout_height="@dimen/loading_progress"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/brown_primary" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/radius_large"
+        android:textAppearance="@style/Text.DialogTitle"
+        android:textSize="@dimen/editor_input_text"
+        tools:text="@string/saving" />
+</LinearLayout>

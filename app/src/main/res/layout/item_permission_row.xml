@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hàng quyền (Figma 3:761): tên + radio (drawableEnd) thể hiện đã cấp -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_name"
+    style="@style/Widget.FaceMaker.ListRow"
+    android:clickable="true"
+    android:focusable="true"
+    android:textAppearance="@style/Text.Body"
+    app:drawableEndCompat="@drawable/ic_radio_off"
+    tools:text="@string/permission_media" />

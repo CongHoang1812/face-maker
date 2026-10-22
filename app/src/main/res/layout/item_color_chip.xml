@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chip màu chữ 32dp (ô đầu = bánh xe màu mở ColorPicker); contentDescription gán trong code -->
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/editor_chip"
+    android:layout_height="@dimen/editor_chip"
+    android:background="@drawable/bg_color_chip"
+    android:focusable="true"
+    android:foreground="@drawable/fg_color_chip_selected"
+    android:scaleType="centerCrop"
+    tools:ignore="ContentDescription" />

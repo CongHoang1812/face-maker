@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Item ngôn ngữ (Figma 3:623): cờ tròn 20 + tên + radio 16; chọn = nền cam, chữ trắng -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.FaceMaker.ListRow"
+    android:layout_marginBottom="@dimen/language_item_gap">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_flag"
+        android:layout_width="@dimen/flag_size"
+        android:layout_height="@dimen/flag_size"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.Circle"
+        tools:src="@drawable/ic_flag_en" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/radius_large"
+        android:layout_weight="1"
+        android:textAppearance="@style/Text.Body"
+        android:textColor="@color/text_language_item"
+        tools:text="@string/language_english" />
+
+    <ImageView
+        android:id="@+id/iv_radio"
+        android:layout_width="@dimen/radio_size"
+        android:layout_height="@dimen/radio_size"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_radio" />
+</LinearLayout>

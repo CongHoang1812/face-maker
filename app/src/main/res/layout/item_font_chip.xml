@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chip font 32dp: "Aa" bằng font tương ứng (ô đầu "T" = font mặc định) -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/editor_chip"
+    android:layout_height="@dimen/editor_chip"
+    android:background="@drawable/bg_font_item"
+    android:focusable="true"
+    android:gravity="center"
+    android:includeFontPadding="false"
+    android:textColor="@color/hint_gray"
+    android:textSize="@dimen/editor_chip_text"
+    tools:text="@string/font_sample" />

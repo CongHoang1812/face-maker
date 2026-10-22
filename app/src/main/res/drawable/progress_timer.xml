@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thanh thời gian còn lại: track trắng, phần còn lại màu nâu (giảm dần) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@color/white" />
+            <corners android:radius="@dimen/radius_medium" />
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <clip android:clipOrientation="horizontal">
+            <shape>
+                <solid android:color="@color/brown_primary" />
+                <corners android:radius="@dimen/radius_medium" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>

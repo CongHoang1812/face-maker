@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thẻ template (Figma 3:299): khung giấy cũ 160×180 (ảnh gồm bóng 168×190) + ô ảnh trắng 136.
+     Chờ API: ô ảnh chạy shimmer (com.facebook.shimmer); thẻ vẫn bấm được. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/template_item_w"
+    android:layout_height="@dimen/template_item_h"
+    android:background="@drawable/bg_template_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer"
+        android:layout_width="@dimen/template_thumb"
+        android:layout_height="@dimen/template_thumb"
+        android:layout_marginStart="@dimen/template_thumb_left"
+        android:layout_marginTop="@dimen/template_thumb_top"
+        style="@style/Widget.FaceMaker.Shimmer">
+
+        <!-- Khối skeleton: màu do shimmer tô lại (chế độ colored) -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_decor_item" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <ImageView
+        android:id="@+id/iv_thumbnail"
+        android:layout_width="@dimen/template_thumb"
+        android:layout_height="@dimen/template_thumb"
+        android:layout_marginStart="@dimen/template_thumb_left"
+        android:layout_marginTop="@dimen/template_thumb_top"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        tools:ignore="ContentDescription" />
+</FrameLayout>

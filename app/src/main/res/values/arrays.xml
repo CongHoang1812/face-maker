@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Màu nền cố định cho tab Background > Color (local, không cần API) -->
+    <array name="decor_background_colors">
+        <item>#FFFFFF</item>
+        <item>#000000</item>
+        <item>#FFD9B2</item>
+        <item>#FFDFB2</item>
+        <item>#FEBF7F</item>
+        <item>#FF8D1A</item>
+        <item>#B25324</item>
+        <item>#6D493B</item>
+        <item>#FF4000</item>
+        <item>#FF8C00</item>
+        <item>#FFD400</item>
+        <item>#33FF00</item>
+        <item>#2E7D32</item>
+        <item>#00E5FF</item>
+        <item>#3377FF</item>
+        <item>#0051FF</item>
+        <item>#8E24AA</item>
+        <item>#FF6FB5</item>
+    </array>
+
+    <!-- Màu chữ cho Speech / Text (Figma 3:1053) -->
+    <array name="decor_text_colors">
+        <item>#FFFFFF</item>
+        <item>#FF8C00</item>
+        <item>#FF4000</item>
+        <item>#FFD400</item>
+        <item>#33FF00</item>
+        <item>#00E5FF</item>
+        <item>#0051FF</item>
+        <item>#3377FF</item>
+        <item>#000000</item>
+        <item>#4C2B13</item>
+    </array>
+</resources>

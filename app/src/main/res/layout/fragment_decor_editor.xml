@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Decor editor (Figma 3:773 / 3:843 / 3:913 / 3:993 / 3:1155). Cả màn trong 1 ShimmerFrameLayout:
+     pack (API) là skeleton, ô None / Color / Image / font / màu là view thật. -->
+<com.conght.facemakerapp.core.widget.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shimmer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/editor_bg"
+    app:shimmerAutoStart="false"
+    app:shimmerTone="dark"
+    tools:ignore="Overdraw">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_back"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_download"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_download"
+            android:src="@drawable/ic_download"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.conght.facemakerapp.feature.decor.editor.DecorCanvasView
+            android:id="@+id/canvas"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/grid_gap"
+            android:layout_marginTop="@dimen/content_top"
+            app:layout_constraintBottom_toTopOf="@id/panel"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintHeight_max="@dimen/character_size"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintWidth_max="@dimen/character_size"
+            android:contentDescription="@string/cd_design_canvas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Panel dưới -->
+        <LinearLayout
+            android:id="@+id/panel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/bottom_panel_height"
+            android:background="@color/panel_brown"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!-- Tab chính: Background / Sticker / Speech / Text -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/editor_tab_row_h"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/tab_background"
+                    android:layout_width="@dimen/decor_tab_icon"
+                    android:layout_height="@dimen/decor_tab_icon"
+                    android:contentDescription="@string/cd_tab_background"
+                    android:focusable="true"
+                    android:src="@drawable/ic_tab_background"
+                    app:tint="@color/tint_editor_tab" />
+
+                <ImageView
+                    android:id="@+id/tab_sticker"
+                    android:layout_width="@dimen/decor_tab_icon"
+                    android:layout_height="@dimen/decor_tab_icon"
+                    android:layout_marginStart="@dimen/editor_tab_gap"
+                    android:contentDescription="@string/cd_tab_sticker"
+                    android:focusable="true"
+                    android:src="@drawable/ic_tab_sticker"
+                    app:tint="@color/tint_editor_tab" />
+
+                <ImageView
+                    android:id="@+id/tab_speech"
+                    android:layout_width="@dimen/decor_tab_icon"
+                    android:layout_height="@dimen/decor_tab_icon"
+                    android:layout_marginStart="@dimen/editor_tab_gap"
+                    android:contentDescription="@string/cd_tab_speech"
+                    android:focusable="true"
+                    android:src="@drawable/ic_tab_speech"
+                    app:tint="@color/tint_editor_tab" />
+
+                <ImageView
+                    android:id="@+id/tab_text"
+                    android:layout_width="@dimen/decor_tab_icon"
+                    android:layout_height="@dimen/decor_tab_icon"
+                    android:layout_marginStart="@dimen/editor_tab_gap"
+                    android:contentDescription="@string/cd_tab_text"
+                    android:focusable="true"
+                    android:src="@drawable/ic_tab_text"
+                    app:tint="@color/tint_editor_tab" />
+            </LinearLayout>
+
+            <!-- Tab con (Color / Image / Pack…) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_sub_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/editor_sub_tab_row_h"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:paddingHorizontal="@dimen/part_grid_padding_h"
+                android:paddingVertical="@dimen/grid_gap"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_sub_tab" />
+
+            <!-- Hàng nhập chữ (tab Text) -->
+            <LinearLayout
+                android:id="@+id/input_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_gap"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/part_grid_padding_h"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/et_text"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/editor_input_h"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_text_input"
+                    android:hint="@string/text_hint"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapSentences"
+                    android:maxLines="1"
+                    android:paddingHorizontal="@dimen/radius_large"
+                    android:textColor="@color/brown_dark"
+                    android:textColorHint="@color/hint_gray"
+                    android:textSize="@dimen/editor_input_text" />
+
+                <ImageButton
+                    android:id="@+id/btn_text_done"
+                    android:layout_width="@dimen/editor_input_h"
+                    android:layout_height="@dimen/editor_input_h"
+                    android:layout_marginStart="@dimen/radius_large"
+                    android:background="@drawable/bg_text_input"
+                    android:contentDescription="@string/cd_confirm"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- Hàng font + màu chữ (Speech / Text) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_fonts"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/editor_chip"
+                android:layout_marginTop="@dimen/grid_gap"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:paddingHorizontal="@dimen/part_grid_padding_h"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_font_chip" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_text_colors"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/editor_chip"
+                android:layout_marginTop="@dimen/grid_gap"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:paddingHorizontal="@dimen/part_grid_padding_h"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_color_chip" />
+
+            <!-- Lưới 5 cột ô 56×56 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_grid"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/grid_gap"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingHorizontal="@dimen/part_grid_padding_h"
+                android:paddingBottom="@dimen/grid_gap"
+                tools:listitem="@layout/item_decor_cell" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.conght.facemakerapp.core.widget.ShimmerFrameLayout>

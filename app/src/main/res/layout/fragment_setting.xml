@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Setting (Figma 3:468) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_tavern" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay_20" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_back"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/list_top"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/row_language"
+                style="@style/Widget.FaceMaker.ListRow"
+                android:layout_marginBottom="@dimen/language_item_gap"
+                android:clickable="true"
+                android:drawablePadding="@dimen/radius_large"
+                android:focusable="true"
+                android:text="@string/language"
+                android:textAppearance="@style/Text.Body"
+                app:drawableStartCompat="@drawable/ic_language" />
+
+            <TextView
+                android:id="@+id/row_rate"
+                style="@style/Widget.FaceMaker.ListRow"
+                android:layout_marginBottom="@dimen/language_item_gap"
+                android:clickable="true"
+                android:drawablePadding="@dimen/radius_large"
+                android:focusable="true"
+                android:text="@string/rate_us"
+                android:textAppearance="@style/Text.Body"
+                app:drawableStartCompat="@drawable/ic_star" />
+
+            <TextView
+                android:id="@+id/row_share"
+                style="@style/Widget.FaceMaker.ListRow"
+                android:layout_marginBottom="@dimen/language_item_gap"
+                android:clickable="true"
+                android:drawablePadding="@dimen/radius_large"
+                android:focusable="true"
+                android:text="@string/share_app"
+                android:textAppearance="@style/Text.Body"
+                app:drawableStartCompat="@drawable/ic_share_app" />
+
+            <TextView
+                android:id="@+id/row_privacy"
+                style="@style/Widget.FaceMaker.ListRow"
+                android:layout_marginBottom="@dimen/language_item_gap"
+                android:clickable="true"
+                android:drawablePadding="@dimen/radius_large"
+                android:focusable="true"
+                android:text="@string/privacy_policy"
+                android:textAppearance="@style/Text.Body"
+                app:drawableStartCompat="@drawable/ic_privacy" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

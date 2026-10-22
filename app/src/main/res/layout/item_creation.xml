@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thẻ My creation (Figma 3:1269): khung giấy + ảnh 136 bo 4 (shimmer khi chờ ảnh) + hàng nút nhỏ (xoá / sửa) hoặc checkbox -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/creation_item_w"
+    android:layout_height="@dimen/creation_item_h"
+    android:background="@drawable/bg_creation_card"
+    android:focusable="true">
+
+    <!-- Chờ ảnh (chưa có / đang tải): shimmer cùng kích thước ô ảnh -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer"
+        style="@style/Widget.FaceMaker.Shimmer"
+        android:layout_width="@dimen/creation_card_image"
+        android:layout_height="@dimen/creation_card_image"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/creation_item_image_inset">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_decor_item" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_image"
+        android:layout_width="@dimen/creation_card_image"
+        android:layout_height="@dimen/creation_card_image"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/creation_item_image_inset"
+        android:background="@color/white"
+        android:scaleType="fitCenter"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/small_icon"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/creation_item_actions_top"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="@dimen/small_icon"
+            android:layout_height="@dimen/small_icon"
+            android:background="@drawable/bg_small_icon"
+            android:contentDescription="@string/cd_delete"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_trash_card" />
+
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:layout_width="@dimen/small_icon"
+            android:layout_height="@dimen/small_icon"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:background="@drawable/bg_small_icon"
+            android:contentDescription="@string/cd_edit"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_pencil" />
+
+        <ImageView
+            android:id="@+id/iv_checkbox"
+            android:layout_width="@dimen/small_icon"
+            android:layout_height="@dimen/small_icon"
+            android:background="@drawable/bg_checkbox"
+            android:importantForAccessibility="no"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_checkbox_check"
+            android:visibility="gone" />
+    </LinearLayout>
+</FrameLayout>

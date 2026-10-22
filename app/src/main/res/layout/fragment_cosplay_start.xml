@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cosplay start (Figma 3:41): ảnh tham chiếu + Random / Cosplay -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_tavern" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay_20" />
+
+    <com.conght.facemakerapp.core.widget.ShimmerFrameLayout
+        android:id="@+id/shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shimmerAutoStart="false"
+        app:shimmerTone="dark">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                style="@style/Widget.FaceMaker.ImageIconButton"
+                android:layout_marginStart="@dimen/screen_padding"
+                android:layout_marginTop="@dimen/top_bar_top"
+                android:contentDescription="@string/cd_back"
+                android:src="@drawable/ic_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btn_info"
+                style="@style/Widget.FaceMaker.ImageIconButton"
+                android:layout_marginEnd="@dimen/screen_padding"
+                android:layout_marginTop="@dimen/top_bar_top"
+                android:contentDescription="@string/cd_info"
+                android:src="@drawable/ic_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_reference"
+                android:layout_width="@dimen/character_size"
+                android:layout_height="@dimen/character_size"
+                android:layout_marginTop="@dimen/content_top"
+                android:background="@color/white"
+                android:contentDescription="@string/cd_reference_image"
+                android:scaleType="centerCrop"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem" />
+
+            <include
+                android:id="@+id/reference_skeleton"
+                layout="@layout/view_skeleton_image"
+                android:layout_width="@dimen/character_size"
+                android:layout_height="@dimen/character_size"
+                android:layout_marginTop="@dimen/content_top"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.conght.facemakerapp.core.widget.ErrorStateView
+                android:id="@+id/error_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/reference_skeleton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/reference_skeleton" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                android:id="@+id/btn_random"
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:layout_marginEnd="@dimen/cosplay_buttons_half_gap"
+                android:layout_marginTop="@dimen/cosplay_buttons_top"
+                android:text="@string/random"
+                app:buttonWidth="@dimen/wood_button_large_width"
+                app:layout_constraintEnd_toStartOf="@id/guide_center"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                android:id="@+id/btn_cosplay"
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:layout_marginStart="@dimen/cosplay_buttons_half_gap"
+                android:layout_marginTop="@dimen/cosplay_buttons_top"
+                android:text="@string/cosplay"
+                app:buttonWidth="@dimen/wood_button_large_width"
+                app:layout_constraintStart_toEndOf="@id/guide_center"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.conght.facemakerapp.core.widget.ShimmerFrameLayout>
+</FrameLayout>

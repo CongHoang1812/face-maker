@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Instruction overlay (Figma 3:114): thẻ giấy rách 312×200 + luật chơi + nút X 40 cách thẻ 16.
+     Ảnh nền gồm cả bóng (328×218) nên phần bóng dưới đáy đã chiếm khoảng cách 16 tới nút X. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/instruction_card_w"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_instruction_paper"
+        android:gravity="center_horizontal"
+        android:minHeight="@dimen/instruction_card_h"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/instruction_card_padding_top"
+        android:paddingBottom="@dimen/screen_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/instruction"
+            android:textAppearance="@style/Text.DialogTitle" />
+
+        <TextView
+            android:layout_width="@dimen/dialog_message_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_gap"
+            android:gravity="center"
+            android:text="@string/instruction_content"
+            android:textAppearance="@style/Text.Caption" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_close"
+        style="@style/Widget.FaceMaker.ImageIconButton"
+        android:contentDescription="@string/cd_close"
+        android:src="@drawable/ic_close" />
+</LinearLayout>

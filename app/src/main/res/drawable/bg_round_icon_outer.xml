@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Viền ngoài nút tròn -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/brown_dark" />
+        </shape>
+    </item>
+    <item android:left="2dp" android:top="1dp" android:right="2dp" android:bottom="3dp">
+        <shape android:shape="oval">
+            <solid android:color="@color/brown_primary" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Maker – Customize (Figma 3:335) + Move (8:24). Cả màn nằm trong 1 ShimmerFrameLayout để
+     mọi skeleton (canvas, màu, lưới, tab) quét đồng bộ; ô None / Xúc xắc là view thật nên không bị phủ. -->
+<com.conght.facemakerapp.core.widget.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shimmer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:shimmerAutoStart="false"
+    app:shimmerTone="dark">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_tavern" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay_20" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Canvas nhân vật 328×328 (y = 116 Figma) -->
+        <com.conght.facemakerapp.core.widget.CharacterCanvasView
+            android:id="@+id/canvas"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/grid_gap"
+            android:layout_marginTop="@dimen/content_top"
+            app:layout_constraintBottom_toTopOf="@id/panel"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintHeight_max="@dimen/character_size"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintWidth_max="@dimen/character_size"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/canvas_skeleton"
+            layout="@layout/view_skeleton_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/grid_gap"
+            android:layout_marginTop="@dimen/content_top"
+            app:layout_constraintBottom_toTopOf="@id/panel"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintHeight_max="@dimen/character_size"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintWidth_max="@dimen/character_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.conght.facemakerapp.core.widget.ErrorStateView
+            android:id="@+id/error_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/canvas_skeleton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/canvas_skeleton" />
+
+        <!-- Top bar -->
+        <ImageButton
+            android:id="@+id/btn_back"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_back"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.conght.facemakerapp.core.widget.WoodButton
+            android:id="@+id/btn_next"
+            style="@style/Widget.FaceMaker.WoodButton"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:text="@string/next"
+            app:buttonWidth="@dimen/next_button_w"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- COSPLAY: thanh thời gian giữa top bar (Figma 3:134) -->
+        <LinearLayout
+            android:id="@+id/timer_bar"
+            android:layout_width="@dimen/cosplay_timer_w"
+            android:layout_height="@dimen/cosplay_timer_h"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:background="@drawable/bg_timer_pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/cosplay_timer_padding"
+            android:paddingTop="@dimen/cosplay_timer_padding"
+            android:paddingEnd="@dimen/cosplay_timer_padding_end"
+            android:paddingBottom="@dimen/cosplay_timer_padding"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="@dimen/cosplay_timer_label_w"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_timer_label"
+                android:gravity="center"
+                android:textAppearance="@style/Text.Button"
+                tools:text="10:00" />
+
+            <ProgressBar
+                android:id="@+id/progress_timer"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/cosplay_timer_progress_h"
+                android:layout_marginStart="@dimen/cosplay_timer_padding"
+                android:layout_weight="1"
+                android:progressDrawable="@drawable/progress_timer" />
+        </LinearLayout>
+
+        <!-- COSPLAY: thumbnail ảnh tham chiếu góc phải dưới canvas (Figma 3:139) -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_reference"
+            android:layout_width="@dimen/cosplay_reference"
+            android:layout_height="@dimen/cosplay_reference"
+            android:layout_marginEnd="@dimen/cosplay_reference_end"
+            android:layout_marginBottom="@dimen/cosplay_reference_end"
+            android:background="@color/white"
+            android:contentDescription="@string/cd_reference_image"
+            android:padding="@dimen/stroke_thin"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/canvas_skeleton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem"
+            app:strokeColor="@color/white"
+            app:strokeWidth="@dimen/cosplay_reference_border" />
+
+        <!-- Cột tool trái: reset / flip / move -->
+        <com.conght.facemakerapp.core.widget.RoundIconButton
+            android:id="@+id/btn_reset"
+            android:layout_width="@dimen/icon_button"
+            android:layout_height="@dimen/icon_button"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/content_top"
+            android:contentDescription="@string/cd_reset"
+            app:icon="@drawable/ic_reset"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.conght.facemakerapp.core.widget.RoundIconButton
+            android:id="@+id/btn_flip"
+            android:layout_width="@dimen/icon_button"
+            android:layout_height="@dimen/icon_button"
+            android:layout_marginTop="@dimen/tool_gap"
+            android:contentDescription="@string/cd_flip"
+            app:icon="@drawable/ic_flip"
+            app:layout_constraintStart_toStartOf="@id/btn_reset"
+            app:layout_constraintTop_toBottomOf="@id/btn_reset" />
+
+        <com.conght.facemakerapp.core.widget.RoundIconButton
+            android:id="@+id/btn_move"
+            android:layout_width="@dimen/icon_button"
+            android:layout_height="@dimen/icon_button"
+            android:layout_marginTop="@dimen/tool_gap"
+            android:contentDescription="@string/cd_move"
+            app:icon="@drawable/ic_move"
+            app:layout_constraintStart_toStartOf="@id/btn_reset"
+            app:layout_constraintTop_toBottomOf="@id/btn_flip" />
+
+        <!-- Random cả nhân vật (x = 316, y = 400 Figma) -->
+        <ImageButton
+            android:id="@+id/btn_random_all"
+            android:layout_width="@dimen/random_all_size"
+            android:layout_height="@dimen/random_all_size"
+            android:layout_marginEnd="@dimen/random_all_end"
+            android:layout_marginBottom="@dimen/random_all_end"
+            android:background="@drawable/bg_gift_button"
+            android:contentDescription="@string/cd_random"
+            android:padding="@dimen/random_all_padding"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_dice_gift"
+            app:layout_constraintBottom_toBottomOf="@id/canvas_skeleton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Panel dưới -->
+        <FrameLayout
+            android:id="@+id/panel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/bottom_panel_height"
+            android:background="@color/panel_brown"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/edit_panel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:id="@+id/color_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/color_bar_height"
+                    android:layout_marginHorizontal="@dimen/screen_padding"
+                    android:layout_marginTop="@dimen/grid_gap"
+                    android:background="@drawable/bg_color_bar"
+                    android:padding="@dimen/color_bar_padding"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_colors"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:overScrollMode="never"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_color_dot" />
+                </FrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_parts"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/grid_gap"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:paddingHorizontal="@dimen/part_grid_padding_h"
+                    android:paddingBottom="@dimen/grid_gap"
+                    app:layout_constraintBottom_toTopOf="@id/tabs_line"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/color_bar"
+                    tools:listitem="@layout/item_part" />
+
+                <!-- Mốc 48dp từ đáy: lưới dừng ở đây, tab chọn (56) nhô lên đè 8dp -->
+                <Space
+                    android:id="@+id/tabs_line"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/category_tab_h"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_tabs"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/category_tab_selected_h"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:listitem="@layout/item_category_tab" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.conght.facemakerapp.feature.maker.move.MovePanelView
+                android:id="@+id/move_panel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.conght.facemakerapp.core.widget.ShimmerFrameLayout>

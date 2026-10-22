@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Viền cam 2dp cho chip màu đang chọn (Figma 3:1056) -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape android:shape="oval">
+            <stroke android:width="@dimen/stroke_medium" android:color="@color/orange_button" />
+        </shape>
+    </item>
+    <item android:drawable="@color/transparent" />
+</selector>

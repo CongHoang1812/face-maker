@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tab category: 56×48 nền cell_tan; đang chọn nền trắng, cao 56 (nhô lên 8).
+     FrameLayout cha cao 56 cần để tab bám đáy. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/category_tab_w"
+    android:layout_height="@dimen/category_tab_selected_h"
+    tools:ignore="UselessParent">
+
+    <FrameLayout
+        android:id="@+id/tab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/category_tab_h"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_category_tab"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="@dimen/decor_tab_icon"
+            android:layout_height="@dimen/decor_tab_icon"
+            android:layout_gravity="center"
+            tools:ignore="ContentDescription" />
+    </FrameLayout>
+</FrameLayout>

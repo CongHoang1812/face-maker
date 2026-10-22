@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pill đồng hồ Cosplay (Figma 3:134): nền cam, viền nâu đậm, bo 12 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/orange_button" />
+    <stroke android:width="@dimen/stroke_thin" android:color="@color/brown_dark" />
+    <corners android:radius="@dimen/radius_large" />
+</shape>

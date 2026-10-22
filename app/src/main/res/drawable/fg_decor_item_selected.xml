@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Viền cam 2dp vẽ CHỒNG lên ô editor đang chọn (ô màu / ảnh phủ kín nền) -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape>
+            <stroke android:width="@dimen/stroke_medium" android:color="@color/orange_button" />
+            <corners android:radius="@dimen/decor_item_radius" />
+        </shape>
+    </item>
+    <item android:drawable="@color/transparent" />
+</selector>

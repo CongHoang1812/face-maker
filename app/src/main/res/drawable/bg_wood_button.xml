@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_wood_button_outer" />
+    <item android:left="4dp" android:top="3dp" android:right="4dp" android:bottom="5dp" android:drawable="@drawable/bg_wood_button_inner" />
+</layer-list>

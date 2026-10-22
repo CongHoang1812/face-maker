@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gradient đáy thẻ Home: trong suốt tới 65% rồi đậm dần -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="270"
+        android:centerColor="@color/home_fade_creation_transparent"
+        android:centerY="0.65"
+        android:endColor="@color/home_fade_creation"
+        android:startColor="@color/home_fade_creation_transparent" />
+</shape>

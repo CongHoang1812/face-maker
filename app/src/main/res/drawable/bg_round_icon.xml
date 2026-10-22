@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nền RoundIconButton: viền nâu + lõi cam (bg_round_icon_inner export từ Figma) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_round_icon_outer" />
+    <item android:left="4dp" android:top="3dp" android:right="4dp" android:bottom="5dp" android:drawable="@drawable/bg_round_icon_inner" />
+</layer-list>

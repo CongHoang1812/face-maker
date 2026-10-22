@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Popup điểm Cosplay: thẻ giấy rách + ảnh nhân vật + "{percent}%" + nút X bên dưới -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/dialog_width"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_instruction_paper"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/screen_padding"
+        android:paddingBottom="@dimen/cosplay_card_padding_bottom">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_result"
+            android:layout_width="@dimen/cosplay_score_image"
+            android:layout_height="@dimen/cosplay_score_image"
+            android:background="@color/white"
+            android:contentDescription="@string/cd_result_image"
+            android:scaleType="fitCenter"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem" />
+
+        <TextView
+            android:id="@+id/tv_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_gap"
+            android:textAppearance="@style/Text.DialogTitle"
+            android:textSize="@dimen/cosplay_score_text"
+            tools:text="50%" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_close"
+        style="@style/Widget.FaceMaker.ImageIconButton"
+        android:layout_marginTop="@dimen/screen_padding"
+        android:contentDescription="@string/cd_close"
+        android:src="@drawable/ic_close" />
+</LinearLayout>

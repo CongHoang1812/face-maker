@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nội dung ErrorStateView: icon + thông báo + Retry -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:orientation="vertical"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <ImageView
+        android:layout_width="@dimen/error_icon"
+        android:layout_height="@dimen/error_icon"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_info" />
+
+    <TextView
+        android:id="@+id/tv_error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/grid_gap"
+        android:gravity="center"
+        android:shadowColor="@color/brown_dark"
+        android:shadowRadius="4"
+        android:text="@string/error_generic"
+        android:textAppearance="@style/Text.Body.White" />
+
+    <com.conght.facemakerapp.core.widget.WoodButton
+        android:id="@+id/btn_retry"
+        style="@style/Widget.FaceMaker.WoodButton"
+        android:layout_marginTop="@dimen/screen_padding"
+        android:text="@string/retry"
+        app:buttonWidth="@dimen/wood_button_medium_width" />
+</merge>

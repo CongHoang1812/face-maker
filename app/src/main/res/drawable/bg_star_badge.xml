@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Huy hiệu tab giấy chứa 3 sao trên ảnh Cosplay successful (Figma 3:269): viền nâu bo trên 32, lõi cam -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/brown_primary" />
+            <corners
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp"
+                android:topLeftRadius="@dimen/success_badge_radius"
+                android:topRightRadius="@dimen/success_badge_radius" />
+        </shape>
+    </item>
+    <item
+        android:left="@dimen/wood_button_inset_h"
+        android:right="@dimen/wood_button_inset_h"
+        android:top="@dimen/wood_button_inset_h">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/button_highlight" />
+                    <corners
+                        android:bottomLeftRadius="0dp"
+                        android:bottomRightRadius="0dp"
+                        android:topLeftRadius="@dimen/success_badge_inner_radius"
+                        android:topRightRadius="@dimen/success_badge_inner_radius" />
+                </shape>
+            </item>
+            <item android:top="@dimen/stroke_thin">
+                <shape>
+                    <solid android:color="@color/orange_button" />
+                    <corners
+                        android:bottomLeftRadius="0dp"
+                        android:bottomRightRadius="0dp"
+                        android:topLeftRadius="@dimen/success_badge_inner_radius"
+                        android:topRightRadius="@dimen/success_badge_inner_radius" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</layer-list>

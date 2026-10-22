@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ô item phụ kiện: khung giấy (chọn = trắng) + thumbnail -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/part_item_h"
+    android:background="@drawable/bg_part_item_state"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/iv_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/grid_gap"
+        android:scaleType="fitCenter"
+        tools:ignore="ContentDescription" />
+</FrameLayout>

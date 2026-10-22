@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ô xúc xắc (random part của category hiện tại) – ô thật, không shimmer -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/part_item_h"
+    android:background="@drawable/bg_part_item"
+    android:contentDescription="@string/cd_random"
+    android:focusable="true">
+
+    <ImageView
+        android:layout_width="@dimen/part_item_icon"
+        android:layout_height="@dimen/part_item_icon"
+        android:layout_gravity="center"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_dice" />
+</FrameLayout>

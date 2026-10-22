@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chỉ để xem trước component trong Android Studio (bản debug), không dùng trong app. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="UnusedResources">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_padding">
+
+        <com.conght.facemakerapp.core.widget.TopBarView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_button_large">
+
+            <com.conght.facemakerapp.core.widget.RoundIconButton
+                android:layout_width="@dimen/icon_button_large"
+                android:layout_height="@dimen/icon_button_large"
+                android:contentDescription="@string/cd_share"
+                app:icon="@drawable/ic_share" />
+
+            <ImageButton
+                style="@style/Widget.FaceMaker.ImageIconButton"
+                android:contentDescription="@string/cd_my_creation"
+                android:src="@drawable/ic_archive" />
+
+            <com.conght.facemakerapp.core.widget.RoundIconButton
+                android:layout_width="@dimen/icon_button_large"
+                android:layout_height="@dimen/icon_button_large"
+                android:contentDescription="@string/cd_home"
+                app:icon="@drawable/ic_home" />
+        </com.conght.facemakerapp.core.widget.TopBarView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/screen_padding"
+            android:orientation="horizontal">
+
+            <com.conght.facemakerapp.core.widget.RoundIconButton
+                android:layout_width="@dimen/icon_button"
+                android:layout_height="@dimen/icon_button"
+                android:contentDescription="@string/cd_reset"
+                app:icon="@drawable/ic_reset" />
+
+            <com.conght.facemakerapp.core.widget.RoundIconButton
+                android:layout_width="@dimen/icon_button"
+                android:layout_height="@dimen/icon_button"
+                android:layout_marginStart="@dimen/grid_gap"
+                android:contentDescription="@string/cd_flip"
+                app:icon="@drawable/ic_flip" />
+
+            <com.conght.facemakerapp.core.widget.RoundIconButton
+                android:layout_width="@dimen/icon_button"
+                android:layout_height="@dimen/icon_button"
+                android:layout_marginStart="@dimen/grid_gap"
+                android:contentDescription="@string/cd_move"
+                app:icon="@drawable/ic_move" />
+        </LinearLayout>
+
+        <com.conght.facemakerapp.core.widget.WoodButton
+            style="@style/Widget.FaceMaker.WoodButton"
+            android:layout_marginTop="@dimen/screen_padding"
+            android:text="@string/download"
+            app:buttonWidth="@dimen/wood_button_large_width" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/screen_padding"
+            android:orientation="horizontal">
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:text="@string/tab_color"
+                android:textAppearance="@style/Text.TabSmall"
+                app:buttonWidth="@dimen/wood_button_tab_width"
+                app:variant="gray" />
+
+            <com.conght.facemakerapp.core.widget.WoodButton
+                style="@style/Widget.FaceMaker.WoodButton"
+                android:layout_marginStart="@dimen/grid_gap"
+                android:text="@string/tab_image"
+                android:textAppearance="@style/Text.TabSmall"
+                app:buttonWidth="@dimen/wood_button_tab_width" />
+        </LinearLayout>
+
+        <com.conght.facemakerapp.core.widget.PaperDialogContainer
+            android:layout_width="@dimen/dialog_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/screen_padding"
+            app:dialogMessage="@string/dialog_exit_message"
+            app:dialogTitle="@string/dialog_exit_title"
+            app:endText="@string/no"
+            app:startText="@string/yes" />
+    </LinearLayout>
+</ScrollView>

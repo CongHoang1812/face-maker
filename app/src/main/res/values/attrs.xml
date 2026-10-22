@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WoodButton">
+        <attr name="android:text" />
+        <!-- orange (mặc định) | gray (tab không chọn) -->
+        <attr name="variant" format="enum">
+            <enum name="orange" value="0" />
+            <enum name="gray" value="1" />
+        </attr>
+        <!-- Chiều rộng cố định của nút (bỏ trống = wrap_content theo chữ) -->
+        <attr name="buttonWidth" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundIconButton">
+        <!-- Glyph đặt giữa nút (16dp với nút 36dp, 20dp với nút 40dp) -->
+        <attr name="icon" />
+    </declare-styleable>
+
+    <declare-styleable name="TopBarView">
+        <attr name="showBack" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ShimmerFrameLayout">
+        <!-- dark: skeleton trắng mờ trên nền tối | light: skeleton be trên nền sáng -->
+        <attr name="shimmerTone" format="enum">
+            <enum name="dark" value="0" />
+            <enum name="light" value="1" />
+        </attr>
+        <attr name="shimmerAutoStart" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="SkeletonView">
+        <attr name="skeletonShape" format="enum">
+            <enum name="rect" value="0" />
+            <enum name="oval" value="1" />
+            <enum name="topRounded" value="2" />
+        </attr>
+        <attr name="skeletonRadius" format="dimension" />
+        <!-- Drawable làm khuôn (lấy theo kênh alpha), vd. khung giấy rách -->
+        <attr name="skeletonMask" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PaperDialogContainer">
+        <attr name="dialogTitle" format="string" />
+        <attr name="dialogMessage" format="string" />
+        <attr name="startText" format="string" />
+        <attr name="endText" format="string" />
+    </declare-styleable>
+</resources>

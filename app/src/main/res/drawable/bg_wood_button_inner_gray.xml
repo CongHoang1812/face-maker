@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lõi nút gỗ, viền sáng 1dp phía trên -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/white" />
+            <corners android:radius="@dimen/wood_button_inner_radius" />
+        </shape>
+    </item>
+    <item android:top="1dp">
+        <shape>
+            <solid android:color="@color/tab_off_inner" />
+            <corners android:radius="@dimen/wood_button_inner_radius" />
+        </shape>
+    </item>
+</layer-list>

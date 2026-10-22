@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">D&amp;D Character Maker</string>
+    <string name="app_title">D&amp;D Character\nMaker</string>
+
+    <string name="next">आगे</string>
+    <string name="continue_text">जारी रखें</string>
+    <string name="yes">हाँ</string>
+    <string name="no">नहीं</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="done">हो गया</string>
+    <string name="exit">बाहर निकलें</string>
+    <string name="edit">संपादित करें</string>
+    <string name="download">डाउनलोड</string>
+    <string name="random">रैंडम</string>
+    <string name="retry">फिर से कोशिश करें</string>
+    <string name="loading">लोड हो रहा है…</string>
+    <string name="saving">सेव हो रहा है…</string>
+    <string name="saved">सेव हो गया</string>
+    <string name="save_failed">सेव नहीं हो सका</string>
+    <string name="coming_soon">जल्द आ रहा है</string>
+    <string name="error_generic">कुछ गलत हो गया। कृपया फिर से कोशिश करें।</string>
+    <string name="error_no_internet">इंटरनेट कनेक्शन नहीं है</string>
+
+    <string name="splash_ads_notice">इस कार्रवाई में विज्ञापन हो सकते हैं</string>
+    <string name="intro_1">अपना अवतार बनाएं\nजैसा आप चाहें</string>
+    <string name="intro_2">अपना स्टाइलिश और\nशानदार लुक अनलॉक करें</string>
+    <string name="intro_3">स्टाइल के ज़रिए\nखुद को व्यक्त करें</string>
+    <string name="permission">अनुमति</string>
+    <string name="permission_media">फ़ोटो</string>
+    <string name="permission_notification">सूचनाएं</string>
+
+    <string name="language">भाषा</string>
+
+    <string name="home_maker">D&amp;D मेकर</string>
+    <string name="home_cosplay">D&amp;D कॉसप्ले</string>
+    <string name="home_lucky_roll">D&amp;D लकी रोल</string>
+    <string name="my_creation">मेरी रचनाएं</string>
+    <string name="rate_us">रेटिंग दें</string>
+    <string name="share_app">ऐप शेयर करें</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
+    <string name="share_app_message">%1$s के साथ अपना D&amp;D कैरेक्टर बनाएं: %2$s</string>
+
+    <string name="tab_color">रंग</string>
+    <string name="tab_image">इमेज</string>
+    <string name="tab_pack">पैक</string>
+    <string name="tab_pack_number">पैक %1$d</string>
+    <string name="text_hint">नमस्ते</string>
+
+    <string name="cosplay">कॉसप्ले</string>
+    <string name="instruction">निर्देश</string>
+    <string name="instruction_content">खिलाड़ियों को एक रैंडम संदर्भ इमेज मिलती है और उन्हें मेल खाते हेयरस्टाइल, कपड़े, रंग और एक्सेसरीज़ चुनकर कैरेक्टर को फिर से बनाना होता है। हर सही चुनाव से प्रतिशत स्कोर बढ़ता है: कैरेक्टर इमेज से जितना ज़्यादा मिलेगा, अंतिम स्कोर उतना ही ज़्यादा होगा।</string>
+
+    <string name="lucky_roll_hint">अपना कैरेक्टर देखने के लिए\nनीचे रैंडम बटन दबाएं!</string>
+
+    <string name="character">कैरेक्टर</string>
+    <string name="design">डिज़ाइन</string>
+    <string name="no_character_here">यहाँ कोई कैरेक्टर नहीं है</string>
+    <string name="no_design_here">यहाँ कोई डिज़ाइन नहीं है</string>
+    <string name="add_to_telegram">Telegram में जोड़ें</string>
+    <string name="add_to_whatsapp">WhatsApp में जोड़ें</string>
+
+    <string name="dialog_exit_title">बाहर निकलें</string>
+    <string name="dialog_exit_message">अभी तक सेव नहीं किया है, क्या आप बाहर निकलना चाहते हैं?</string>
+    <string name="dialog_reset_title">रीसेट</string>
+    <string name="dialog_reset_message">क्या आप सब कुछ रीसेट करना चाहते हैं?</string>
+    <string name="dialog_random_title">रैंडम</string>
+    <string name="dialog_random_message">रैंडम कैरेक्टर बनाने के लिए एक छोटा विज्ञापन देखें।</string>
+    <string name="watch_ad">विज्ञापन देखें</string>
+    <string name="dialog_delete_title">हटाएं</string>
+    <string name="dialog_delete_message">क्या आप वाकई इस आइटम को हटाना चाहते हैं?</string>
+    <string name="choose_color">रंग चुनें</string>
+
+    <string name="rate">रेट करें</string>
+    <string name="rate_title_default">क्या आपको ऐप पसंद है?</string>
+    <string name="rate_message_default">हमें अपना अनुभव बताएं</string>
+    <string name="rate_title_low">अरे नहीं!</string>
+    <string name="rate_message_low">कृपया हमें अपनी प्रतिक्रिया दें</string>
+    <string name="rate_title_high">हम भी आपसे प्यार करते हैं!</string>
+    <string name="rate_message_high">आपकी प्रतिक्रिया के लिए धन्यवाद</string>
+
+    <string name="cd_back">पीछे</string>
+    <string name="cd_settings">सेटिंग्स</string>
+    <string name="cd_download">डाउनलोड</string>
+    <string name="cd_share">शेयर करें</string>
+    <string name="cd_home">होम</string>
+    <string name="cd_my_creation">मेरी रचनाएं</string>
+    <string name="cd_reset">रीसेट</string>
+    <string name="cd_flip">पलटें</string>
+    <string name="cd_move">खिसकाएं</string>
+    <string name="cd_random">रैंडम</string>
+    <string name="cd_info">निर्देश</string>
+    <string name="cd_close">बंद करें</string>
+    <string name="cd_delete">हटाएं</string>
+    <string name="cd_edit">संपादित करें</string>
+    <string name="cd_rotate_left">बाएं घुमाएं</string>
+    <string name="cd_rotate_right">दाएं घुमाएं</string>
+    <string name="cd_move_up">ऊपर खिसकाएं</string>
+    <string name="cd_move_down">नीचे खिसकाएं</string>
+    <string name="cd_move_left">बाएं खिसकाएं</string>
+    <string name="cd_move_right">दाएं खिसकाएं</string>
+    <string name="cd_zoom_in">ज़ूम इन</string>
+    <string name="cd_zoom_out">ज़ूम आउट</string>
+    <string name="cd_none">कोई नहीं</string>
+    <string name="cd_confirm">पुष्टि करें</string>
+
+    <string name="rate_feedback_subject">%1$s के लिए प्रतिक्रिया</string>
+    <plurals name="cd_rate_stars">
+        <item quantity="one">%1$d स्टार</item>
+        <item quantity="other">%1$d स्टार</item>
+    </plurals>
+
+    <string name="cd_tab_background">पृष्ठभूमि</string>
+    <string name="cd_tab_sticker">स्टिकर</string>
+    <string name="cd_tab_speech">स्पीच बबल</string>
+    <string name="cd_tab_text">टेक्स्ट</string>
+    <string name="cd_color_wheel">कस्टम रंग</string>
+    <string name="cd_add_image">इमेज जोड़ें</string>
+    <string name="cd_font">फ़ॉन्ट</string>
+    <string name="cd_design_canvas">डिज़ाइन</string>
+    <string name="cd_re_edit">फिर से संपादित करें</string>
+    <string name="cd_result_image">आपकी रचना</string>
+    <string name="cd_reference_image">संदर्भ इमेज</string>
+</resources>

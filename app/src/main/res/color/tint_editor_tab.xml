@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icon tab chính editor: chọn = cam, còn lại = xám -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/orange_button" android:state_selected="true" />
+    <item android:color="@color/tab_off_inner" />
+</selector>

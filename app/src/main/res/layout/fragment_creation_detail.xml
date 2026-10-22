@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chi tiết creation (Figma 3:1583 character / 3:1608 design) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/editor_bg"
+    tools:ignore="Overdraw">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_back"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_download"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/top_bar_top"
+            android:contentDescription="@string/cd_download"
+            android:src="@drawable/ic_download"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.conght.facemakerapp.core.widget.RoundIconButton
+            android:id="@+id/btn_share"
+            android:layout_width="@dimen/icon_button_large"
+            android:layout_height="@dimen/icon_button_large"
+            android:layout_marginEnd="@dimen/top_bar_action_gap"
+            android:contentDescription="@string/cd_share"
+            app:icon="@drawable/ic_share"
+            app:layout_constraintEnd_toStartOf="@id/btn_download"
+            app:layout_constraintTop_toTopOf="@id/btn_download" />
+
+        <com.conght.facemakerapp.core.widget.RoundIconButton
+            android:id="@+id/btn_delete"
+            android:layout_width="@dimen/icon_button_large"
+            android:layout_height="@dimen/icon_button_large"
+            android:layout_marginEnd="@dimen/top_bar_action_gap"
+            android:contentDescription="@string/cd_delete"
+            app:icon="@drawable/ic_trash"
+            app:layout_constraintEnd_toStartOf="@id/btn_share"
+            app:layout_constraintTop_toTopOf="@id/btn_download" />
+
+        <!-- Chờ ảnh: shimmer cùng vị trí/kích thước ảnh -->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer"
+            style="@style/Widget.FaceMaker.Shimmer"
+            android:layout_width="@dimen/character_size"
+            android:layout_height="@dimen/character_size"
+            android:layout_marginTop="@dimen/content_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_decor_item" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_image"
+            android:layout_width="@dimen/character_size"
+            android:layout_height="@dimen/character_size"
+            android:layout_marginTop="@dimen/content_top"
+            android:background="@color/white"
+            android:contentDescription="@string/cd_result_image"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem" />
+
+        <com.conght.facemakerapp.core.widget.WoodButton
+            android:id="@+id/btn_edit"
+            style="@style/Widget.FaceMaker.WoodButton"
+            android:layout_marginTop="@dimen/screen_padding"
+            android:text="@string/edit"
+            android:visibility="gone"
+            app:buttonWidth="@dimen/wood_button_large_width"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_image"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

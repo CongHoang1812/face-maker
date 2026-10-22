@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Viền xám 3dp (Figma) cho chấm màu đang chọn (dùng làm foreground) -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape android:shape="oval">
+            <stroke android:width="@dimen/color_dot_ring" android:color="@color/tab_off_inner" />
+        </shape>
+    </item>
+    <item android:drawable="@color/transparent" />
+</selector>

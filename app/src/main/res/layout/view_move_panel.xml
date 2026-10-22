@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Panel chế độ Move (Figma 8:24): Exit | xoay trái/phải | D-pad | zoom +/- -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout"
+    tools:orientation="vertical">
+
+    <com.conght.facemakerapp.core.widget.WoodButton
+        android:id="@+id/btn_exit"
+        style="@style/Widget.FaceMaker.WoodButton"
+        android:layout_marginStart="@dimen/screen_padding"
+        android:layout_marginTop="@dimen/grid_gap"
+        android:text="@string/exit"
+        app:buttonWidth="@dimen/move_exit_w" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/character_size"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/grid_gap">
+
+        <!-- Cột trái: xoay -->
+        <ImageButton
+            android:id="@+id/btn_rotate_left"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:contentDescription="@string/cd_rotate_left"
+            android:src="@drawable/ic_rotate_left"
+            app:layout_constraintBottom_toTopOf="@id/btn_rotate_right"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageButton
+            android:id="@+id/btn_rotate_right"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginTop="@dimen/screen_padding"
+            android:contentDescription="@string/cd_rotate_right"
+            android:src="@drawable/ic_rotate_right_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_rotate_left" />
+
+        <!-- Giữa: D-pad 3×3 (40dp, gap 8) -->
+        <ImageButton
+            android:id="@+id/btn_up"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:contentDescription="@string/cd_move_up"
+            android:src="@drawable/ic_arrow_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_left"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginEnd="@dimen/move_dpad_offset"
+            android:contentDescription="@string/cd_move_left"
+            android:src="@drawable/ic_arrow_left"
+            app:layout_constraintEnd_toEndOf="@id/btn_up"
+            app:layout_constraintTop_toBottomOf="@id/btn_up"
+            android:layout_marginTop="@dimen/grid_gap" />
+
+        <ImageButton
+            android:id="@+id/btn_right"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginStart="@dimen/move_dpad_offset"
+            android:layout_marginTop="@dimen/grid_gap"
+            android:contentDescription="@string/cd_move_right"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintStart_toStartOf="@id/btn_up"
+            app:layout_constraintTop_toBottomOf="@id/btn_up" />
+
+        <ImageButton
+            android:id="@+id/btn_down"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginTop="@dimen/move_dpad_offset"
+            android:contentDescription="@string/cd_move_down"
+            android:src="@drawable/ic_arrow_down"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_up" />
+
+        <!-- Cột phải: zoom -->
+        <ImageButton
+            android:id="@+id/btn_zoom_in"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:contentDescription="@string/cd_zoom_in"
+            android:src="@drawable/ic_zoom_in"
+            app:layout_constraintBottom_toTopOf="@id/btn_zoom_out"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageButton
+            android:id="@+id/btn_zoom_out"
+            style="@style/Widget.FaceMaker.ImageIconButton"
+            android:layout_marginTop="@dimen/screen_padding"
+            android:contentDescription="@string/cd_zoom_out"
+            android:src="@drawable/ic_zoom_out"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_zoom_in" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

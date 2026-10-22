@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kích thước theo docs/prompts/02_DESIGN_SYSTEM.md (1px Figma = 1dp) -->
+<resources>
+    <!-- Màn hình. Toạ độ dọc tính TỪ DƯỚI status bar: y_Figma - 44 (status bar Figma),
+         root của màn cộng thêm status bar thật qua View.applyStatusBarPadding() -->
+    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="top_bar_top">16dp</dimen>
+    <dimen name="top_bar_action_gap">16dp</dimen>
+    <dimen name="content_top">72dp</dimen>
+    <dimen name="list_top">80dp</dimen>
+
+    <!-- Splash -->
+    <dimen name="splash_title_top">198dp</dimen>
+    <dimen name="splash_progress_w">240dp</dimen>
+    <dimen name="splash_progress_h">16dp</dimen>
+    <dimen name="splash_progress_inset">3dp</dimen>
+    <dimen name="splash_bottom_margin">24dp</dimen>
+
+    <!-- Intro / permission -->
+    <dimen name="intro_image_h">560dp</dimen>
+    <dimen name="intro_controls_top">640dp</dimen>
+    <dimen name="intro_controls_h">20dp</dimen>
+    <dimen name="check_button">48dp</dimen>
+    <dimen name="permission_image">300dp</dimen>
+    <dimen name="permission_continue_gap">72dp</dimen>
+
+    <!-- Nút tròn -->
+    <dimen name="icon_button">36dp</dimen>
+    <dimen name="icon_button_large">40dp</dimen>
+    <dimen name="icon_button_glyph">16dp</dimen>
+    <dimen name="icon_button_glyph_large">20dp</dimen>
+
+    <!-- Nút gỗ -->
+    <dimen name="wood_button_height">40dp</dimen>
+    <dimen name="wood_button_outer_radius">20dp</dimen>
+    <dimen name="wood_button_inner_radius">12dp</dimen>
+    <dimen name="wood_button_tab_radius">16dp</dimen>
+    <dimen name="wood_button_inset_h">4dp</dimen>
+    <dimen name="wood_button_inset_top">3dp</dimen>
+    <dimen name="wood_button_inset_bottom">5dp</dimen>
+    <dimen name="wood_button_medium_width">112dp</dimen>
+    <dimen name="wood_button_large_width">160dp</dimen>
+    <dimen name="wood_button_tab_width">124dp</dimen>
+    <dimen name="wood_button_text_stroke">2dp</dimen>
+
+    <!-- Nhân vật & panel -->
+    <dimen name="character_size">328dp</dimen>
+    <dimen name="bottom_panel_height">356dp</dimen>
+    <!-- Customize (Figma 3:335): cột tool trái, nút random-all, Move panel (8:24) -->
+    <dimen name="tool_gap">8dp</dimen>
+    <dimen name="next_button_w">70dp</dimen>
+    <dimen name="random_all_size">40dp</dimen>
+    <dimen name="random_all_end">4dp</dimen>
+    <dimen name="random_all_padding">4dp</dimen>
+    <dimen name="category_tab_gap">2dp</dimen>
+    <dimen name="move_exit_w">88dp</dimen>
+    <dimen name="move_dpad_offset">48dp</dimen>
+
+    <!-- My creation (Figma 3:1228). Item = ảnh bg_creation_card gồm bóng (164×184), giấy thật 160×180 ở (2,2) -->
+    <dimen name="creation_tabs_top">72dp</dimen>
+    <dimen name="creation_tab_offset">8dp</dimen>
+    <dimen name="creation_tab_second_start">104dp</dimen>
+    <dimen name="creation_body_top">112dp</dimen>
+    <dimen name="creation_grid_top">128dp</dimen>
+    <dimen name="creation_grid_w">332dp</dimen>
+    <dimen name="creation_item_w">164dp</dimen>
+    <dimen name="creation_item_h">184dp</dimen>
+    <dimen name="creation_item_image_inset">14dp</dimen>
+    <dimen name="creation_item_actions_top">154dp</dimen>
+    <dimen name="creation_grid_gap_h">4dp</dimen>
+    <dimen name="creation_grid_gap_v">12dp</dimen>
+    <dimen name="creation_empty_image">200dp</dimen>
+    <dimen name="creation_empty_gap">14dp</dimen>
+    <dimen name="creation_tab_z">2dp</dimen>
+
+    <!-- Cosplay (Figma 3:41 start / 3:77 instruction / 3:132 play) -->
+    <dimen name="cosplay_buttons_top">416dp</dimen>
+    <dimen name="cosplay_buttons_half_gap">4dp</dimen>
+    <dimen name="cosplay_timer_w">208dp</dimen>
+    <dimen name="cosplay_timer_h">40dp</dimen>
+    <dimen name="cosplay_timer_label_w">44dp</dimen>
+    <dimen name="cosplay_timer_progress_h">12dp</dimen>
+    <dimen name="cosplay_timer_padding">4dp</dimen>
+    <dimen name="cosplay_timer_padding_end">12dp</dimen>
+    <dimen name="cosplay_reference">80dp</dimen>
+    <dimen name="cosplay_reference_end">4dp</dimen>
+    <dimen name="cosplay_reference_border">2dp</dimen>
+    <dimen name="cosplay_card_padding_bottom">24dp</dimen>
+    <dimen name="cosplay_score_image">160dp</dimen>
+    <dimen name="cosplay_score_text">20sp</dimen>
+
+    <!-- Thông báo / loading / lỗi (bước 15, tự thiết kế) -->
+    <dimen name="app_toast_margin">24dp</dimen>
+    <dimen name="loading_dialog_w">200dp</dimen>
+    <dimen name="loading_dialog_h">140dp</dimen>
+    <dimen name="loading_progress">48dp</dimen>
+    <dimen name="error_icon">48dp</dimen>
+
+    <!-- Lucky roll (Figma 3:11) -->
+    <dimen name="lucky_hint_top">63dp</dimen>
+    <dimen name="lucky_arrow_w">80dp</dimen>
+    <dimen name="lucky_arrow_h">128dp</dimen>
+    <dimen name="lucky_arrow_top">135dp</dimen>
+
+    <!-- Successful (Figma 3:1109 maker / 3:223 cosplay) -->
+    <dimen name="success_cosplay_image_top">124dp</dimen>
+    <dimen name="success_image_border">4dp</dimen>
+    <dimen name="success_badge_w">160dp</dimen>
+    <dimen name="success_badge_h">44dp</dimen>
+    <dimen name="success_badge_radius">32dp</dimen>
+    <dimen name="success_badge_inner_radius">28dp</dimen>
+    <dimen name="success_star_small">24dp</dimen>
+    <dimen name="success_star_big">32dp</dimen>
+
+    <!-- Decor editor (Figma 3:773 / 3:913 / 3:993 / 3:1155) -->
+    <dimen name="editor_tab_row_h">48dp</dimen>
+    <dimen name="editor_tab_gap">32dp</dimen>
+    <dimen name="editor_sub_tab_row_h">56dp</dimen>
+    <dimen name="editor_chip">32dp</dimen>
+    <dimen name="editor_input_h">36dp</dimen>
+    <dimen name="editor_input_text">16sp</dimen>
+    <dimen name="editor_chip_text">10sp</dimen>
+    <dimen name="editor_icon_color_wheel">40dp</dimen>
+    <dimen name="editor_icon_add_image">48dp</dimen>
+    <dimen name="decor_sticker_w">152dp</dimen>
+    <dimen name="decor_sticker_h">96dp</dimen>
+    <dimen name="decor_speech_w">191dp</dimen>
+    <dimen name="decor_speech_h">118dp</dimen>
+    <dimen name="decor_speech_text_padding">20dp</dimen>
+    <dimen name="decor_speech_text">32sp</dimen>
+    <dimen name="decor_text_size">36sp</dimen>
+    <dimen name="decor_text_shadow">3dp</dimen>
+    <dimen name="decor_handle">20dp</dimen>
+    <dimen name="decor_selection_padding">4dp</dimen>
+    <dimen name="decor_dash">6dp</dimen>
+    <dimen name="part_item_h">64dp</dimen>
+    <dimen name="part_item_icon">28dp</dimen>
+    <dimen name="part_grid_padding_h">24dp</dimen>
+    <dimen name="decor_item">56dp</dimen>
+    <dimen name="decor_item_radius">4dp</dimen>
+    <dimen name="decor_tab_icon">32dp</dimen>
+    <dimen name="grid_gap">8dp</dimen>
+    <dimen name="category_tab_w">56dp</dimen>
+    <dimen name="category_tab_h">48dp</dimen>
+    <dimen name="category_tab_selected_h">56dp</dimen>
+    <dimen name="category_tab_radius">8dp</dimen>
+    <dimen name="color_bar_height">40dp</dimen>
+    <dimen name="color_bar_radius">24dp</dimen>
+    <dimen name="color_bar_padding">8dp</dimen>
+    <dimen name="color_dot">24dp</dimen>
+    <dimen name="color_dot_gap">16dp</dimen>
+    <dimen name="color_dot_ring">3dp</dimen>
+    <dimen name="font_item">32dp</dimen>
+
+    <!-- Danh sách cài đặt / ngôn ngữ -->
+    <dimen name="language_item_h">56dp</dimen>
+    <dimen name="language_item_radius">16dp</dimen>
+    <dimen name="language_item_padding_h">24dp</dimen>
+    <dimen name="language_item_gap">16dp</dimen>
+    <dimen name="flag_size">20dp</dimen>
+    <dimen name="radio_size">16dp</dimen>
+    <dimen name="stroke_thin">1dp</dimen>
+    <dimen name="stroke_medium">2dp</dimen>
+
+    <!-- Home -->
+    <dimen name="home_card_size">160dp</dimen>
+    <dimen name="home_card_radius">24dp</dimen>
+    <dimen name="home_card_gap">8dp</dimen>
+    <dimen name="home_card_half_gap">4dp</dimen>
+    <dimen name="home_cards_top">192dp</dimen>
+    <dimen name="home_card_label_bottom">9dp</dimen>
+
+    <!-- My creation -->
+    <dimen name="creation_card_image">136dp</dimen>
+    <dimen name="creation_tab_w">96dp</dimen>
+    <dimen name="creation_tab_h">40dp</dimen>
+    <dimen name="small_icon">24dp</dimen>
+    <dimen name="small_icon_glyph">12dp</dimen>
+    <dimen name="small_icon_radius">8dp</dimen>
+
+    <!-- Template (cata) -->
+    <!-- Item cata = ảnh bg_template_item gồm cả bóng (168×190), giấy thật nằm ở (5,3) 160×180 -->
+    <dimen name="template_item_w">168dp</dimen>
+    <dimen name="template_item_h">190dp</dimen>
+    <dimen name="template_thumb">136dp</dimen>
+    <dimen name="template_thumb_left">16dp</dimen>
+    <dimen name="template_thumb_top">14dp</dimen>
+    <dimen name="template_grid_top">77dp</dimen>
+    <dimen name="template_grid_w">336dp</dimen>
+    <dimen name="template_grid_gap_v">6dp</dimen>
+
+    <!-- Dialog -->
+    <dimen name="dialog_width">312dp</dimen>
+    <dimen name="dialog_message_width">264dp</dimen>
+    <!-- Instruction (Figma 3:114): thẻ 312×200; ảnh nền gồm bóng → 328×218, thẻ lệch 2dp từ đỉnh ảnh -->
+    <dimen name="instruction_card_w">328dp</dimen>
+    <dimen name="instruction_card_h">218dp</dimen>
+    <dimen name="instruction_card_padding_top">10dp</dimen>
+    <dimen name="dialog_button_w">142dp</dimen>
+    <dimen name="dialog_padding">16dp</dimen>
+    <dimen name="rate_dialog_width">300dp</dimen>
+    <dimen name="rate_emoji">72dp</dimen>
+    <dimen name="rate_star">30dp</dimen>
+    <dimen name="rate_button_radius">30dp</dimen>
+    <dimen name="rate_button_w">232dp</dimen>
+    <dimen name="rate_button_h">40dp</dimen>
+    <dimen name="rate_star_gap">8dp</dimen>
+    <dimen name="rate_title_gap">4dp</dimen>
+    <dimen name="rate_buttons_gap">24dp</dimen>
+    <dimen name="color_picker_sv_w">230dp</dimen>
+    <dimen name="color_picker_sv_h">94dp</dimen>
+    <dimen name="color_picker_hue_h">24dp</dimen>
+    <dimen name="color_picker_hue_bar_h">18dp</dimen>
+    <dimen name="color_picker_gap">12dp</dimen>
+    <dimen name="color_picker_cursor">16dp</dimen>
+    <dimen name="color_picker_hue_cursor">24dp</dimen>
+    <dimen name="color_picker_cursor_stroke">2dp</dimen>
+
+    <!-- Intro / splash -->
+    <dimen name="indicator_dot">8dp</dimen>
+    <dimen name="indicator_active_w">16dp</dimen>
+    <dimen name="indicator_gap">4dp</dimen>
+
+    <!-- Bo góc chung -->
+    <dimen name="radius_small">4dp</dimen>
+    <dimen name="radius_medium">8dp</dimen>
+    <dimen name="radius_large">12dp</dimen>
+</resources>

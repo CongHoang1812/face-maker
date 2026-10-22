@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Token màu theo docs/prompts/02_DESIGN_SYSTEM.md -->
+<resources>
+    <color name="brown_primary">#B25324</color>
+    <color name="orange_button">#FEBF7F</color>
+    <color name="button_highlight">#FBFCDB</color>
+    <color name="brown_dark">#4C2B13</color>
+    <color name="panel_brown">#6D493B</color>
+    <color name="color_bar_bg">#331100</color>
+    <color name="cell_tan">#FFDFB2</color>
+    <color name="editor_bg">#FFD9B2</color>
+    <color name="cream">#FFFAF2</color>
+    <color name="language_bg">#B28A71</color>
+    <color name="orange_selected">#FF8D1A</color>
+    <color name="tab_off_outer">#666666</color>
+    <color name="tab_off_inner">#CCCCCC</color>
+    <color name="tab_off_shadow">#333333</color>
+    <color name="overlay_20">#33000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="shimmer_base_dark">#33FFFFFF</color>
+    <color name="shimmer_base_light">#E6D3BC</color>
+    <color name="shimmer_highlight">#80FFFFFF</color>
+    <color name="star_on">#FFCC00</color>
+    <color name="star_off">#C4C4C4</color>
+
+    <!-- Phụ (lấy từ Figma) -->
+    <color name="brown_text_60">#99B25324</color>
+    <color name="hint_gray">#808080</color>
+    <color name="lucky_frame_bg">#666666</color>
+    <color name="lucky_frame_stroke">#166086</color>
+    <color name="transparent">#00000000</color>
+    <color name="language_bg_transparent">#00B28A71</color>
+
+    <!-- Gradient đáy thẻ Home (Figma 3:439 / 3:443 / 3:441 / 3:445) -->
+    <color name="home_fade_maker">#553F35</color>
+    <color name="home_fade_maker_transparent">#00553F35</color>
+    <color name="home_fade_cosplay">#421300</color>
+    <color name="home_fade_cosplay_transparent">#00421300</color>
+    <color name="home_fade_lucky">#5A5044</color>
+    <color name="home_fade_lucky_transparent">#005A5044</color>
+    <color name="home_fade_creation">#58483C</color>
+    <color name="home_fade_creation_transparent">#0058483C</color>
+</resources>

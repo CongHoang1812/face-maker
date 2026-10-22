@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thanh loading splash (Figma 3:576): track trắng viền đen, progress là các ô vuông cam 10dp -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@color/white" />
+            <stroke
+                android:width="@dimen/stroke_thin"
+                android:color="@android:color/black" />
+        </shape>
+    </item>
+    <item
+        android:id="@android:id/progress"
+        android:bottom="@dimen/splash_progress_inset"
+        android:left="@dimen/splash_progress_inset"
+        android:right="@dimen/splash_progress_inset"
+        android:top="@dimen/splash_progress_inset">
+        <clip android:clipOrientation="horizontal">
+            <bitmap
+                android:src="@drawable/progress_splash_tile"
+                android:tileModeX="repeat"
+                android:tileModeY="clamp" />
+        </clip>
+    </item>
+</layer-list>
