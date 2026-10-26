@@ -13,7 +13,12 @@ import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.databinding.FragmentIntroBinding
 
+/**
+ * 3 trang intro, hiện mỗi lần mở app. [ARG_ONBOARDING_DONE] = false: lần đầu (→ permission), true: → home.
+ */
 class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::inflate) {
+
+    private val onboardingDone by lazy { arguments?.getBoolean(ARG_ONBOARDING_DONE, false) ?: false }
 
     private val pageCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) = updateIndicator(position)
@@ -33,7 +38,9 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
             if (current < adapter.itemCount - 1) {
                 binding.pager.currentItem = current + 1
             } else {
-                findNavController().navigate(R.id.action_intro_to_permission)
+                findNavController().navigate(
+                    if (onboardingDone) R.id.action_intro_to_home else R.id.action_intro_to_permission,
+                )
             }
         }
     }
@@ -64,5 +71,9 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
             view.setBackgroundResource(if (selected) R.drawable.bg_indicator_active else R.drawable.bg_indicator_dot)
             view.updateLayoutParams { width = if (selected) active else dot }
         }
+    }
+
+    companion object {
+        const val ARG_ONBOARDING_DONE = "onboardingDone"
     }
 }

@@ -14,6 +14,7 @@ import com.conght.facemakerapp.core.ui.applyStatusBarPadding
 import com.conght.facemakerapp.core.ui.base.BaseFragment
 import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.databinding.FragmentSplashBinding
+import com.conght.facemakerapp.feature.intro.IntroFragment
 import com.conght.facemakerapp.feature.language.LanguageFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -33,8 +34,12 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
         viewLifecycleOwner.lifecycleScope.launch {
             runProgress()
             val nav = findNavController()
+            // Intro hiện mỗi lần mở app; Language + Permission chỉ ở lần đầu
             if (viewModel.isOnboardingDone()) {
-                nav.navigate(R.id.action_splash_to_home)
+                nav.navigate(
+                    R.id.action_splash_to_intro,
+                    Bundle().apply { putBoolean(IntroFragment.ARG_ONBOARDING_DONE, true) },
+                )
             } else {
                 nav.navigate(
                     R.id.action_splash_to_language,

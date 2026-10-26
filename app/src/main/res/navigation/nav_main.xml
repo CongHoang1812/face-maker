@@ -19,8 +19,8 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
         <action
-            android:id="@+id/action_splash_to_home"
-            app:destination="@id/homeFragment"
+            android:id="@+id/action_splash_to_intro"
+            app:destination="@id/introFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true"
             app:enterAnim="@anim/fade_in"
@@ -50,6 +50,19 @@
         android:id="@+id/introFragment"
         android:name="com.conght.facemakerapp.feature.intro.IntroFragment"
         tools:layout="@layout/fragment_intro">
+        <argument
+            android:name="onboardingDone"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_intro_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_intro_to_permission"
             app:destination="@id/permissionFragment"
