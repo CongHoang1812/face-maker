@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Face maker"
+rootProject.name = "ST237_D&D Character Maker"
 include(":app")
  

@@ -14,7 +14,7 @@ import androidx.core.widget.TextViewCompat
 import com.conght.facemakerapp.R
 
 /**
- * Nút chữ "gỗ" 2 lớp (viền ngoài + lõi + highlight), chữ trắng có viền.
+ * Nút chữ "gỗ" (nền [WoodButtonDrawable]), chữ trắng có viền.
  * attr: `android:text`, `app:variant` (orange | gray), `app:buttonWidth`.
  * Nhấn: scale 0.95.
  */
@@ -64,12 +64,13 @@ class WoodButton @JvmOverloads constructor(
     }
 
     private fun applyVariant() {
-        val (bg, stroke) = when (variant) {
-            Variant.ORANGE -> R.drawable.bg_wood_button to R.color.brown_dark
-            Variant.GRAY -> R.drawable.bg_wood_button_gray to R.color.tab_off_shadow
-        }
-        background = ContextCompat.getDrawable(context, bg)
-        textStrokeColor = ContextCompat.getColor(context, stroke)
+        // shadow, outer, core, highlight
+        val colors = when (variant) {
+            Variant.ORANGE -> listOf(R.color.brown_dark, R.color.brown_primary, R.color.orange_button, R.color.button_highlight)
+            Variant.GRAY -> listOf(R.color.tab_off_shadow, R.color.tab_off_outer, R.color.tab_off_inner, R.color.white)
+        }.map { ContextCompat.getColor(context, it) }
+        background = WoodButtonDrawable(resources, colors[0], colors[1], colors[2], colors[3])
+        textStrokeColor = colors[0]
         invalidate()
     }
 

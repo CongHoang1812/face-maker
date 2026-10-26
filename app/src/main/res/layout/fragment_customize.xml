@@ -27,22 +27,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Canvas nhân vật 328×328 (y = 116 Figma) -->
+        <!-- Canvas nhân vật rộng tối đa 328 (y = 116 Figma), kéo dài xuống sát panel dưới -->
         <com.conght.facemakerapp.core.widget.CharacterCanvasView
             android:id="@+id/canvas"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/grid_gap"
             android:layout_marginTop="@dimen/content_top"
-            app:layout_constraintBottom_toTopOf="@id/panel"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/character_size"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintWidth_max="@dimen/character_size"
+            android:layout_marginBottom="@dimen/app_toast_margin"
             android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/panel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/character_size" />
 
         <include
             android:id="@+id/canvas_skeleton"
@@ -52,9 +49,6 @@
             android:layout_marginBottom="@dimen/grid_gap"
             android:layout_marginTop="@dimen/content_top"
             app:layout_constraintBottom_toTopOf="@id/panel"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/character_size"
-            app:layout_constraintVertical_bias="0"
             app:layout_constraintWidth_max="@dimen/character_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -179,7 +173,7 @@
             app:layout_constraintStart_toStartOf="@id/btn_reset"
             app:layout_constraintTop_toBottomOf="@id/btn_flip" />
 
-        <!-- Random cả nhân vật (x = 316, y = 400 Figma) -->
+        <!-- Random cả nhân vật: góc phải dưới canvas, sát panel dưới -->
         <ImageButton
             android:id="@+id/btn_random_all"
             android:layout_width="@dimen/random_all_size"

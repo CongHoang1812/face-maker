@@ -106,12 +106,14 @@ class CharacterCanvasView @JvmOverloads constructor(
         layerContainer.rotation = transform.rotation
     }
 
-    /** Vẽ nhân vật (kèm transform) ra bitmap vuông [size]px. Gọi trên main thread. */
+    /** Vẽ nhân vật (kèm transform) ra bitmap vuông [size]px – lấy ô vuông giữa view. Gọi trên main thread. */
     fun exportBitmap(size: Int = EXPORT_SIZE): Bitmap {
         val bitmap = createBitmap(size, size)
         if (width == 0 || height == 0) return bitmap
         val canvas = Canvas(bitmap)
-        canvas.scale(size / width.toFloat(), size / height.toFloat())
+        val side = minOf(width, height).toFloat()
+        canvas.scale(size / side, size / side)
+        canvas.translate(-(width - side) / 2f, -(height - side) / 2f)
         draw(canvas)
         return bitmap
     }

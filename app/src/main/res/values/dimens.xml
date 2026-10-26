@@ -32,8 +32,6 @@
 
     <!-- Nút gỗ -->
     <dimen name="wood_button_height">40dp</dimen>
-    <dimen name="wood_button_outer_radius">20dp</dimen>
-    <dimen name="wood_button_inner_radius">12dp</dimen>
     <dimen name="wood_button_tab_radius">16dp</dimen>
     <dimen name="wood_button_inset_h">4dp</dimen>
     <dimen name="wood_button_inset_top">3dp</dimen>
@@ -198,6 +196,15 @@
     <dimen name="instruction_card_padding_top">10dp</dimen>
     <dimen name="dialog_button_w">142dp</dimen>
     <dimen name="dialog_padding">16dp</dimen>
+    <!-- Khoảng cách dọc trong PaperDialogContainer (Figma 69:34, 69:101).
+         TextView (includeFontPadding=false, 1 dòng) chỉ cao ascent+descent của Londrina (1.183em),
+         thấp hơn line box Figma -> cộng half-leading: title (32-28.4)/2 = 1.8, caption (20-16.6)/2 = 1.7 -->
+    <dimen name="dialog_title_top">1.8dp</dimen>
+    <dimen name="dialog_title_message_gap">30.5dp</dimen> <!-- 27 + 1.8 + 1.7 -->
+    <dimen name="dialog_message_button_gap">34.7dp</dimen> <!-- 33 + 1.7 -->
+    <dimen name="dialog_title_content_gap">21.8dp</dimen> <!-- 20 + 1.8 -->
+    <dimen name="dialog_content_gap">20dp</dimen>
+    <dimen name="dialog_padding_bottom">20dp</dimen>
     <dimen name="rate_dialog_width">300dp</dimen>
     <dimen name="rate_emoji">72dp</dimen>
     <dimen name="rate_star">30dp</dimen>
