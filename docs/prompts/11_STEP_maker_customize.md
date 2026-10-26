@@ -6,10 +6,11 @@
 - Nền `bg_tavern_inside` + `overlay_20`.
 - Top: back (16,60); nút **Next** dạng WoodButton nhỏ (phải, y=60).
 - Cột tool trái (x=16): `RoundIconButton` reset (y=116), flip (y=160), move (y=204).
-- `CharacterCanvasView` 328×328 căn giữa, y=116.
-- Nút random-all (ảnh xúc xắc màu `ic_dice_color`, nền `orange_button`, viền trắng, bo 12) tại góc phải dưới canvas (x=316, y=400).
+- `CharacterCanvasView` rộng tối đa 328 căn giữa, y=116, kéo dài xuống sát panel dưới (cách 8dp).
+- Vào màn hiển thị sẵn nhân vật mặc định – mỗi category 1 item (`detail.defaultConfig`).
+- Nút random-all (ảnh xúc xắc màu `ic_dice_color`, nền `orange_button`, viền trắng, bo 12) tại góc phải dưới canvas, sát panel dưới. Chức năng: lấy ngẫu nhiên mỗi category 1 item.
 - Panel dưới cao 356dp nền `panel_brown`:
-  1. **ColorBar**: RecyclerView ngang trong `bg_color_bar` (padding 16 ngang, 8 dọc), chấm màu 24dp, gap 16. Ẩn nếu item đang chọn không có màu.
+  1. **ColorBar** – **NEXT VER** (plan.xlsx: list màu cho category = 0; bản 1.0 ẩn, item dùng màu đầu tiên): RecyclerView ngang trong `bg_color_bar` (padding 16 ngang, 8 dọc), chấm màu 24dp, gap 16. Ẩn nếu item đang chọn không có màu.
   2. **Lưới item**: `GridLayoutManager(5)`, item 56×64 khung giấy `cell_tan`, padding ngang 24, gap 8, cuộn dọc.
      - **Ô 1 = None** (`ic_none`) – LUÔN có, chọn → `PartSelection(itemId = null)`.
      - **Ô 2 = Xúc xắc** (`ic_dice`) – random part của category hiện tại.
@@ -20,7 +21,7 @@
 - `FrameLayout` chứa nhiều `ImageView` layer xếp theo `PartCategory.zIndex`.
 - `render(detail: TemplateDetail, config: CharacterConfig)`: với mỗi category lấy `PartSelection` → url layer (theo colorId, fallback màu đầu) → Glide load; None → ẩn layer.
 - Áp `CharacterTransform` lên container: `translationX/Y`, `scaleX/Y` (flip = scaleX âm), `rotation`.
-- `exportBitmap(): Bitmap` – vẽ view ra bitmap 1024×1024 (dùng ở Next / save).
+- `exportBitmap(): Bitmap` – vẽ ô vuông giữa view ra bitmap 1024×1024 (dùng ở Next / save).
 
 ## ViewModel (`CustomizeViewModel`, @HiltViewModel, dùng `SavedStateHandle`)
 - Input: `templateId` hoặc `initialConfigJson` (khi Edit).
@@ -40,7 +41,7 @@
 - Lưu config vào `SavedStateHandle` (JSON) để không mất khi process death.
 
 ## Trạng thái loading (hiện tại luôn Loading vì chưa có API)
-- Canvas: `view_skeleton_image` 328×328 có shimmer.
+- Canvas: `view_skeleton_image` cùng kích thước canvas, có shimmer.
 - ColorBar: 8 `item_skeleton_color_dot` shimmer.
 - Lưới: ô None (thật) + ô Xúc xắc (thật, click → hàm rỗng) + 18 skeleton shimmer (dùng `ConcatAdapter`).
 - Tab category: 6 skeleton tab shimmer.

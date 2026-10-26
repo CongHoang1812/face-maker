@@ -2,6 +2,14 @@
 
 > Prompt cho agent. Figma section `3:40`: start `3:41`, instruction `3:77`, play `3:132`, score popup (khung giấy "50%"), successful `3:223`.
 
+> **NEXT VER** – không làm ở bản 1.0 (plan.xlsx: toàn bộ nhóm Cosplay = 0).
+>
+> Khác biệt giữa plan.xlsx và Figma cần chốt trước khi làm:
+> - Plan: thanh trên màn play hiển thị **% giống ảnh mẫu**; Figma (`3:134`) vẽ **thanh thời gian 10:00**.
+> - Plan: chạm ảnh mẫu (thumbnail) → dialog xem ảnh mẫu, icon X đóng.
+> - Plan: icon **next** → Successful hiển thị % giống ảnh mẫu, có icon back và icon home (bước này ghi score popup + số sao).
+> - Plan gọi nút hướng dẫn là icon **?** (Figma: (i)).
+
 ## Luật chơi
 Người chơi nhận một ảnh tham chiếu ngẫu nhiên, phải dựng lại nhân vật bằng cách chọn đúng kiểu tóc, trang phục, màu, phụ kiện. Mỗi lựa chọn đúng tăng % điểm.
 

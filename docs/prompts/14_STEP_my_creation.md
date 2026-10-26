@@ -11,11 +11,14 @@
   - Character: nút nhỏ **xoá** + **sửa** (24dp, nền cream viền nâu bo 8).
   - Design: chỉ nút **xoá**.
 - Lưới 2 cột, gap 8 ngang / 16 dọc, padding 16.
+- **Thanh dưới luôn hiện** (kể cả khi chưa chọn item, theo plan.xlsx):
+  - Tab Character: 2 WoodButton **Add to Telegram** / **Add to Whatsapp**.
+  - Tab Design: 2 WoodButton **Share** / **Download**.
 
 ## Chế độ chọn nhiều
 - Long-press item → vào selection mode: nút xoá/sửa của item thay bằng **checkbox** vuông bo 4 (chưa chọn: xám; chọn: nền cream + ✓).
-- Header hiện xoá / share / download cho các item đã chọn.
-- Riêng tab Character: thanh dưới cùng 2 WoodButton **Add to Telegram** / **Add to Whatsapp** → stub `// TODO(STICKER_EXPORT): tích hợp WhatsApp sticker / Telegram` (hiện Toast "Coming soon").
+- Header hiện **xoá** và **chọn tất cả** cho các item đã chọn.
+- Thanh dưới áp dụng cho các item đã chọn: tab Design → Share / Download; tab Character → **Add to Telegram** / **Add to Whatsapp** → stub `// TODO(STICKER_EXPORT): tích hợp WhatsApp sticker / Telegram` (hiện Toast "Coming soon").
 - Back khi đang selection → thoát selection mode.
 - Xoá → Delete dialog → `CreationRepository.delete(ids)` (xoá cả file).
 - Share nhiều → `ACTION_SEND_MULTIPLE`. Download → `CreationRepository.download(ids)` (lưu vào internal storage `filesDir/downloads/`, Toast "Saved").
@@ -23,7 +26,7 @@
 ## Chi tiết (`CreationDetailFragment`)
 - Nền `editor_bg`; top bar: back, và bên phải xoá / share / download.
 - Ảnh 328×328 nền trắng.
-- Character: WoodButton **Edit** → `customizeFragment` với `ARG_CONFIG_JSON` của creation (nếu template detail chưa load được thì customize vẫn ở trạng thái shimmer – OK).
+- Character: WoodButton **Edit** – **NEXT VER** (plan.xlsx = 0, bản 1.0 ẩn) → `customizeFragment` với `ARG_CONFIG_JSON` của creation (nếu template detail chưa load được thì customize vẫn ở trạng thái shimmer – OK).
 - Design: không có Edit.
 - Nút sửa (pencil) trên item danh sách = đi thẳng Edit như trên.
 

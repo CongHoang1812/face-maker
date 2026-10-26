@@ -46,18 +46,20 @@ Trang `lfs` (`3:1645`) chỉ là ảnh store listing → **không code**.
 
 ## 2. Luồng điều hướng
 
+> Các nhánh đánh dấu **(NEXT VER)** không làm ở bản 1.0 – xem phạm vi trong `00_README.md`.
+
 ```
 Splash ──(lần đầu)──> Language ─> Intro1 ─> Intro2 ─> Intro3 ─> Permission ─> Home
-   └──(đã onboard)────────────────────────────────────────────────────────> Home
+   └──(đã onboard)──────────────> Intro1 ─> Intro2 ─> Intro3 ──────────────> Home
 
 Home
  ├─ Setting ─> Language (setting) | Rate us (dialog) | Share app (intent) | Privacy (WebView/Browser)
  ├─ D&D maker ─> TemplateSelect(cata) ─> Customize ─(Next)─> DecorEditor ─(Download)─> Successful
  │                                         └─ Move mode (panel thay thế, cùng màn)
- ├─ D&D cosplay ─> CosplayStart ─(i)─> Instruction overlay
+ ├─ D&D cosplay (NEXT VER) ─> CosplayStart ─(i)─> Instruction overlay
  │                     └─(Cosplay)─> CosplayPlay ─(Done/hết giờ)─> Score popup ─> CosplaySuccessful
- ├─ D&D lucky roll ─> LuckyRoll ─(Edit)─> Customize (với config random)
- └─ My creation ─> [Character | Design] ─> Detail ─(Edit)─> Customize / DecorEditor
+ ├─ Character Random (lucky roll) ─> nhân vật random ngay khi vào ─(Edit)─> Customize (với config random)
+ └─ My creation ─> [Character | Design] ─> Detail ─(Edit, NEXT VER)─> Customize
                                 └─ long-press ─> Selection mode
 
 Successful: re-edit (về editor), share, my creation, home (popUpTo Home)

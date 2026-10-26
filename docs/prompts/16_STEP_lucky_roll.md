@@ -1,6 +1,8 @@
-# BƯỚC 14 – D&D Lucky roll
+# BƯỚC 14 – Character Random (Figma: D&D Lucky roll)
 
 > Prompt cho agent. Figma section `3:10`: default `3:11`, play `3:24`.
+
+> Phạm vi VER 1.0 (plan.xlsx): vào màn là **tự random 1 nhân vật** hiển thị giữa màn, có back và **Edit** → Customize. Nút **Random** để random lại là **NEXT VER** – bản 1.0 ẩn nút này và bỏ trạng thái Idle.
 
 ## UI (`LuckyRollFragment`)
 - Nền `bg_tavern`. Top: back trái; **Edit** (WoodButton nhỏ) bên phải – chỉ hiện khi đã có kết quả.

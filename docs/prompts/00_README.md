@@ -25,10 +25,21 @@ Mỗi file `NN_*.md` là **một prompt độc lập**: copy toàn bộ nội du
 | 10 | [12_STEP_decor_editor.md](12_STEP_decor_editor.md) | Background / Sticker / Speech bubble / Text |
 | 11 | [13_STEP_success_save_share.md](13_STEP_success_save_share.md) | Lưu ảnh, màn Successful, share |
 | 12 | [14_STEP_my_creation.md](14_STEP_my_creation.md) | My creation (Character / Design), chọn nhiều, xem chi tiết |
-| 13 | [15_STEP_cosplay.md](15_STEP_cosplay.md) | Chế độ D&D cosplay (game) |
-| 14 | [16_STEP_lucky_roll.md](16_STEP_lucky_roll.md) | D&D lucky roll |
+| 13 | [15_STEP_cosplay.md](15_STEP_cosplay.md) | Chế độ D&D cosplay (game) – **NEXT VER** |
+| 14 | [16_STEP_lucky_roll.md](16_STEP_lucky_roll.md) | Character Random (Figma: D&D lucky roll) |
 | 15 | [17_STEP_missing_screens_polish.md](17_STEP_missing_screens_polish.md) | Màn hình thiếu trong Figma, empty/error state, polish |
 | – | [18_API_INTEGRATION_TODO.md](18_API_INTEGRATION_TODO.md) | Danh sách mọi chỗ để trống chờ API – dùng khi có API |
+
+## Phạm vi VER 1.0 (theo `docs/plan.xlsx`, Sheet1)
+
+`plan.xlsx` là kế hoạch tính năng gốc: cột **VER 1.0** = 1 làm ở bản 1.0, = 0 để **NEXT VER**. Khi các file md lệch với `plan.xlsx` thì theo `plan.xlsx`.
+
+- **VER 1.0**: Splash, Intro, Permission, Language; Home (D&D Character Maker, Character Random, My Creation, Setting); Maker (Category → Customize → Add BG → Successful); Character Random; My Creation.
+- **NEXT VER** (chưa làm ở 1.0):
+  - Toàn bộ **Cosplay** (thẻ ở Home và mọi màn cosplay).
+  - **List màu cho category** ở Customize.
+  - Nút **Random** ở màn Character Random (bản 1.0 chỉ random 1 lần khi vào màn).
+  - Nút **Edit** ở màn View của My Character.
 
 ## Quy ước bắt buộc cho MỌI bước (agent phải tuân thủ)
 

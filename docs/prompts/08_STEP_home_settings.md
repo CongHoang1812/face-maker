@@ -7,8 +7,8 @@
 - Logo `img_logo` căn giữa dưới top bar.
 - Lưới 2×2 thẻ (mỗi thẻ ~112×112dp, bo 12, viền trắng 2dp, ảnh full + nhãn chữ trắng viền nâu ở đáy):
   1. **D&D maker** → `templateSelectFragment`
-  2. **D&D cosplay** → `cosplayStartFragment`
-  3. **D&D lucky roll** → `luckyRollFragment`
+  2. **D&D cosplay** → `cosplayStartFragment` – **NEXT VER**: bản 1.0 ẩn thẻ này (plan.xlsx: Button Cosplay = 0)
+  3. **Character Random** (Figma ghi "D&D lucky roll") → `luckyRollFragment`
   4. **My creation** → `myCreationFragment`
 - Ảnh thẻ là asset local (không qua API, không shimmer).
 - Back ở Home → thoát app (có thể hiện Rate us dialog lần đầu thoát nếu chưa rate – logic ở bước 7).

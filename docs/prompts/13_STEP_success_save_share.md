@@ -3,7 +3,7 @@
 > Prompt cho agent. Figma nodes: successful maker `3:1109`, successful cosplay `3:223` (bước 13 dùng lại).
 
 ## UI (`SuccessFragment`)
-- Nền `editor_bg`. Top bar: trái nút **re-edit** (`ic_reset` dạng vòng xoay) ; phải 3 nút: **share**, **my creation** (`ic_archive`), **home**.
+- Nền `editor_bg`. Top bar: trái nút **re-edit** (`ic_reset` dạng vòng xoay; plan.xlsx gọi là icon back) ; phải 3 nút: **share**, **my creation** (`ic_archive`), **home**.
 - Ảnh kết quả 328×328 nền trắng, căn giữa y=116 (load từ `Creation.imagePath`).
 - WoodButton **Download** rộng ~112 dưới ảnh.
 - Tham số: `ARG_CREATION_ID`, `ARG_SOURCE` (`MAKER` | `COSPLAY`), với COSPLAY thêm `ARG_STARS` (0–3): hiển thị huy hiệu tab giấy có 3 sao phía trên ảnh và viền ảnh `brown_primary` 2dp (theo `3:223`).

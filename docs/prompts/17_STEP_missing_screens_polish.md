@@ -17,7 +17,7 @@
 ## 4. Snackbar/Toast style
 - `showAppToast(message)`: thẻ nhỏ nền `brown_primary` bo 16 chữ trắng, hiện 2s ở đáy.
 
-## 5. Cosplay
+## 5. Cosplay (NEXT VER)
 - Nút Done ở play screen, time-up dùng score popup, Exit dialog khi back (đã nêu ở bước 13 – kiểm tra lại).
 
 ## 6. Rate us trigger
@@ -27,7 +27,7 @@
 - Hiệu ứng nhấn cho mọi nút (scale 0.95, 100ms), ripple tắt cho WoodButton.
 - Transition fragment: fade 150ms.
 - Âm thanh/haptic khi chọn item: `performHapticFeedback(KEYBOARD_TAP)`.
-- Kiểm tra màn nhỏ (360×640) và lớn (412×915): panel dưới cố định 356dp, canvas co lại (giữ tỉ lệ vuông) nếu thiếu chiều cao – dùng ConstraintLayout `layout_constraintDimensionRatio="1:1"` + `layout_constraintHeight_max`.
+- Kiểm tra màn nhỏ (360×640) và lớn (412×915): panel dưới cố định 356dp. Canvas customize kéo dài theo chiều cao còn lại (rộng tối đa 328); các khung ảnh khác giữ tỉ lệ vuông – dùng ConstraintLayout `layout_constraintDimensionRatio="1:1"` + `layout_constraintHeight_max`.
 - Insets: nội dung top bar không bị status bar che (padding top = inset + 16).
 - Kiểm tra mọi danh sách phụ kiện có **None ở đầu**: customize parts, background color/image/pack, sticker, speech bubble. Viết UI test (Espresso) hoặc unit test cho adapter đảm bảo `position 0 == NoneItem`.
 - Chạy `./gradlew lint` và sửa lỗi mới.
