@@ -25,7 +25,6 @@ class TemplateSelectViewModel @Inject constructor(
     /** Mỗi lần tăng = tải lại danh sách (Retry). */
     private val reloadKey = MutableStateFlow(0)
 
-    /** Hiện tại (chưa có API) luôn ở Loading -> UI shimmer. */
     @OptIn(ExperimentalCoroutinesApi::class)
     val state: StateFlow<Resource<List<CharacterTemplate>>> = reloadKey
         .flatMapLatest { makerRepository.templates() }

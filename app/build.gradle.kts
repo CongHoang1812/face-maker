@@ -19,8 +19,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // TODO(API): thay BASE_URL thật
-        buildConfigField("String", "BASE_URL", "\"https://example.invalid/\"")
+        // Máy chủ chính + dự phòng (chỉ gọi khi máy chủ chính lỗi)
+        buildConfigField("String", "BASE_URL", "\"https://lvtglobal.tech/\"")
+        buildConfigField("String", "BACKUP_BASE_URL", "\"https://lvt-api-tech.io.vn/\"")
         buildConfigField("boolean", "USE_MOCK_DATA", "false")
     }
 
@@ -84,9 +85,10 @@ dependencies {
 
     // Image
     implementation(libs.glide)
+    implementation(libs.glide.okhttp)
     ksp(libs.glide.ksp)
 
-    // Network (chuẩn bị cho API)
+    // Network
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp)

@@ -60,7 +60,7 @@
             android:id="@+id/iv_result"
             android:layout_width="@dimen/character_size"
             android:layout_height="@dimen/character_size"
-            android:layout_marginTop="@dimen/content_top"
+            android:layout_marginTop="140dp"
             android:background="@color/white"
             android:contentDescription="@string/cd_result_image"
             android:scaleType="fitCenter"

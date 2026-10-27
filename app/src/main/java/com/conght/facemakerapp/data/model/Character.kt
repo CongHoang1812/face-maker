@@ -21,9 +21,17 @@ data class PartItem(
     val id: String,
     val thumbnailUrl: String,
     val colors: List<PartColor>,  // rỗng = không đổi màu
+    val layerUrl: String? = null, // layer khi item không có màu (có màu thì dùng PartColor.layerUrl)
 )
 
 data class PartColor(val id: String, val hex: String, val layerUrl: String)
+
+/** Ảnh layer cần vẽ cho [selection]; null = None / item không còn trong category. */
+fun PartCategory.layerUrlFor(selection: PartSelection?): String? {
+    val item = items.firstOrNull { it.id == selection?.itemId } ?: return null
+    val color = item.colors.firstOrNull { it.id == selection?.colorId } ?: item.colors.firstOrNull()
+    return color?.layerUrl ?: item.layerUrl ?: item.thumbnailUrl
+}
 
 data class PartSelection(val itemId: String?, val colorId: String?)   // itemId null = None
 

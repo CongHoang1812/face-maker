@@ -17,10 +17,10 @@ interface MakerRepository {
     fun templates(): Flow<Resource<List<CharacterTemplate>>>
     fun templateDetail(id: String): Flow<Resource<TemplateDetail>>
 
-    /** null = chưa có API / không random được (UI không làm gì). */
+    /** null = không random được (UI không làm gì). */
     suspend fun randomizeCategory(templateId: String, categoryId: String): PartSelection?
 
-    /** null = chưa có API / không random được (UI không làm gì). */
+    /** null = không random được (UI không làm gì). */
     suspend fun randomizeCharacter(templateId: String): CharacterConfig?
 }
 

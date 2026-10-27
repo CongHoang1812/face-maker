@@ -53,7 +53,7 @@ class CosplayModeTest {
         defaultConfig = CharacterConfig("t", mapOf("hair" to PartSelection(null, null), "hat" to PartSelection(null, null))),
     )
 
-    /** Đáp án: hair_1 + hat = None → cấu hình mặc định khớp 1/2 = 50%. */
+    /** Đáp án: hair_1 + hat = None → cấu hình mặc định (toàn None) được 0% (None vs None không tính). */
     private val challenge = CosplayChallenge(
         id = "c", referenceImageUrl = "ref", templateId = "t",
         answer = CharacterConfig("t", mapOf("hair" to PartSelection("hair_1", null), "hat" to PartSelection(null, null))),
@@ -120,7 +120,7 @@ class CosplayModeTest {
         advanceTimeBy(10 * 60 * 1_000L)
         runCurrent()
         assertEquals(0, vm.state.value.cosplay?.remainingSeconds)
-        assertEquals(50, vm.state.value.cosplay?.scorePercent)
+        assertEquals(0, vm.state.value.cosplay?.scorePercent)
     }
 }
 

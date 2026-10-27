@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
- * Cosplay start (Figma 3:41). Chưa có API: ảnh tham chiếu là skeleton shimmer, nút Cosplay disable.
+ * Cosplay start (Figma 3:41). Đang tải đề: ảnh tham chiếu là skeleton shimmer, nút Cosplay disable.
  * Random gọi lại đề; (i) mở luật chơi (tự hiện lần đầu).
  */
 @AndroidEntryPoint

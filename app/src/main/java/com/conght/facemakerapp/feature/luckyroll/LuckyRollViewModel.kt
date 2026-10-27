@@ -27,10 +27,7 @@ sealed interface LuckyRollUiState {
     data class Rolled(val result: Resource<LuckyRollResult>) : LuckyRollUiState
 }
 
-/**
- * Lucky roll: kết quả random do API quyết định (không tự random bằng code local).
- * Hiện chưa có API → sau khi bấm Random sẽ ở Loading (shimmer) mãi.
- */
+/** Lucky roll: kết quả random từ dữ liệu API (data source random + ghép ảnh). */
 @HiltViewModel
 class LuckyRollViewModel @Inject constructor(
     private val luckyRollRepository: LuckyRollRepository,

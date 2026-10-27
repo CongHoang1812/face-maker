@@ -119,7 +119,7 @@ class CustomizeViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val detail: Flow<Resource<TemplateDetail>> = reloadKey.flatMapLatest {
         val id = templateId
-        // TODO(API): chưa có template (mở từ thẻ chờ API) → giữ Loading (shimmer) tới khi có API
+        // Không có template (bấm thẻ shimmer khi danh sách đang tải) → giữ Loading
         if (id == null) flow { emit(Resource.Loading); awaitCancellation() }
         else makerRepository.templateDetail(id)
     }.onEach { resource ->
@@ -300,15 +300,34 @@ class CustomizeViewModel @Inject constructor(
         savedStateHandle[KEY_PANEL] = mode.name
     }
 
+    /** Xúc xắc trong lưới: random item + màu của category đang chọn. */
     fun randomCategory() {
-        // TODO(API): gọi makerRepository.randomizeCategory(templateId, selectedCategoryId) khi có API
-        Log.d(TAG, "TODO(API): randomizeCategory(${templateId}, ${current.selectedCategoryId})")
+        val id = templateId ?: return
+        val categoryId = current.selectedCategoryId ?: return
+        if (!current.isReady) return
+        viewModelScope.launch {
+            val selection = randomOrNull { makerRepository.randomizeCategory(id, categoryId) } ?: return@launch
+            updateConfig { it.copy(selections = it.selections + (categoryId to selection)) }
+        }
     }
 
-    /** Gọi sau khi Random dialog (Watch Ad) xác nhận. */
+    /** Gọi sau khi Random dialog (Watch Ad) xác nhận: random cả nhân vật, giữ transform. */
     fun randomAll() {
-        // TODO(API): makerRepository.randomizeCharacter(templateId)
-        Log.d(TAG, "TODO(API): randomizeCharacter($templateId)")
+        val id = templateId ?: return
+        if (!current.isReady) return
+        viewModelScope.launch {
+            val random = randomOrNull { makerRepository.randomizeCharacter(id) } ?: return@launch
+            updateConfig { it.copy(selections = random.selections) }
+        }
+    }
+
+    private suspend fun <T> randomOrNull(block: suspend () -> T?): T? = try {
+        block()
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Log.e(TAG, "Random lỗi", e)
+        null
     }
 
     /**

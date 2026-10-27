@@ -1,6 +1,5 @@
 package com.conght.facemakerapp.data.remote
 
-import android.util.Log
 import com.conght.facemakerapp.core.ui.MockImageLoader.MOCK_COLOR_PREFIX
 import com.conght.facemakerapp.data.model.CharacterConfig
 import com.conght.facemakerapp.data.model.CharacterTemplate
@@ -18,7 +17,9 @@ import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 /** Dữ liệu giả để test UI, chỉ dùng khi AppConfig.USE_MOCK_DATA = true. */
-class MockDataSource @Inject constructor() : MakerRemoteDataSource {
+class MockDataSource @Inject constructor(
+    private val randomizer: CharacterRandomizer,
+) : MakerRemoteDataSource {
 
     override suspend fun getTemplates(): List<CharacterTemplate> {
         delay(DELAY_MS)
@@ -94,22 +95,15 @@ class MockDataSource @Inject constructor() : MakerRemoteDataSource {
         )
     }
 
-    override suspend fun randomizeCategory(templateId: String, categoryId: String): PartSelection? {
-        // TODO(API): random do server/dữ liệu quyết định – mock không tự random
-        Log.d(TAG, "TODO(API): randomizeCategory($templateId, $categoryId)")
-        return null
-    }
+    override suspend fun randomizeCategory(templateId: String, categoryId: String): PartSelection? =
+        getTemplateDetail(templateId).categories.firstOrNull { it.id == categoryId }?.let(randomizer::randomSelection)
 
-    override suspend fun randomizeCharacter(templateId: String): CharacterConfig? {
-        // TODO(API): random do server/dữ liệu quyết định – mock không tự random
-        Log.d(TAG, "TODO(API): randomizeCharacter($templateId)")
-        return null
-    }
+    override suspend fun randomizeCharacter(templateId: String): CharacterConfig =
+        randomizer.randomConfig(getTemplateDetail(templateId))
 
     private fun colorUrl(index: Int) = MOCK_COLOR_PREFIX + PALETTE[index % PALETTE.size]
 
     private companion object {
-        const val TAG = "MockDataSource"
         const val DELAY_MS = 1500L
         const val TEMPLATE_COUNT = 6
         const val CATEGORY_COUNT = 6

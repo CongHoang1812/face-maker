@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/** Màn bắt đầu Cosplay: đề bài ngẫu nhiên (API – hiện luôn Loading → shimmer). */
+/** Màn bắt đầu Cosplay: đề bài ngẫu nhiên từ dữ liệu API (Loading → shimmer). */
 @HiltViewModel
 class CosplayViewModel @Inject constructor(
     private val cosplayRepository: CosplayRepository,
@@ -40,7 +40,7 @@ class CosplayViewModel @Inject constructor(
         retryWhenBackOnline(networkMonitor, isError = { challenge.value is Resource.Error }, retry = ::random)
     }
 
-    /** Random: xin đề mới (data source là TODO(API) nên UI quay về shimmer). */
+    /** Random: xin đề mới (UI quay về shimmer tới khi ghép xong ảnh tham chiếu). */
     fun random() {
         reloadKey.value++
     }

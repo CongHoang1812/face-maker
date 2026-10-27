@@ -68,6 +68,9 @@
     <string name="watch_ad">Voir la pub</string>
     <string name="dialog_delete_title">Supprimer</string>
     <string name="dialog_delete_message">Voulez-vous vraiment supprimer cet élément ?</string>
+    <string name="dialog_no_internet_title">Pas de connexion Internet</string>
+    <string name="dialog_no_internet_message">Vérifiez votre connexion et réessayez.</string>
+    <string name="try_again">Réessayer</string>
     <string name="choose_color">Choisir une couleur</string>
 
     <string name="rate">Noter</string>

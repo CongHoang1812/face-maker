@@ -9,17 +9,21 @@ object CosplayScorer {
     private val NONE = PartSelection(itemId = null, colorId = null)
 
     /**
-     * % category khớp so với đáp án. Một category khớp khi itemId bằng nhau
-     * và (nếu đáp án có colorId) colorId cũng bằng nhau. None vs None = khớp.
+     * % category khớp so với đáp án, chỉ tính các category mà đáp án hoặc người chơi có chọn item
+     * (None vs None bị bỏ qua để đáp án nhiều None không làm điểm cao sẵn). Một category khớp khi
+     * itemId bằng nhau và (nếu đáp án có colorId) colorId cũng bằng nhau.
      */
     fun score(answer: CharacterConfig, user: CharacterConfig): Int {
-        val total = answer.selections.size
-        if (total == 0) return 0
-        val matched = answer.selections.count { (categoryId, expected) ->
+        val counted = (answer.selections.keys + user.selections.keys).filter { categoryId ->
+            answer.selections[categoryId]?.itemId != null || user.selections[categoryId]?.itemId != null
+        }
+        if (counted.isEmpty()) return 0
+        val matched = counted.count { categoryId ->
+            val expected = answer.selections[categoryId] ?: NONE
             val actual = user.selections[categoryId] ?: NONE
             expected.itemId == actual.itemId &&
                 (expected.colorId == null || expected.colorId == actual.colorId)
         }
-        return (matched * 100.0 / total).roundToInt()
+        return (matched * 100.0 / counted.size).roundToInt()
     }
 }

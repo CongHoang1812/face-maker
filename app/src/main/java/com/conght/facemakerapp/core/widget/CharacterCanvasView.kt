@@ -17,6 +17,7 @@ import com.conght.facemakerapp.core.ui.MockImageLoader
 import com.conght.facemakerapp.data.model.CharacterConfig
 import com.conght.facemakerapp.data.model.CharacterTransform
 import com.conght.facemakerapp.data.model.TemplateDetail
+import com.conght.facemakerapp.data.model.layerUrlFor
 
 /**
  * Vẽ nhân vật từ nhiều layer ảnh (mỗi [com.conght.facemakerapp.data.model.PartCategory] một layer,
@@ -69,12 +70,7 @@ class CharacterCanvasView @JvmOverloads constructor(
                 layerContainer.removeView(view)
                 layerContainer.addView(view, index, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
             }
-            val selection = config.selections[category.id]
-            val item = category.items.firstOrNull { it.id == selection?.itemId }
-            val color = item?.colors?.firstOrNull { it.id == selection?.colorId } ?: item?.colors?.firstOrNull()
-            // TODO(API): item không có màu hiện dùng thumbnailUrl làm layer – đổi khi API có field layer riêng
-            val url = color?.layerUrl ?: item?.thumbnailUrl
-            setLayer(category.id, view, url)
+            setLayer(category.id, view, category.layerUrlFor(config.selections[category.id]))
         }
         applyTransform(config.transform)
     }

@@ -22,7 +22,7 @@ import com.conght.facemakerapp.feature.maker.customize.CustomizeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * Lucky roll (Figma 3:11 / 3:24): Idle → Random → Loading (shimmer, chờ API) → kết quả + Edit.
+ * Lucky roll (Figma 3:11 / 3:24): Idle → Random → Loading (shimmer) → kết quả + Edit.
  */
 @AndroidEntryPoint
 class LuckyRollFragment : BaseFragment<FragmentLuckyRollBinding>(FragmentLuckyRollBinding::inflate) {

@@ -13,11 +13,25 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+/** [ApiService] trỏ tới máy chủ chính ([AppConfig.BASE_URL]). */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class PrimaryApi
+
+/** [ApiService] trỏ tới máy chủ dự phòng ([AppConfig.BACKUP_BASE_URL]). */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class BackupApi
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    /** Theo tài liệu API: quá 6 giây thì chuyển sang máy chủ dự phòng. */
+    private const val TIMEOUT_SECONDS = 6L
 
     @Provides
     @Singleton
@@ -26,24 +40,32 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .addInterceptor(
             HttpLoggingInterceptor().apply {
-                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+                // BODY sẽ in cả JSON dữ liệu nhân vật (rất lớn) → chỉ log header
+                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.HEADERS else HttpLoggingInterceptor.Level.NONE
             },
         )
         .build()
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
-        .baseUrl(AppConfig.BASE_URL) // TODO(API): BASE_URL hiện là placeholder
-        .client(client)
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .build()
+    @PrimaryApi
+    fun providePrimaryApiService(client: OkHttpClient, gson: Gson): ApiService =
+        createApiService(AppConfig.BASE_URL, client, gson)
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+    @BackupApi
+    fun provideBackupApiService(client: OkHttpClient, gson: Gson): ApiService =
+        createApiService(AppConfig.BACKUP_BASE_URL, client, gson)
+
+    private fun createApiService(baseUrl: String, client: OkHttpClient, gson: Gson): ApiService = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+        .create(ApiService::class.java)
 }

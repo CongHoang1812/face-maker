@@ -37,7 +37,7 @@ sealed interface DecorEditorEvent {
 /**
  * Editor trang trí (Background / Sticker / Speech / Text). Toàn bộ [EditorData] lưu JSON trong
  * [SavedStateHandle] để không mất khi xoay / recreate / process death.
- * Pack background / sticker / speech lấy từ [DecorRepository] (chưa có API → luôn Loading).
+ * Pack background / sticker / speech lấy từ [DecorRepository].
  */
 @HiltViewModel
 class DecorEditorViewModel @Inject constructor(

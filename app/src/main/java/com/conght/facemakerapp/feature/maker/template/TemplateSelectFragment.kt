@@ -55,7 +55,7 @@ class TemplateSelectFragment : BaseFragment<FragmentTemplateSelectBinding>(Fragm
         }
     }
 
-    /** [template] null (chưa có API): mở Customize ở trạng thái chờ dữ liệu (shimmer). */
+    /** [template] null (thẻ shimmer khi đang tải): mở Customize ở trạng thái chờ dữ liệu (shimmer). */
     private fun openCustomize(template: CharacterTemplate?) {
         navigateSafe(
             R.id.action_templateSelect_to_customize,

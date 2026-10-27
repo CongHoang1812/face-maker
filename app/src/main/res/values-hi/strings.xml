@@ -68,6 +68,9 @@
     <string name="watch_ad">विज्ञापन देखें</string>
     <string name="dialog_delete_title">हटाएं</string>
     <string name="dialog_delete_message">क्या आप वाकई इस आइटम को हटाना चाहते हैं?</string>
+    <string name="dialog_no_internet_title">इंटरनेट कनेक्शन नहीं है</string>
+    <string name="dialog_no_internet_message">कृपया अपना कनेक्शन जाँचें और फिर से कोशिश करें।</string>
+    <string name="try_again">फिर से कोशिश करें</string>
     <string name="choose_color">रंग चुनें</string>
 
     <string name="rate">रेट करें</string>

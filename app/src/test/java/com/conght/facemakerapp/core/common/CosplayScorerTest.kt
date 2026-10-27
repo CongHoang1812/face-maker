@@ -51,6 +51,19 @@ class CosplayScorerTest {
     }
 
     @Test
+    fun noneVsNone_notCounted_extraItemPenalized() {
+        val sparseAnswer = config(
+            "hair" to PartSelection("hair_1", null),
+            "hat" to PartSelection(null, null),
+            "cape" to PartSelection(null, null),
+            "mask" to PartSelection(null, null),
+        )
+        assertEquals(0, CosplayScorer.score(sparseAnswer, config()))
+        val user = config("hair" to PartSelection("hair_1", null), "mask" to PartSelection("mask_1", null))
+        assertEquals(50, CosplayScorer.score(sparseAnswer, user))
+    }
+
+    @Test
     fun emptyAnswer_is0() {
         assertEquals(0, CosplayScorer.score(config(), answer))
     }

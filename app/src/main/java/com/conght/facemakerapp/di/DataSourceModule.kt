@@ -1,9 +1,13 @@
 package com.conght.facemakerapp.di
 
 import com.conght.facemakerapp.core.common.AppConfig
+import com.conght.facemakerapp.data.remote.ApiRemoteDataSource
+import com.conght.facemakerapp.data.remote.AssetProbe
+import com.conght.facemakerapp.data.remote.CharacterImageComposer
+import com.conght.facemakerapp.data.remote.GlideCharacterImageComposer
 import com.conght.facemakerapp.data.remote.MakerRemoteDataSource
 import com.conght.facemakerapp.data.remote.MockDataSource
-import com.conght.facemakerapp.data.remote.PendingRemoteDataSource
+import com.conght.facemakerapp.data.remote.OkHttpAssetProbe
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,11 +19,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataSourceModule {
 
-    // TODO(API): khi có API thật, thay PendingRemoteDataSource bằng implementation gọi ApiService
     @Provides
     @Singleton
     fun provideMakerRemoteDataSource(
         mock: Provider<MockDataSource>,
-        pending: Provider<PendingRemoteDataSource>,
-    ): MakerRemoteDataSource = if (AppConfig.USE_MOCK_DATA) mock.get() else pending.get()
+        api: Provider<ApiRemoteDataSource>,
+    ): MakerRemoteDataSource = if (AppConfig.USE_MOCK_DATA) mock.get() else api.get()
+
+    @Provides
+    fun provideCharacterImageComposer(impl: GlideCharacterImageComposer): CharacterImageComposer = impl
+
+    @Provides
+    fun provideAssetProbe(impl: OkHttpAssetProbe): AssetProbe = impl
 }

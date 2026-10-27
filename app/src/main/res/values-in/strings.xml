@@ -68,6 +68,9 @@
     <string name="watch_ad">Tonton iklan</string>
     <string name="dialog_delete_title">Hapus</string>
     <string name="dialog_delete_message">Apakah kamu yakin ingin menghapus item ini?</string>
+    <string name="dialog_no_internet_title">Tidak Ada Koneksi Internet</string>
+    <string name="dialog_no_internet_message">Periksa koneksi Anda dan coba lagi.</string>
+    <string name="try_again">Coba lagi</string>
     <string name="choose_color">Pilih warna</string>
 
     <string name="rate">Beri nilai</string>
