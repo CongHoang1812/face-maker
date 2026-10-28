@@ -20,7 +20,7 @@ import javax.inject.Singleton
 
 /** Ghép nhân vật thành 1 ảnh, trả đường dẫn tuyệt đối (UI load được bằng `loadImage`). */
 fun interface CharacterImageComposer {
-    /** [prefix] phân loại file; file cũ cùng prefix bị xoá để cache không phình. */
+    /** [prefix] phân loại file; chỉ giữ vài file mới nhất cùng prefix để cache không phình. */
     suspend fun compose(detail: TemplateDetail, config: CharacterConfig, prefix: String): String
 }
 
@@ -38,6 +38,7 @@ class GlideCharacterImageComposer @Inject constructor(
         withContext(dispatchers.io) {
             val urls = detail.categories.sortedBy { it.zIndex }.mapNotNull { it.layerUrlFor(config.selections[it.id]) }
             check(urls.isNotEmpty()) { "Nhân vật không có layer nào" }
+            downloadAll(urls)
             var result: Bitmap? = null
             val paint = Paint(Paint.FILTER_BITMAP_FLAG)
             urls.forEach { url ->
@@ -53,9 +54,28 @@ class GlideCharacterImageComposer @Inject constructor(
             save(checkNotNull(result), prefix)
         }
 
+    /**
+     * Tải song song mọi layer vào disk cache (chỉ file, không giữ bitmap). Trước đây tải + decode tuần tự
+     * từng layer → ~40 layer × ~0,4s mạng. Sau bước này vòng ghép chỉ decode từ đĩa.
+     */
+    private fun downloadAll(urls: List<String>) {
+        val targets = urls.map { Glide.with(context).downloadOnly().load(it).submit() }
+        try {
+            targets.forEachIndexed { i, target ->
+                runCatching { target.get() }.getOrElse { throw IOException("Không tải được layer ${urls[i]}", it) }
+            }
+        } finally {
+            targets.forEach { Glide.with(context).clear(it) }
+        }
+    }
+
     private fun save(bitmap: Bitmap, prefix: String): String {
         val dir = File(context.cacheDir, DIR).apply { mkdirs() }
-        dir.listFiles { file -> file.name.startsWith("${prefix}_") }?.forEach(File::delete)
+        // Giữ vài file mới nhất: ảnh đang hiện + ảnh đã ghép sẵn cho lần random kế tiếp không bị xoá
+        dir.listFiles { file -> file.name.startsWith("${prefix}_") }
+            ?.sortedByDescending { it.lastModified() }
+            ?.drop(KEEP_FILES - 1)
+            ?.forEach(File::delete)
         // Tên mới mỗi lần để Glide không hiện ảnh cũ từ cache
         val file = File(dir, "${prefix}_${System.currentTimeMillis()}.png")
         file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, PNG_QUALITY, it) }
@@ -67,5 +87,6 @@ class GlideCharacterImageComposer @Inject constructor(
         const val DIR = "generated"
         const val MAX_SIZE = 1024
         const val PNG_QUALITY = 100
+        const val KEEP_FILES = 4
     }
 }

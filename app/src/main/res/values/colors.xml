@@ -11,6 +11,8 @@
     <color name="editor_bg">#FFD9B2</color>
     <color name="cream">#FFFAF2</color>
     <color name="language_bg">#B28A71</color>
+    <!-- Màu trung bình của bg_tavern + lớp tối 20% (nền splash hệ thống) -->
+    <color name="splash_bg">#5E4834</color>
     <color name="orange_selected">#FF8D1A</color>
     <color name="tab_off_outer">#666666</color>
     <color name="tab_off_inner">#CCCCCC</color>

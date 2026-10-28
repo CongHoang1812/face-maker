@@ -7,7 +7,7 @@ import com.conght.facemakerapp.data.remote.dto.DecorConfigDto
 import com.conght.facemakerapp.data.remote.dto.PartDto
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.IOException
@@ -100,19 +100,16 @@ class ApiRemoteDataSourceTest {
     }
 
     @Test
-    fun randomizeCharacter_requiredAlwaysSelected_validIds() = runTest {
+    fun randomizeCharacter_everyCategorySelected_validIds() = runTest {
         val source = source(FakeApi())
         val detail = source.getTemplateDetail("11")
         repeat(20) {
             val config = source.randomizeCharacter("11")
-            val body = config.selections.getValue("1-1")
-            assertNotNull(body.itemId)
             detail.categories.forEach { category ->
                 val selection = config.selections.getValue(category.id)
-                selection.itemId?.let { id ->
-                    val item = category.items.first { it.id == id }
-                    assertTrue(selection.colorId == null || item.colors.any { it.id == selection.colorId })
-                }
+                val item = category.items.first { it.id == selection.itemId }
+                if (item.colors.isEmpty()) assertNull(selection.colorId)
+                else assertTrue(item.colors.any { it.id == selection.colorId })
             }
         }
     }

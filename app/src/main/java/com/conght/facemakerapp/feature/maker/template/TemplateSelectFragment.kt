@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Maker – chọn nhân vật gốc (Figma 3:278). Không có ô None.
- * Chờ API: vẫn hiện [PLACEHOLDER_COUNT] thẻ khung giấy thật (ô ảnh shimmer), bấm được sang Customize.
+ * Chờ API: hiện [PLACEHOLDER_COUNT] thẻ khung giấy thật (ô ảnh shimmer), chưa bấm được; tải xong mới sang Customize.
  */
 @AndroidEntryPoint
 class TemplateSelectFragment : BaseFragment<FragmentTemplateSelectBinding>(FragmentTemplateSelectBinding::inflate) {
@@ -55,11 +55,10 @@ class TemplateSelectFragment : BaseFragment<FragmentTemplateSelectBinding>(Fragm
         }
     }
 
-    /** [template] null (thẻ shimmer khi đang tải): mở Customize ở trạng thái chờ dữ liệu (shimmer). */
-    private fun openCustomize(template: CharacterTemplate?) {
+    private fun openCustomize(template: CharacterTemplate) {
         navigateSafe(
             R.id.action_templateSelect_to_customize,
-            Bundle().apply { putString(CustomizeFragment.ARG_TEMPLATE_ID, template?.id) },
+            Bundle().apply { putString(CustomizeFragment.ARG_TEMPLATE_ID, template.id) },
         )
     }
 

@@ -11,11 +11,11 @@ import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.data.model.CharacterTemplate
 import com.conght.facemakerapp.databinding.ItemTemplateBinding
 
-/** Một thẻ trong lưới; [template] null = thẻ chờ API (ô ảnh shimmer) nhưng vẫn bấm được. */
+/** Một thẻ trong lưới; [template] null = thẻ chờ API (ô ảnh shimmer), chưa bấm được. */
 data class TemplateCell(val position: Int, val template: CharacterTemplate?)
 
 class TemplateAdapter(
-    private val onClick: (CharacterTemplate?) -> Unit,
+    private val onClick: (CharacterTemplate) -> Unit,
 ) : ListAdapter<TemplateCell, TemplateAdapter.ViewHolder>(DIFF) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -27,10 +27,16 @@ class TemplateAdapter(
 
         fun bind(cell: TemplateCell) {
             val template = cell.template
-            // Chờ API (template null) hoặc đang tải ảnh: ô ảnh shimmer; thẻ vẫn bấm được
+            // Chờ API (template null) hoặc đang tải ảnh: ô ảnh shimmer
             binding.ivThumbnail.loadWithShimmer(template?.thumbnailUrl, binding.shimmer)
             binding.root.contentDescription = template?.name ?: binding.root.resources.getString(R.string.loading)
-            binding.root.setOnSingleClickListener { onClick(template) }
+            // Chỉ bấm được khi đã có dữ liệu template (tránh mở Customize không có category)
+            if (template != null) {
+                binding.root.setOnSingleClickListener { onClick(template) }
+            } else {
+                binding.root.setOnClickListener(null)
+                binding.root.isClickable = false
+            }
         }
     }
 

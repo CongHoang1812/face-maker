@@ -37,10 +37,14 @@
         <item name="android:textViewStyle">@style/Widget.FaceMaker.TextView</item>
     </style>
 
-    <!-- Splash hệ thống (core-splashscreen), sau đó chuyển sang Theme.FaceMaker -->
+    <!--
+        Splash hệ thống (core-splashscreen, Android 12+ luôn hiện, không tắt được), sau đó chuyển sang
+        Theme.FaceMaker. Không icon + màu nền trùng tông ảnh bg_tavern của SplashFragment → trông như
+        một màn splash duy nhất thay vì 2 màn nối nhau.
+    -->
     <style name="Theme.FaceMaker.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/language_bg</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="windowSplashScreenBackground">@color/splash_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@android:color/transparent</item>
         <item name="postSplashScreenTheme">@style/Theme.FaceMaker</item>
     </style>
 </resources>

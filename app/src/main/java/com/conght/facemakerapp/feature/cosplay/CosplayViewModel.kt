@@ -37,6 +37,7 @@ class CosplayViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), Resource.Loading)
 
     init {
+        cosplayRepository.prepare()
         retryWhenBackOnline(networkMonitor, isError = { challenge.value is Resource.Error }, retry = ::random)
     }
 

@@ -19,6 +19,7 @@ import com.conght.facemakerapp.data.model.PartCategory
 import com.conght.facemakerapp.data.model.PartItem
 import com.conght.facemakerapp.data.model.PartSelection
 import com.conght.facemakerapp.data.model.TemplateDetail
+import com.conght.facemakerapp.data.model.layerUrlFor
 import com.conght.facemakerapp.data.repository.CreationRepository
 import com.conght.facemakerapp.data.repository.MakerRepository
 import com.google.gson.Gson
@@ -119,7 +120,7 @@ class CustomizeViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val detail: Flow<Resource<TemplateDetail>> = reloadKey.flatMapLatest {
         val id = templateId
-        // Không có template (bấm thẻ shimmer khi danh sách đang tải) → giữ Loading
+        // Không có template (args thiếu) → giữ Loading
         if (id == null) flow { emit(Resource.Loading); awaitCancellation() }
         else makerRepository.templateDetail(id)
     }.onEach { resource ->
@@ -156,6 +157,18 @@ class CustomizeViewModel @Inject constructor(
 
     private val _events = Channel<CustomizeEvent>(Channel.BUFFERED)
     val events: Flow<CustomizeEvent> = _events.receiveAsFlow()
+
+    /**
+     * Kết quả random đã tính sẵn (random cả nhân vật / xúc xắc của 1 category): ảnh layer của nó được
+     * tải trước qua [prefetchUrls] → bấm random thì layer lấy từ disk cache, nhân vật hiện ngay.
+     */
+    private var nextRandomAll: CharacterConfig? = null
+    private var nextRandomCategory: Pair<String, PartSelection>? = null
+
+    private val _prefetchUrls = Channel<List<String>>(Channel.BUFFERED)
+
+    /** Link ảnh layer cần tải trước vào disk cache (Fragment gọi ImagePrefetcher). */
+    val prefetchUrls: Flow<List<String>> = _prefetchUrls.receiveAsFlow()
 
     private val current get() = state.value
 
@@ -236,6 +249,31 @@ class CustomizeViewModel @Inject constructor(
         if (category == null || detail.categories.none { it.id == category }) {
             savedStateHandle[KEY_CATEGORY] = detail.categories.firstOrNull()?.id
         }
+        // Nút random cả nhân vật chỉ có ở MAKER
+        if (mode == CustomizeMode.MAKER && nextRandomAll == null) prepareRandomAll(detail)
+        selectedCategory.value?.let { prepareRandomCategory(it, detail) }
+    }
+
+    /** Tính trước lần random cả nhân vật kế tiếp + tải trước mọi layer của nó. */
+    private fun prepareRandomAll(detail: TemplateDetail) {
+        val id = detail.templateId
+        viewModelScope.launch {
+            val random = randomOrNull { makerRepository.randomizeCharacter(id) } ?: return@launch
+            nextRandomAll = random
+            _prefetchUrls.send(detail.categories.mapNotNull { it.layerUrlFor(random.selections[it.id]) })
+        }
+    }
+
+    /** Tính trước lần bấm xúc xắc kế tiếp của [categoryId] + tải trước layer của nó. */
+    private fun prepareRandomCategory(categoryId: String, detail: TemplateDetail? = current.templateDetail) {
+        val id = templateId ?: return
+        val category = detail?.categories?.firstOrNull { it.id == categoryId } ?: return
+        if (nextRandomCategory?.first == categoryId) return
+        viewModelScope.launch {
+            val selection = randomOrNull { makerRepository.randomizeCategory(id, categoryId) } ?: return@launch
+            nextRandomCategory = categoryId to selection
+            category.layerUrlFor(selection)?.let { _prefetchUrls.send(listOf(it)) }
+        }
     }
 
     fun retry() {
@@ -244,6 +282,7 @@ class CustomizeViewModel @Inject constructor(
 
     fun selectCategory(id: String) {
         savedStateHandle[KEY_CATEGORY] = id
+        if (current.isReady) prepareRandomCategory(id)
     }
 
     /** [itemId] null = None. Category bắt buộc chọn: None = trả về lựa chọn mặc định. */
@@ -305,9 +344,12 @@ class CustomizeViewModel @Inject constructor(
         val id = templateId ?: return
         val categoryId = current.selectedCategoryId ?: return
         if (!current.isReady) return
+        val prepared = nextRandomCategory?.takeIf { it.first == categoryId }?.second
+        nextRandomCategory = null
         viewModelScope.launch {
-            val selection = randomOrNull { makerRepository.randomizeCategory(id, categoryId) } ?: return@launch
+            val selection = prepared ?: randomOrNull { makerRepository.randomizeCategory(id, categoryId) } ?: return@launch
             updateConfig { it.copy(selections = it.selections + (categoryId to selection)) }
+            prepareRandomCategory(categoryId)
         }
     }
 
@@ -315,9 +357,12 @@ class CustomizeViewModel @Inject constructor(
     fun randomAll() {
         val id = templateId ?: return
         if (!current.isReady) return
+        val prepared = nextRandomAll?.takeIf { it.templateId == id }
+        nextRandomAll = null
         viewModelScope.launch {
-            val random = randomOrNull { makerRepository.randomizeCharacter(id) } ?: return@launch
+            val random = prepared ?: randomOrNull { makerRepository.randomizeCharacter(id) } ?: return@launch
             updateConfig { it.copy(selections = random.selections) }
+            current.templateDetail?.let(::prepareRandomAll)
         }
     }
 

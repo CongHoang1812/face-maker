@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -13,6 +14,10 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.conght.facemakerapp.core.ui.MockImageLoader
 import com.conght.facemakerapp.data.model.CharacterConfig
 import com.conght.facemakerapp.data.model.CharacterTransform
@@ -38,6 +43,16 @@ class CharacterCanvasView @JvmOverloads constructor(
     private val layerContainer = FrameLayout(context)
     private val layers = mutableMapOf<String, ImageView>()
     private val layerUrls = mutableMapOf<String, String?>()
+    private var layerOrder: List<String> = emptyList()
+
+    /** Layer mới đang chờ hiện: categoryId → url đích (null = None) / view ẩn đang tải ảnh. */
+    private val pendingUrls = mutableMapOf<String, String?>()
+    private val pendingViews = mutableMapOf<String, ImageView>()
+    private val loadingIds = mutableSetOf<String>()
+    private var staging = false
+
+    /** false = đang chờ layer mới (màn hình vẫn là nhân vật cũ) → chưa nên exportBitmap(). */
+    val isSettled: Boolean get() = pendingUrls.isEmpty()
     private val density = resources.displayMetrics.density
 
     private var lastX = 0f
@@ -54,26 +69,128 @@ class CharacterCanvasView @JvmOverloads constructor(
         addView(layerContainer, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
-    /** Hiển thị [config] theo [detail]: chọn layer url theo item + màu, None → ẩn layer. */
+    /**
+     * Hiển thị [config] theo [detail]: chọn layer url theo item + màu, None → ẩn layer.
+     *
+     * Lần đầu: tải thẳng vào layer. Các lần sau (random, đổi item / màu): layer mới tải vào view ẩn
+     * nằm ngay trên layer cũ, nhân vật cũ giữ nguyên; khi mọi layer mới xong thì đổi cùng lúc
+     * ([commitPending]) → không bị cảnh nhân vật thiếu bộ phận / hiện dần từng layer.
+     */
     fun render(detail: TemplateDetail, config: CharacterConfig) {
         val categories = detail.categories.sortedBy { it.zIndex }
-        val wanted = categories.map { it.id }.toSet()
-        (layers.keys - wanted).forEach { id ->
-            layers.remove(id)?.let(layerContainer::removeView)
-            layerUrls.remove(id)
-        }
-        categories.forEachIndexed { index, category ->
-            val view = layers.getOrPut(category.id) {
-                ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+        val ids = categories.map { it.id }
+        if (ids != layerOrder) {
+            // Đổi bộ category (template khác): sắp lại layer, bỏ mọi layer đang chờ
+            cancelPending(pendingUrls.keys.toList())
+            (layers.keys - ids.toSet()).forEach { id ->
+                layers.remove(id)?.let(layerContainer::removeView)
+                layerUrls.remove(id)
             }
-            if (layerContainer.indexOfChild(view) != index) {
-                layerContainer.removeView(view)
-                layerContainer.addView(view, index, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+            ids.forEachIndexed { index, id ->
+                val view = layers.getOrPut(id) { newLayerView() }
+                if (layerContainer.indexOfChild(view) != index) {
+                    layerContainer.removeView(view)
+                    layerContainer.addView(view, index, layerParams())
+                }
             }
-            setLayer(category.id, view, category.layerUrlFor(config.selections[category.id]))
+            layerOrder = ids
         }
+        staging = true
+        categories.forEach { category ->
+            val id = category.id
+            val url = category.layerUrlFor(config.selections[id])
+            when {
+                // Layer chưa từng hiện: tải thẳng
+                !layerUrls.containsKey(id) && id !in pendingUrls -> setLayer(id, layers.getValue(id), url)
+                pendingUrls.containsKey(id) && pendingUrls[id] == url -> Unit // đang tải đúng url
+                else -> {
+                    cancelPending(listOf(id))
+                    if (layerUrls[id] != url) stageLayer(id, url)
+                }
+            }
+        }
+        staging = false
+        commitIfReady()
         applyTransform(config.transform)
     }
+
+    /** Tải [url] vào view ẩn ngay trên layer hiện tại của [categoryId]; hiện ở [commitPending]. */
+    private fun stageLayer(categoryId: String, url: String?) {
+        pendingUrls[categoryId] = url
+        if (url == null || url.startsWith(MockImageLoader.MOCK_COLOR_PREFIX)) return // không cần tải
+        val current = layers.getValue(categoryId)
+        val view = newLayerView().apply { visibility = INVISIBLE }
+        layerContainer.addView(view, layerContainer.indexOfChild(current) + 1, layerParams())
+        pendingViews[categoryId] = view
+        loadingIds += categoryId
+        val onDone = {
+            if (pendingViews[categoryId] === view && loadingIds.remove(categoryId)) commitIfReady()
+        }
+        Glide.with(view).load(url).disallowHardwareConfig()
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>,
+                    isFirstResource: Boolean,
+                ): Boolean {
+                    onDone()
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean,
+                ): Boolean {
+                    onDone()
+                    return false
+                }
+            })
+            .into(view)
+    }
+
+    /** Callback có thể chạy ngay trong [stageLayer] (ảnh có sẵn trong RAM) → chờ hết vòng render mới đổi. */
+    private fun commitIfReady() {
+        if (!staging && loadingIds.isEmpty() && pendingUrls.isNotEmpty()) commitPending()
+    }
+
+    /** Đổi mọi layer đang chờ cùng lúc. */
+    private fun commitPending() {
+        pendingUrls.forEach { (id, url) ->
+            val old = layers.getValue(id)
+            val replacement = pendingViews[id]
+            if (replacement == null) {
+                setLayer(id, old, url)
+            } else {
+                Glide.with(old).clear(old)
+                layerContainer.removeView(old)
+                replacement.visibility = VISIBLE
+                layers[id] = replacement
+                layerUrls[id] = url
+            }
+        }
+        pendingUrls.clear()
+        pendingViews.clear()
+    }
+
+    /** Bỏ layer đang chờ của [ids] (url đích đã đổi / đổi template). */
+    private fun cancelPending(ids: List<String>) {
+        ids.forEach { id ->
+            pendingUrls.remove(id)
+            loadingIds.remove(id)
+            pendingViews.remove(id)?.let { view ->
+                Glide.with(view).clear(view)
+                layerContainer.removeView(view)
+            }
+        }
+    }
+
+    private fun newLayerView() = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+
+    private fun layerParams() = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 
     private fun setLayer(categoryId: String, view: ImageView, url: String?) {
         if (layerUrls.containsKey(categoryId) && layerUrls[categoryId] == url) return

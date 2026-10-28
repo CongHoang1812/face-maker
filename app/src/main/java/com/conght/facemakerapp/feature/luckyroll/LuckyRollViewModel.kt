@@ -48,6 +48,8 @@ class LuckyRollViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), LuckyRollUiState.Idle)
 
     init {
+        // Tải + ghép sẵn kết quả trong lúc người dùng còn ở màn Idle
+        luckyRollRepository.prepare()
         retryWhenBackOnline(
             networkMonitor,
             isError = { (state.value as? LuckyRollUiState.Rolled)?.result is Resource.Error },

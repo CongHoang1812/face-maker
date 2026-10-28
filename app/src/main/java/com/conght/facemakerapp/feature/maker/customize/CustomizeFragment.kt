@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.conght.facemakerapp.R
 import com.conght.facemakerapp.core.common.Resource
+import com.conght.facemakerapp.data.model.TemplateDetail
 import com.conght.facemakerapp.core.ui.GridSpacingItemDecoration
+import com.conght.facemakerapp.core.ui.ImagePrefetcher
 import com.conght.facemakerapp.core.ui.LinearSpacingItemDecoration
 import com.conght.facemakerapp.core.ui.applyStatusBarPadding
 import com.conght.facemakerapp.core.ui.base.BaseFragment
@@ -51,6 +53,9 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
     /** Ảnh tham chiếu đã load (tránh load lại mỗi giây khi đồng hồ chạy). */
     private var referenceUrl: String? = null
 
+    /** Category đã tải trước ảnh (tránh tính lại mỗi lần render). */
+    private var prefetchedCategoryId: String? = null
+
     private lateinit var noneAdapter: NoneAdapter
     private lateinit var partAdapter: PartItemAdapter
     private lateinit var colorAdapter: ColorDotAdapter
@@ -63,6 +68,7 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         referenceUrl = null
+        prefetchedCategoryId = null
         binding.content.applyStatusBarPadding()
         setLightStatusBar(false)
 
@@ -75,6 +81,7 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
 
         collectWhenStarted(viewModel.state, ::render)
         collectWhenStarted(viewModel.saving) { setLoadingVisible(it) }
+        collectWhenStarted(viewModel.prefetchUrls) { ImagePrefetcher.prefetch(requireContext(), it) }
         collectWhenStarted(viewModel.events) { event ->
             when (event) {
                 is CustomizeEvent.OpenEditor -> navigateSafe(
@@ -128,7 +135,8 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         // COSPLAY: nút Next đổi thành "Done" (nộp bài) – màn thiếu trong Figma
         if (isCosplay) binding.btnNext.setText(R.string.done)
         binding.btnNext.setOnSingleClickListener {
-            if (!viewModel.state.value.isReady) return@setOnSingleClickListener
+            // Chưa xong layer mới (vừa random) → ảnh export sẽ là nhân vật cũ
+            if (!viewModel.state.value.isReady || !binding.canvas.isSettled) return@setOnSingleClickListener
             if (isCosplay) viewModel.finishCosplay() else viewModel.saveAndContinue(binding.canvas.exportBitmap())
         }
         binding.btnReset.setOnSingleClickListener {
@@ -223,8 +231,25 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         val colors = state.selectedItem?.colors.orEmpty()
         binding.colorBar.isInvisible = colors.isEmpty()
         colorAdapter.submitList(colors.map { Selectable(it, it.id == selection?.colorId) })
+        prefetchImages(detail, state.selectedCategoryId)
 
         state.cosplay?.let(::handleCosplayResult)
+    }
+
+    /**
+     * Tải trước vào disk cache: icon mọi tab + thumbnail của tab đang chọn và [PREFETCH_NEIGHBORS] tab
+     * mỗi bên → bấm sang tab kế bên ảnh hiện ngay thay vì chờ mạng.
+     */
+    private fun prefetchImages(detail: TemplateDetail, selectedCategoryId: String?) {
+        if (selectedCategoryId == null || selectedCategoryId == prefetchedCategoryId) return
+        prefetchedCategoryId = selectedCategoryId
+        val categories = detail.categories.ifEmpty { return }
+        val index = categories.indexOfFirst { it.id == selectedCategoryId }.coerceAtLeast(0)
+        // Thứ tự gửi = thứ tự ưu tiên: tab đang chọn trước, rồi icon tab, rồi các tab lân cận
+        val nearby = (1..PREFETCH_NEIGHBORS).flatMap { d -> listOfNotNull(categories.getOrNull(index + d), categories.getOrNull(index - d)) }
+        ImagePrefetcher.prefetch(requireContext(), categories[index].items.map { it.thumbnailUrl })
+        ImagePrefetcher.prefetch(requireContext(), categories.map { it.iconUrl })
+        ImagePrefetcher.prefetch(requireContext(), nearby.flatMap { c -> c.items.map { it.thumbnailUrl } })
     }
 
     /** Thanh thời gian + thumbnail ảnh tham chiếu (chỉ COSPLAY). */
@@ -278,6 +303,7 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         private const val SKELETON_COLORS = 8
         private const val SKELETON_TABS = 6
         private const val DISABLED_ALPHA = 0.5f
+        private const val PREFETCH_NEIGHBORS = 2
         private const val SECONDS_PER_MINUTE = 60
     }
 }

@@ -21,19 +21,15 @@ class CharacterRandomizer(private val random: Random) {
         return PartSelection(item.id, item.colors.randomOrNull(random)?.id)
     }
 
-    /** Category bắt buộc luôn có item; category khác có item với xác suất [FILL_CHANCE], còn lại None. */
+    /** Mọi category đều có item + màu ngẫu nhiên (nhân vật đủ bộ phận); chỉ category không có item mới None. */
     fun randomConfig(detail: TemplateDetail): CharacterConfig = CharacterConfig(
         templateId = detail.templateId,
-        selections = detail.categories.associate { category ->
-            val pick = category.isRequired || random.nextFloat() < FILL_CHANCE
-            category.id to ((if (pick) randomSelection(category) else null) ?: NONE)
-        },
+        selections = detail.categories.associate { category -> category.id to (randomSelection(category) ?: NONE) },
     )
 
     fun <T> pick(list: List<T>): T? = list.randomOrNull(random)
 
     private companion object {
-        const val FILL_CHANCE = 0.6f
         val NONE = PartSelection(itemId = null, colorId = null)
     }
 }
