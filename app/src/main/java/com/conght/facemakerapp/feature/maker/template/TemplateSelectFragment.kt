@@ -37,9 +37,10 @@ class TemplateSelectFragment : BaseFragment<FragmentTemplateSelectBinding>(Fragm
         binding.btnBack.setOnSingleClickListener { findNavController().popBackStack() }
 
         val adapter = TemplateAdapter(::openCustomize)
-        binding.rvTemplates.layoutManager = GridLayoutManager(requireContext(), COLUMNS)
+        val columns = resources.getInteger(R.integer.template_grid_columns)
+        binding.rvTemplates.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.rvTemplates.addItemDecoration(
-            GridSpacingItemDecoration(COLUMNS, 0, resources.getDimensionPixelSize(R.dimen.template_grid_gap_v)),
+            GridSpacingItemDecoration(columns, 0, resources.getDimensionPixelSize(R.dimen.template_grid_gap_v)),
         )
         binding.rvTemplates.adapter = adapter
         binding.errorState.setOnRetryClickListener { viewModel.retry() }
@@ -63,7 +64,6 @@ class TemplateSelectFragment : BaseFragment<FragmentTemplateSelectBinding>(Fragm
     }
 
     private companion object {
-        const val COLUMNS = 2
         const val PLACEHOLDER_COUNT = 10
     }
 }

@@ -158,13 +158,14 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
 
     private fun setupLists() {
         val gap = resources.getDimensionPixelSize(R.dimen.grid_gap)
+        val columns = resources.getInteger(R.integer.part_grid_columns)
 
         noneAdapter = NoneAdapter(R.layout.item_none_decor) { onNoneClick() }
         cellAdapter = DecorCellAdapter(::onCellClick)
         gridLoading = noneFirst(noneAdapter, SkeletonAdapter(R.layout.item_skeleton_decor, SKELETON_CELLS))
         gridReady = noneFirst(noneAdapter, cellAdapter)
-        binding.rvGrid.layoutManager = GridLayoutManager(requireContext(), GRID_COLUMNS)
-        binding.rvGrid.addItemDecoration(GridSpacingItemDecoration(GRID_COLUMNS, gap, gap))
+        binding.rvGrid.layoutManager = GridLayoutManager(requireContext(), columns)
+        binding.rvGrid.addItemDecoration(GridSpacingItemDecoration(columns, gap, gap))
 
         subTabAdapter = SubTabAdapter(viewModel::selectSubTab)
         subTabSkeleton = SkeletonAdapter(R.layout.item_skeleton_sub_tab, SKELETON_PACKS)
@@ -396,7 +397,6 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         private const val KEY_TEXT_COLOR = "editor_text_color"
         private const val SUB_COLOR = 0
         private const val SUB_IMAGE = 1
-        private const val GRID_COLUMNS = 5
         private const val SKELETON_CELLS = 14
         private const val SKELETON_PACKS = 3
         private const val TAB_DEBOUNCE_MS = 150L

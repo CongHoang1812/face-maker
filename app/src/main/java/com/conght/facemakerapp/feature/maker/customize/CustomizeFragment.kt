@@ -109,13 +109,14 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
 
     private fun setupLists() {
         val gap = resources.getDimensionPixelSize(R.dimen.grid_gap)
+        val columns = resources.getInteger(R.integer.part_grid_columns)
         noneAdapter = NoneAdapter(R.layout.item_none_part) { viewModel.selectItem(null) }
         val diceAdapter = NoneAdapter(R.layout.item_dice_part) { viewModel.randomCategory() }
         partAdapter = PartItemAdapter { viewModel.selectItem(it.id) }
         loadingParts = noneFirst(noneAdapter, diceAdapter, SkeletonAdapter(R.layout.item_skeleton_part, SKELETON_PARTS))
         readyParts = noneFirst(noneAdapter, diceAdapter, partAdapter)
-        binding.rvParts.layoutManager = GridLayoutManager(requireContext(), GRID_COLUMNS)
-        binding.rvParts.addItemDecoration(GridSpacingItemDecoration(GRID_COLUMNS, gap, gap))
+        binding.rvParts.layoutManager = GridLayoutManager(requireContext(), columns)
+        binding.rvParts.addItemDecoration(GridSpacingItemDecoration(columns, gap, gap))
 
         colorAdapter = ColorDotAdapter { viewModel.selectColor(it.id) }
         loadingColors = SkeletonAdapter(R.layout.item_skeleton_color_dot, SKELETON_COLORS)
@@ -298,7 +299,6 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         private const val KEY_EXIT = "customize_exit"
         private const val KEY_RESET = "customize_reset"
         private const val KEY_RANDOM = "customize_random"
-        private const val GRID_COLUMNS = 5
         private const val SKELETON_PARTS = 18
         private const val SKELETON_COLORS = 8
         private const val SKELETON_TABS = 6

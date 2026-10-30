@@ -54,10 +54,11 @@ class MyCreationFragment : BaseFragment<FragmentMyCreationBinding>(FragmentMyCre
         binding.content.applyStatusBarPadding()
         setLightStatusBar(false)
 
-        binding.rvCreations.layoutManager = GridLayoutManager(requireContext(), COLUMNS)
+        val columns = resources.getInteger(R.integer.creation_grid_columns)
+        binding.rvCreations.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.rvCreations.addItemDecoration(
             GridSpacingItemDecoration(
-                COLUMNS,
+                columns,
                 resources.getDimensionPixelSize(R.dimen.creation_grid_gap_h),
                 resources.getDimensionPixelSize(R.dimen.creation_grid_gap_v),
             ),
@@ -161,7 +162,6 @@ class MyCreationFragment : BaseFragment<FragmentMyCreationBinding>(FragmentMyCre
         const val ARG_TAB = "tab"
 
         private const val KEY_DELETE = "creation_delete"
-        private const val COLUMNS = 2
         private const val DISABLED_ALPHA = 0.5f
     }
 }

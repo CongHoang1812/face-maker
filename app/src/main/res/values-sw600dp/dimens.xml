@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tablet ≥600dp (smallest width). Chỉ ghi đè các khối lớn; dimen nào không có ở đây lấy từ values/.
+     Nhân vật phóng 328 → 480 (×1.46); các toạ độ đặt tuyệt đối theo nhân vật được nhân cùng tỉ lệ.
+     Nút, dialog, stroke, inset ảnh có bóng giữ nguyên vì gắn với ảnh gốc. -->
+<resources>
+    <!-- Màn hình -->
+    <dimen name="screen_padding">24dp</dimen>
+
+    <!-- Splash / permission -->
+    <dimen name="splash_progress_w">320dp</dimen>
+    <dimen name="permission_image">400dp</dimen>
+
+    <!-- Nhân vật & panel -->
+    <dimen name="character_size">480dp</dimen>
+    <dimen name="bottom_panel_height">440dp</dimen>
+
+    <!-- Cosplay: nút nằm dưới nhân vật = content_top + character_size + 16 -->
+    <dimen name="cosplay_buttons_top">568dp</dimen>
+    <dimen name="cosplay_reference">112dp</dimen>
+
+    <!-- Lucky roll: toạ độ trong khung nhân vật, ×1.46 -->
+    <dimen name="lucky_hint_top">92dp</dimen>
+    <dimen name="lucky_arrow_w">117dp</dimen>
+    <dimen name="lucky_arrow_h">187dp</dimen>
+    <dimen name="lucky_arrow_top">198dp</dimen>
+
+    <!-- Lưới: giữ kích thước item, tăng số cột (integers.xml) → rộng lưới = cột × item + khe -->
+    <dimen name="template_grid_w">504dp</dimen>  <!-- 3 × 168 -->
+    <dimen name="creation_grid_w">500dp</dimen>  <!-- 3 × 164 + 2 × 4 -->
+    <dimen name="creation_empty_image">280dp</dimen>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="template_grid_columns">3</integer>
+    <integer name="creation_grid_columns">3</integer>
+    <integer name="part_grid_columns">8</integer>
+</resources>

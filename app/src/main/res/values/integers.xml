@@ -2,4 +2,9 @@
 <resources>
     <integer name="press_anim_ms">100</integer>
     <integer name="fragment_fade_ms">150</integer>
+
+    <!-- Số cột lưới; tablet ghi đè trong values-sw600dp -->
+    <integer name="template_grid_columns">2</integer>
+    <integer name="creation_grid_columns">2</integer>
+    <integer name="part_grid_columns">5</integer>
 </resources>
