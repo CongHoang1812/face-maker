@@ -33,7 +33,6 @@ class LuckyRollFragment : BaseFragment<FragmentLuckyRollBinding>(FragmentLuckyRo
         super.onViewCreated(view, savedInstanceState)
         binding.content.applyStatusBarPadding()
         setLightStatusBar(false)
-
         binding.btnBack.setOnSingleClickListener { findNavController().popBackStack() }
         binding.btnRandom.setOnSingleClickListener { requestRoll() }
         binding.errorState.setOnRetryClickListener { viewModel.roll() }
@@ -45,9 +44,9 @@ class LuckyRollFragment : BaseFragment<FragmentLuckyRollBinding>(FragmentLuckyRo
                 Bundle().apply { putString(CustomizeFragment.ARG_CONFIG_JSON, viewModel.configJson(result.data)) },
             )
         }
-        childFragmentManager.setFragmentResultListener(KEY_RANDOM, viewLifecycleOwner) { _, bundle ->
-            if (ConfirmDialogFragment.isConfirmed(bundle)) viewModel.roll()
-        }
+//        childFragmentManager.setFragmentResultListener(KEY_RANDOM, viewLifecycleOwner) { _, bundle ->
+//            if (ConfirmDialogFragment.isConfirmed(bundle)) viewModel.roll()
+//        }
 
         collectWhenStarted(viewModel.state, ::render)
     }
