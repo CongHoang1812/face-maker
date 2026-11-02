@@ -12,7 +12,10 @@ object AppConfig {
     /** Máy chủ dự phòng: chỉ gọi khi máy chủ chính lỗi / quá thời gian. */
     const val BACKUP_BASE_URL: String = BuildConfig.BACKUP_BASE_URL
 
-    /** Mã app trên server (endpoint dữ liệu nhân vật + thư mục ảnh). */
+    /**
+     * Mã app trên server (endpoint dữ liệu nhân vật + thư mục ảnh).
+     * TODO(RELEASE): đang mượn dữ liệu ST279 để test vì chưa có mã của ST237; đổi sang mã thật trước khi phát hành.
+     */
     const val APP_KEY: String = "ST279_AnimeOCMaker"
 
     /** Thư mục ảnh tính từ base URL. */
