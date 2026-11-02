@@ -5,13 +5,17 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.conght.facemakerapp.R
 import com.conght.facemakerapp.core.common.Resource
+import com.conght.facemakerapp.data.model.CharacterConfig
+import com.conght.facemakerapp.data.model.PartSelection
 import com.conght.facemakerapp.data.model.TemplateDetail
 import com.conght.facemakerapp.core.ui.GridSpacingItemDecoration
 import com.conght.facemakerapp.core.ui.ImagePrefetcher
@@ -29,6 +33,7 @@ import com.conght.facemakerapp.core.ui.skeleton.SkeletonAdapter
 import com.conght.facemakerapp.core.ui.skeleton.noneFirst
 import com.conght.facemakerapp.databinding.FragmentCustomizeBinding
 import com.conght.facemakerapp.feature.decor.editor.DecorEditorFragment
+import com.conght.facemakerapp.feature.cosplay.CosplayReferenceDialogFragment
 import com.conght.facemakerapp.feature.cosplay.CosplayScoreDialogFragment
 import com.conght.facemakerapp.feature.dialog.ConfirmDialogFragment
 import com.conght.facemakerapp.feature.dialog.ConfirmDialogs
@@ -56,6 +61,11 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
     /** Category đã tải trước ảnh (tránh tính lại mỗi lần render). */
     private var prefetchedCategoryId: String? = null
 
+    /** Đầu vào của 3 danh sách ở lần render trước: kéo / zoom / đếm giờ không đổi gì thì khỏi submit lại. */
+    private var listsDetail: TemplateDetail? = null
+    private var listsCategoryId: String? = null
+    private var listsSelections: Map<String, PartSelection>? = null
+
     private lateinit var noneAdapter: NoneAdapter
     private lateinit var partAdapter: PartItemAdapter
     private lateinit var colorAdapter: ColorDotAdapter
@@ -69,6 +79,7 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         super.onViewCreated(view, savedInstanceState)
         referenceUrl = null
         prefetchedCategoryId = null
+        listsDetail = null
         binding.content.applyStatusBarPadding()
         setLightStatusBar(false)
 
@@ -133,12 +144,17 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
 
     private fun setupActions() {
         binding.btnBack.setOnSingleClickListener { onBack() }
-        // COSPLAY: nút Next đổi thành "Done" (nộp bài) – màn thiếu trong Figma
-        if (isCosplay) binding.btnNext.setText(R.string.done)
         binding.btnNext.setOnSingleClickListener {
             // Chưa xong layer mới (vừa random) → ảnh export sẽ là nhân vật cũ
             if (!viewModel.state.value.isReady || !binding.canvas.isSettled) return@setOnSingleClickListener
-            if (isCosplay) viewModel.finishCosplay() else viewModel.saveAndContinue(binding.canvas.exportBitmap())
+            viewModel.saveAndContinue(binding.canvas.exportBitmap())
+        }
+        binding.ivReference.setOnSingleClickListener { showReferenceDialog() }
+        // Nộp bài lúc layer cuối còn đang tải: chờ tải xong mới chụp ảnh kết quả
+        binding.canvas.onSettled = {
+            if (view != null && lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                viewModel.state.value.cosplay?.let(::handleCosplayResult)
+            }
         }
         binding.btnReset.setOnSingleClickListener {
             ConfirmDialogs.reset(KEY_RESET).show(childFragmentManager, ConfirmDialogFragment.TAG)
@@ -210,7 +226,8 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         binding.movePanel.isVisible = moving
         binding.canvas.gesturesEnabled = moving
         binding.btnBack.isInvisible = moving
-        binding.btnNext.isInvisible = moving
+        // COSPLAY: không có nút Next / Done (Figma 3:132), bài tự nộp khi đạt 100% hoặc hết giờ
+        binding.btnNext.isInvisible = moving || isCosplay
         // COSPLAY: bỏ cột tool trái + random-all (ô xúc xắc trong lưới vẫn giữ)
         listOf(binding.btnReset, binding.btnFlip, binding.btnMove, binding.btnRandomAll).forEach {
             it.isVisible = !moving && !isCosplay
@@ -220,9 +237,22 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         if (!ready) {
             noneAdapter.isSelected = false
             binding.colorBar.isInvisible = false
+            listsDetail = null
             return
         }
         binding.canvas.render(detail, config)
+        renderLists(state, detail, config)
+        prefetchImages(detail, state.selectedCategoryId)
+
+        state.cosplay?.let(::handleCosplayResult)
+    }
+
+    /** Tab / lưới item / chấm màu: chỉ dựng lại khi template, tab đang chọn hoặc lựa chọn đổi. */
+    private fun renderLists(state: CustomizeUiState, detail: TemplateDetail, config: CharacterConfig) {
+        if (detail === listsDetail && state.selectedCategoryId == listsCategoryId && config.selections == listsSelections) return
+        listsDetail = detail
+        listsCategoryId = state.selectedCategoryId
+        listsSelections = config.selections
 
         val selection = state.selection
         noneAdapter.isSelected = selection?.itemId == null
@@ -232,9 +262,6 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         val colors = state.selectedItem?.colors.orEmpty()
         binding.colorBar.isInvisible = colors.isEmpty()
         colorAdapter.submitList(colors.map { Selectable(it, it.id == selection?.colorId) })
-        prefetchImages(detail, state.selectedCategoryId)
-
-        state.cosplay?.let(::handleCosplayResult)
     }
 
     /**
@@ -268,12 +295,27 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         }
     }
 
+    /** Bấm ảnh mẫu: popup ảnh mẫu + % hoàn thành hiện tại, đóng thì chơi tiếp. */
+    private fun showReferenceDialog() {
+        val cosplay = viewModel.state.value.cosplay ?: return
+        if (cosplay.isFinished) return
+        val percent = viewModel.cosplayProgressPercent() ?: return
+        if (childFragmentManager.findFragmentByTag(CosplayReferenceDialogFragment.TAG) != null) return
+        CosplayReferenceDialogFragment.newInstance(percent, cosplay.referenceImageUrl)
+            .show(childFragmentManager, CosplayReferenceDialogFragment.TAG)
+    }
+
     /** Đã nộp bài: chụp nhân vật cho popup → hiện popup điểm (một lần, sống qua xoay màn). */
     private fun handleCosplayResult(cosplay: CosplayState) {
         val percent = cosplay.scorePercent ?: return
+        // Hết giờ khi đang xem ảnh mẫu → đóng popup ảnh mẫu để nhường popup điểm
+        (childFragmentManager.findFragmentByTag(CosplayReferenceDialogFragment.TAG) as? DialogFragment)
+            ?.dismissAllowingStateLoss()
         val path = cosplay.resultImagePath
         if (path == null) {
-            viewModel.setCosplayResultImage(binding.canvas.exportBitmap())
+            if (viewModel.needsCosplayResultImage && binding.canvas.isSettled) {
+                viewModel.setCosplayResultImage(binding.canvas.exportBitmap())
+            }
         } else if (childFragmentManager.findFragmentByTag(CosplayScoreDialogFragment.TAG) == null) {
             CosplayScoreDialogFragment.newInstance(percent, path).show(childFragmentManager, CosplayScoreDialogFragment.TAG)
         }

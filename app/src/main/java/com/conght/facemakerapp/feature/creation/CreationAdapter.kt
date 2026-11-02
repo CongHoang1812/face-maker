@@ -39,9 +39,15 @@ class CreationAdapter(
 
     inner class ViewHolder(private val binding: ItemCreationBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        /** Ảnh đang hiện ở ô này: vào / thoát chế độ chọn rebind mọi ô nhưng ảnh không đổi thì khỏi tải lại. */
+        private var boundPath: String? = null
+
         fun bind(item: CreationItem) {
             val creation = item.creation
-            binding.ivImage.loadWithShimmer(creation.imagePath, binding.shimmer)
+            if (boundPath != creation.imagePath) {
+                boundPath = creation.imagePath
+                binding.ivImage.loadWithShimmer(creation.imagePath, binding.shimmer)
+            }
             binding.root.contentDescription = binding.root.resources.getString(R.string.cd_result_image)
 
             // Bình thường: xoá (+ sửa với Character). Chọn nhiều: checkbox.

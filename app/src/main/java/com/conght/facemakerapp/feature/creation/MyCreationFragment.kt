@@ -129,7 +129,11 @@ class MyCreationFragment : BaseFragment<FragmentMyCreationBinding>(FragmentMyCre
             val selected = type == tab
             view.isSelected = selected
             view.translationZ = if (selected) z else 0f
-            view.updateLayoutParams<ConstraintLayout.LayoutParams> { topMargin = if (selected) top else top + offset }
+            val topMargin = if (selected) top else top + offset
+            // Mỗi lần gán layoutParams là một requestLayout: chỉ gán khi tab thật sự đổi chỗ
+            if ((view.layoutParams as ConstraintLayout.LayoutParams).topMargin != topMargin) {
+                view.updateLayoutParams<ConstraintLayout.LayoutParams> { this.topMargin = topMargin }
+            }
         }
     }
 

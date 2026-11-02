@@ -21,6 +21,7 @@ import com.bumptech.glide.request.target.Target
 import com.conght.facemakerapp.core.ui.MockImageLoader
 import com.conght.facemakerapp.data.model.CharacterConfig
 import com.conght.facemakerapp.data.model.CharacterTransform
+import com.conght.facemakerapp.data.model.PartSelection
 import com.conght.facemakerapp.data.model.TemplateDetail
 import com.conght.facemakerapp.data.model.layerUrlFor
 
@@ -51,8 +52,15 @@ class CharacterCanvasView @JvmOverloads constructor(
     private val loadingIds = mutableSetOf<String>()
     private var staging = false
 
+    /** Đầu vào layer của lần [render] trước: kéo / zoom chỉ đổi transform nên khỏi dựng lại layer. */
+    private var renderedDetail: TemplateDetail? = null
+    private var renderedSelections: Map<String, PartSelection>? = null
+
     /** false = đang chờ layer mới (màn hình vẫn là nhân vật cũ) → chưa nên exportBitmap(). */
     val isSettled: Boolean get() = pendingUrls.isEmpty()
+
+    /** Gọi sau khi layer mới đã hiện xong, lúc này exportBitmap() ra đúng nhân vật mới. */
+    var onSettled: (() -> Unit)? = null
     private val density = resources.displayMetrics.density
 
     private var lastX = 0f
@@ -77,6 +85,15 @@ class CharacterCanvasView @JvmOverloads constructor(
      * ([commitPending]) → không bị cảnh nhân vật thiếu bộ phận / hiện dần từng layer.
      */
     fun render(detail: TemplateDetail, config: CharacterConfig) {
+        if (detail !== renderedDetail || config.selections != renderedSelections) {
+            renderedDetail = detail
+            renderedSelections = config.selections
+            renderLayers(detail, config)
+        }
+        applyTransform(config.transform)
+    }
+
+    private fun renderLayers(detail: TemplateDetail, config: CharacterConfig) {
         val categories = detail.categories.sortedBy { it.zIndex }
         val ids = categories.map { it.id }
         if (ids != layerOrder) {
@@ -111,7 +128,6 @@ class CharacterCanvasView @JvmOverloads constructor(
         }
         staging = false
         commitIfReady()
-        applyTransform(config.transform)
     }
 
     /** Tải [url] vào view ẩn ngay trên layer hiện tại của [categoryId]; hiện ở [commitPending]. */
@@ -174,6 +190,8 @@ class CharacterCanvasView @JvmOverloads constructor(
         }
         pendingUrls.clear()
         pendingViews.clear()
+        // post: listener của Glide chạy trước khi ảnh được gán vào view, báo ngay thì export thiếu layer
+        post { onSettled?.invoke() }
     }
 
     /** Bỏ layer đang chờ của [ids] (url đích đã đổi / đổi template). */

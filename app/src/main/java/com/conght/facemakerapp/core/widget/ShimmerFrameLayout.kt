@@ -87,8 +87,6 @@ class ShimmerFrameLayout @JvmOverloads constructor(
         updateRunning()
     }
 
-    val isShimmerStarted: Boolean get() = animator.isStarted
-
     internal fun register(view: SkeletonView) {
         skeletons += view
     }

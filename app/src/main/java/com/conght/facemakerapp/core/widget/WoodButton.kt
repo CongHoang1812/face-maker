@@ -34,6 +34,9 @@ class WoodButton @JvmOverloads constructor(
 
     private var buttonWidth = -1
 
+    /** Variant đã dựng nền: bind lại cùng variant (vd. SubTabAdapter) không tạo lại drawable. */
+    private var appliedVariant: Variant? = null
+
     @ColorInt
     private var textStrokeColor = 0
     private val textStrokeWidth = resources.getDimension(R.dimen.wood_button_text_stroke)
@@ -64,6 +67,8 @@ class WoodButton @JvmOverloads constructor(
     }
 
     private fun applyVariant() {
+        if (appliedVariant == variant) return
+        appliedVariant = variant
         // shadow, outer, core, highlight
         val colors = when (variant) {
             Variant.ORANGE -> listOf(R.color.brown_dark, R.color.brown_primary, R.color.orange_button, R.color.button_highlight)

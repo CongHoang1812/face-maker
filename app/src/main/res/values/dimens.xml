@@ -84,8 +84,8 @@
     <dimen name="cosplay_reference_end">4dp</dimen>
     <dimen name="cosplay_reference_border">2dp</dimen>
     <dimen name="cosplay_card_padding_bottom">24dp</dimen>
-    <dimen name="cosplay_score_image">160dp</dimen>
-    <dimen name="cosplay_score_text">20sp</dimen>
+    <dimen name="cosplay_score_image">280dp</dimen>
+    <dimen name="cosplay_score_text">24sp</dimen>
 
     <!-- Thông báo / loading / lỗi (bước 15, tự thiết kế) -->
     <dimen name="app_toast_margin">24dp</dimen>

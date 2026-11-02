@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.PointF
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
@@ -20,6 +19,7 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
 import com.conght.facemakerapp.R
 import com.conght.facemakerapp.core.ui.loadImage
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
@@ -84,12 +84,15 @@ class DecorCanvasView @JvmOverloads constructor(
     private val path = Path()
     private val rect = RectF()
 
+    /** 4 góc (TL, TR, BR, BL) dạng x,y liên tiếp – dùng lại mỗi frame để không cấp phát khi vẽ / chạm. */
+    private val corners = FloatArray(CORNER_COUNT * 2)
+
     // ---- Cử chỉ ----
     private enum class Mode { NONE, DRAG, RESIZE, PINCH }
-    private enum class Handle { FLIP, DELETE, RESIZE }
 
     private var mode = Mode.NONE
-    private var dragOffset = PointF()
+    private var dragDx = 0f
+    private var dragDy = 0f
     private var startScale = 1f
     private var startRotation = 0f
     private var startDistance = 1f
@@ -175,37 +178,44 @@ class DecorCanvasView @JvmOverloads constructor(
 
     // ---------- Hình học ----------
 
-    private fun centerOf(e: DecorElement) = PointF(e.x * width, e.y * height)
-
-    /** 4 góc (TL, TR, BR, BL) của khung chọn quanh phần tử, đã xoay. */
-    private fun cornersOf(e: DecorElement): List<PointF>? {
-        val view = elementViews[e.id] ?: return null
-        if (view.width == 0) return null
-        val c = centerOf(e)
+    /**
+     * Tính 4 góc (TL, TR, BR, BL) của khung chọn quanh phần tử, đã xoay, vào [corners].
+     * false = phần tử chưa đo xong nên chưa có khung.
+     */
+    private fun computeCorners(e: DecorElement): Boolean {
+        val view = elementViews[e.id] ?: return false
+        if (view.width == 0) return false
+        val cx = e.x * width
+        val cy = e.y * height
         val hw = view.width * e.scale / 2 + selectionPadding
         val hh = view.height * e.scale / 2 + selectionPadding
         val rad = Math.toRadians(e.rotation.toDouble())
         val cos = cos(rad).toFloat()
         val sin = sin(rad).toFloat()
-        return listOf(-hw to -hh, hw to -hh, hw to hh, -hw to hh).map { (dx, dy) ->
-            PointF(c.x + dx * cos - dy * sin, c.y + dx * sin + dy * cos)
-        }
+        setCorner(0, cx, cy, -hw, -hh, cos, sin)
+        setCorner(1, cx, cy, hw, -hh, cos, sin)
+        setCorner(2, cx, cy, hw, hh, cos, sin)
+        setCorner(3, cx, cy, -hw, hh, cos, sin)
+        return true
     }
 
-    private fun handlesOf(e: DecorElement): Map<Handle, PointF> {
-        val c = cornersOf(e) ?: return emptyMap()
-        return mapOf(Handle.FLIP to c[1], Handle.RESIZE to c[2], Handle.DELETE to c[3])
+    private fun setCorner(index: Int, cx: Float, cy: Float, dx: Float, dy: Float, cos: Float, sin: Float) {
+        corners[index * 2] = cx + dx * cos - dy * sin
+        corners[index * 2 + 1] = cy + dx * sin + dy * cos
     }
+
+    /** [corner] (theo thứ tự trong [corners]) nằm trong vòng chạm của handle tại ([x], [y]). */
+    private fun touchesHandle(corner: Int, x: Float, y: Float): Boolean =
+        hypot(corners[corner * 2] - x, corners[corner * 2 + 1] - y) <= handleSize
 
     private fun hit(e: DecorElement, x: Float, y: Float): Boolean {
         val view = elementViews[e.id] ?: return false
-        val c = centerOf(e)
         val rad = Math.toRadians(-e.rotation.toDouble())
-        val dx = x - c.x
-        val dy = y - c.y
+        val dx = x - e.x * width
+        val dy = y - e.y * height
         val lx = (dx * cos(rad) - dy * sin(rad)).toFloat()
         val ly = (dx * sin(rad) + dy * cos(rad)).toFloat()
-        return kotlin.math.abs(lx) <= view.width * e.scale / 2 && kotlin.math.abs(ly) <= view.height * e.scale / 2
+        return abs(lx) <= view.width * e.scale / 2 && abs(ly) <= view.height * e.scale / 2
     }
 
     // ---------- Vẽ khung chọn ----------
@@ -213,31 +223,28 @@ class DecorCanvasView @JvmOverloads constructor(
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
         if (exporting) return
-        val e = elements.firstOrNull { it.id == selectedId } ?: return
-        val corners = cornersOf(e) ?: return
+        val e = selected() ?: return
+        if (!computeCorners(e)) return
         path.reset()
-        path.moveTo(corners[0].x, corners[0].y)
-        corners.drop(1).forEach { path.lineTo(it.x, it.y) }
+        path.moveTo(corners[0], corners[1])
+        path.lineTo(corners[2], corners[3])
+        path.lineTo(corners[4], corners[5])
+        path.lineTo(corners[6], corners[7])
         path.close()
         canvas.drawPath(path, borderPaint)
-        handlesOf(e).forEach { (handle, p) ->
-            val icon = when (handle) {
-                Handle.FLIP -> iconFlip
-                Handle.DELETE -> iconDelete
-                Handle.RESIZE -> iconResize
-            }
-            drawHandle(canvas, p, icon)
-        }
+        drawHandle(canvas, corners[2], corners[3], iconFlip)
+        drawHandle(canvas, corners[4], corners[5], iconResize)
+        drawHandle(canvas, corners[6], corners[7], iconDelete)
     }
 
-    private fun drawHandle(canvas: Canvas, p: PointF, icon: Drawable?) {
+    private fun drawHandle(canvas: Canvas, px: Float, py: Float, icon: Drawable?) {
         val half = handleSize / 2
-        rect.set(p.x - half, p.y - half, p.x + half, p.y + half)
+        rect.set(px - half, py - half, px + half, py + half)
         canvas.drawRoundRect(rect, handleRadius, handleRadius, handleFill)
         canvas.drawRoundRect(rect, handleRadius, handleRadius, handleStroke)
         icon ?: return
         val i = iconSize / 2
-        icon.setBounds((p.x - i).toInt(), (p.y - i).toInt(), (p.x + i).toInt(), (p.y + i).toInt())
+        icon.setBounds((px - i).toInt(), (py - i).toInt(), (px + i).toInt(), (py + i).toInt())
         icon.draw(canvas)
     }
 
@@ -262,21 +269,23 @@ class DecorCanvasView @JvmOverloads constructor(
     private fun onDown(x: Float, y: Float) {
         parent?.requestDisallowInterceptTouchEvent(true)
         selected()?.let { e ->
-            val touched = handlesOf(e).entries.firstOrNull { (_, p) -> hypot(p.x - x, p.y - y) <= handleSize }
-            when (touched?.key) {
-                Handle.FLIP -> return listener?.onFlip(e.id) ?: Unit
-                Handle.DELETE -> return listener?.onDelete(e.id) ?: Unit
-                Handle.RESIZE -> {
-                    val c = centerOf(e)
-                    mode = Mode.RESIZE
-                    startScale = e.scale
-                    startRotation = e.rotation
-                    startDistance = hypot(x - c.x, y - c.y).coerceAtLeast(1f)
-                    startAngle = angle(c.x, c.y, x, y)
-                    return
-                }
+            // Thứ tự ưu tiên khi vùng chạm chồng nhau: flip → resize → delete
+            if (computeCorners(e)) {
+                when {
+                    touchesHandle(CORNER_FLIP, x, y) -> return listener?.onFlip(e.id) ?: Unit
+                    touchesHandle(CORNER_RESIZE, x, y) -> {
+                        val cx = e.x * width
+                        val cy = e.y * height
+                        mode = Mode.RESIZE
+                        startScale = e.scale
+                        startRotation = e.rotation
+                        startDistance = hypot(x - cx, y - cy).coerceAtLeast(1f)
+                        startAngle = angle(cx, cy, x, y)
+                        return
+                    }
 
-                null -> Unit
+                    touchesHandle(CORNER_DELETE, x, y) -> return listener?.onDelete(e.id) ?: Unit
+                }
             }
         }
         val target = elements.lastOrNull { hit(it, x, y) }
@@ -292,8 +301,8 @@ class DecorCanvasView @JvmOverloads constructor(
         lastTapId = target.id
         lastTapTime = now
         if (target.id != selectedId) listener?.onSelect(target.id)
-        val c = centerOf(target)
-        dragOffset = PointF(x - c.x, y - c.y)
+        dragDx = x - target.x * width
+        dragDy = y - target.y * height
         mode = Mode.DRAG
     }
 
@@ -311,16 +320,17 @@ class DecorCanvasView @JvmOverloads constructor(
         when (mode) {
             Mode.DRAG -> listener?.onTransform(
                 e.id,
-                (event.x - dragOffset.x) / width,
-                (event.y - dragOffset.y) / height,
+                (event.x - dragDx) / width,
+                (event.y - dragDy) / height,
                 e.scale,
                 e.rotation,
             )
 
             Mode.RESIZE -> {
-                val c = centerOf(e)
-                val distance = hypot(event.x - c.x, event.y - c.y)
-                val rotation = startRotation + angle(c.x, c.y, event.x, event.y) - startAngle
+                val cx = e.x * width
+                val cy = e.y * height
+                val distance = hypot(event.x - cx, event.y - cy)
+                val rotation = startRotation + angle(cx, cy, event.x, event.y) - startAngle
                 listener?.onTransform(e.id, e.x, e.y, startScale * distance / startDistance, rotation)
             }
 
@@ -339,5 +349,11 @@ class DecorCanvasView @JvmOverloads constructor(
 
     private companion object {
         const val EXPORT_SIZE = 1024
+        const val CORNER_COUNT = 4
+
+        // Chỉ số góc trong [corners] mà từng handle đặt tại: flip trên-phải, resize dưới-phải, delete dưới-trái
+        const val CORNER_FLIP = 1
+        const val CORNER_RESIZE = 2
+        const val CORNER_DELETE = 3
     }
 }

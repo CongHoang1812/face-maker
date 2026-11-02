@@ -1,6 +1,5 @@
 package com.conght.facemakerapp.core.ui
 
-import android.content.res.Resources
 import android.os.SystemClock
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -19,10 +18,6 @@ fun <T> Fragment.collectWhenStarted(flow: Flow<T>, action: suspend (T) -> Unit) 
         }
     }
 }
-
-val Int.dp: Int get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
-
-val Float.dp: Float get() = this * Resources.getSystem().displayMetrics.density
 
 /**
  * Click chống bấm liên tục (debounce [intervalMs]).

@@ -38,6 +38,7 @@ class HueBarView @JvmOverloads constructor(
     private val bar = RectF()
     private val barPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val hsv = floatArrayOf(0f, 1f, 1f)
     private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = this@HueBarView.strokeWidth
@@ -57,7 +58,8 @@ class HueBarView @JvmOverloads constructor(
         val r = barHeight / 2
         canvas.drawRoundRect(bar, r, r, barPaint)
         val x = bar.left + hue / MAX_HUE * bar.width()
-        fillPaint.color = Color.HSVToColor(floatArrayOf(hue, 1f, 1f))
+        hsv[0] = hue
+        fillPaint.color = Color.HSVToColor(hsv)
         val cy = height / 2f
         canvas.drawCircle(x, cy, cursorRadius - strokeWidth, fillPaint)
         canvas.drawCircle(x, cy, cursorRadius - strokeWidth, strokePaint)

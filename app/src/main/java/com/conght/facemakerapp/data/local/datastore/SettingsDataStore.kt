@@ -28,7 +28,6 @@ class SettingsDataStore @Inject constructor(
     val onboardingDone: Flow<Boolean> = dataStore.data.map { it[KEY_ONBOARDING_DONE] ?: false }
     val rated: Flow<Boolean> = dataStore.data.map { it[KEY_RATED] ?: false }
     val cosplayInstructionShown: Flow<Boolean> = dataStore.data.map { it[KEY_COSPLAY_INSTRUCTION] ?: false }
-    val sampleCreationsSeeded: Flow<Boolean> = dataStore.data.map { it[KEY_SAMPLE_SEEDED] ?: false }
     val creationSaveCount: Flow<Int> = dataStore.data.map { it[KEY_SAVE_COUNT] ?: 0 }
     val ratePromptState: Flow<RatePromptState> = dataStore.data.map {
         RatePromptState(
@@ -54,10 +53,6 @@ class SettingsDataStore @Inject constructor(
         dataStore.edit { it[KEY_COSPLAY_INSTRUCTION] = true }
     }
 
-    suspend fun setSampleCreationsSeeded() {
-        dataStore.edit { it[KEY_SAMPLE_SEEDED] = true }
-    }
-
     suspend fun incrementCreationSaveCount() {
         dataStore.edit { it[KEY_SAVE_COUNT] = (it[KEY_SAVE_COUNT] ?: 0) + 1 }
     }
@@ -76,7 +71,6 @@ class SettingsDataStore @Inject constructor(
         val KEY_RATED = booleanPreferencesKey("rated")
         val KEY_COSPLAY_INSTRUCTION = booleanPreferencesKey("cosplay_instruction_shown")
         val KEY_SAVE_COUNT = intPreferencesKey("creation_save_count")
-        val KEY_SAMPLE_SEEDED = booleanPreferencesKey("sample_creations_seeded")
         val KEY_RATE_LAST_DAY = longPreferencesKey("rate_last_prompt_day")
         val KEY_RATE_SAVE_PROMPTED = booleanPreferencesKey("rate_after_save_prompted")
         val KEY_RATE_HOME_PROMPTED = booleanPreferencesKey("rate_home_exit_prompted")

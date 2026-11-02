@@ -17,8 +17,6 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
         // Máy chủ chính + dự phòng (chỉ gọi khi máy chủ chính lỗi)
         buildConfigField("String", "BASE_URL", "\"https://lvtglobal.tech/\"")
         buildConfigField("String", "BACKUP_BASE_URL", "\"https://lvt-api-tech.io.vn/\"")
@@ -68,7 +66,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.core.splashscreen)
@@ -100,6 +97,4 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
 }

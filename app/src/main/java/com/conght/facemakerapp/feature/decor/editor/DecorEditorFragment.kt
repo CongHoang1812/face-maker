@@ -71,8 +71,22 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
     /** Pack hiện tại theo loại, cập nhật từ ViewModel. */
     private var packs: Map<DecorType, Resource<List<DecorPack>>> = emptyMap()
 
+    /** Đầu vào của hàng tab con + lưới ở lần render trước: kéo / xoay phần tử không đổi gì thì khỏi dựng lại. */
+    private var renderedGridKey: GridKey? = null
+    private var renderedPacks: Map<DecorType, Resource<List<DecorPack>>>? = null
+
+    private data class GridKey(
+        val tab: EditorTab,
+        val subTab: Int,
+        val background: DecorBackground,
+        val recentImages: List<String>,
+        val selectedType: ElementType?,
+    )
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        renderedGridKey = null
+        renderedPacks = null
         binding.content.applyStatusBarPadding()
         setLightStatusBar(true)
 
@@ -230,11 +244,17 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         binding.rvTextColors.isVisible = showText
         binding.rvGrid.isVisible = tab != EditorTab.TEXT
         binding.rvSubTabs.isVisible = tab != EditorTab.TEXT
-        fontAdapter.selectedId = data.selected?.takeIf { it.type != ElementType.STICKER }?.fontId ?: data.fontId
-        colorChipAdapter.selectedColor = data.selected?.takeIf { it.type != ElementType.STICKER }?.color ?: data.textColor
+        val selected = data.selected
+        val selectedText = selected?.takeIf { it.type != ElementType.STICKER }
+        fontAdapter.selectedId = selectedText?.fontId ?: data.fontId
+        colorChipAdapter.selectedColor = selectedText?.color ?: data.textColor
 
-        val pack = renderSubTabs(data)
-        renderGrid(data, pack)
+        val gridKey = GridKey(tab, data.subTab, data.background, data.recentImages, selected?.type)
+        if (gridKey != renderedGridKey || packs !== renderedPacks) {
+            renderedGridKey = gridKey
+            renderedPacks = packs
+            renderGrid(data, renderSubTabs(data))
+        }
 
         val loading = packs.values.any { it is Resource.Loading }
         if (loading) binding.shimmer.startShimmer() else binding.shimmer.stopShimmer()

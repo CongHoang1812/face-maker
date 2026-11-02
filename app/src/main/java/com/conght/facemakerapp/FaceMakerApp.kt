@@ -5,28 +5,19 @@ import android.net.ConnectivityManager
 import android.net.Network
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.getSystemService
-import com.conght.facemakerapp.data.local.db.SampleCreationSeeder
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 @HiltAndroidApp
 class FaceMakerApp : Application() {
 
-    @Inject lateinit var sampleCreationSeeder: SampleCreationSeeder
-
     @Inject lateinit var okHttpClient: OkHttpClient
-
-    private val appScope = CoroutineScope(SupervisorJob())
 
     override fun onCreate() {
         super.onCreate()
         // App không có dark theme -> khoá light mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        appScope.launch { sampleCreationSeeder.seedIfNeeded() }
         resetConnectionsOnNetworkChange()
     }
 

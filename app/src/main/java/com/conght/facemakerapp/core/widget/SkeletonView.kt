@@ -35,6 +35,10 @@ class SkeletonView @JvmOverloads constructor(
     private var radius = 0f
     private var mask: Drawable? = null
 
+    /** Màu đang tint trên [mask]: chỉ tint lại khi đổi, không phải mỗi frame shimmer. */
+    private var maskTint = 0
+    private var maskTinted = false
+
     private var host: ShimmerFrameLayout? = null
     private var highlightShader: Shader? = null
     private val shaderMatrix = Matrix()
@@ -108,8 +112,12 @@ class SkeletonView @JvmOverloads constructor(
         if (maskDrawable != null) {
             // Khuôn bất kỳ: tô khuôn bằng màu base, rồi phủ dải sáng chỉ lên pixel của khuôn
             val layer = if (shader != null) canvas.saveLayer(rect, null) else -1
-            maskDrawable.setTint(base)
-            maskDrawable.setTintMode(PorterDuff.Mode.SRC_IN)
+            if (!maskTinted || maskTint != base) {
+                maskDrawable.setTint(base)
+                maskDrawable.setTintMode(PorterDuff.Mode.SRC_IN)
+                maskTint = base
+                maskTinted = true
+            }
             maskDrawable.draw(canvas)
             if (shader != null) {
                 maskHighlightPaint.shader = shader

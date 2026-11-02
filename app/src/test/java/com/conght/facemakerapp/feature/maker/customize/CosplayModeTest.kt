@@ -95,17 +95,42 @@ class CosplayModeTest {
             runCurrent()
         }
 
+    private fun TestScope.select(vm: CustomizeViewModel, categoryId: String, itemId: String?) {
+        vm.selectCategory(categoryId)
+        runCurrent()
+        vm.selectItem(itemId)
+        runCurrent()
+    }
+
     @Test
-    fun done_scoresAgainstAnswer() = runTest(dispatcher) {
+    fun belowComplete_showsPercent_withoutFinishing() = runTest(dispatcher) {
         val vm = viewModel(handle())
         assertEquals("ref", vm.state.value.cosplay?.referenceImageUrl)
+        assertEquals(0, vm.cosplayProgressPercent())
+
+        select(vm, "hat", "hat_1") // đáp án là None → sai
+        select(vm, "hair", "hair_1") // đúng 1 / 2 category
+        assertEquals(50, vm.cosplayProgressPercent())
+        assertNull(vm.state.value.cosplay?.scorePercent) // chưa 100%, chưa hết giờ → chơi tiếp
+    }
+
+    @Test
+    fun reachingComplete_finishesWithoutWaitingForTimer() = runTest(dispatcher) {
+        val vm = viewModel(handle())
+        select(vm, "hat", "hat_1")
+        select(vm, "hair", "hair_1")
         assertNull(vm.state.value.cosplay?.scorePercent)
 
-        vm.selectItem("hair_1") // giờ khớp cả 2 category
-        runCurrent()
-        vm.finishCosplay()
-        runCurrent()
+        select(vm, "hat", null) // giờ khớp cả 2 category
         assertEquals(100, vm.state.value.cosplay?.scorePercent)
+
+        // Đã nộp: đồng hồ dừng, không đổi đồ được nữa
+        val left = vm.state.value.cosplay?.remainingSeconds
+        select(vm, "hair", "hair_2")
+        advanceTimeBy(5_000)
+        runCurrent()
+        assertEquals(left, vm.state.value.cosplay?.remainingSeconds)
+        assertEquals("hair_1", vm.state.value.config?.selections?.get("hair")?.itemId)
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.conght.facemakerapp.core.widget
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isVisible
@@ -62,12 +61,4 @@ class PaperDialogContainer @JvmOverloads constructor(
             binding.tvMessage.text = value
             binding.tvMessage.isVisible = !value.isNullOrEmpty()
         }
-
-    fun setOnStartClickListener(listener: View.OnClickListener?) {
-        binding.btnStart.setOnClickListener(listener)
-    }
-
-    fun setOnEndClickListener(listener: View.OnClickListener?) {
-        binding.btnEnd.setOnClickListener(listener)
-    }
 }

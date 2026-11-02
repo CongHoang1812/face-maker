@@ -57,7 +57,6 @@ data class CustomizeUiState(
     val selectedCategoryId: String? = null,
     val panel: PanelMode = PanelMode.EDIT,
     val isDirty: Boolean = false,
-    val mode: CustomizeMode = CustomizeMode.MAKER,
     /** Chỉ có ở mode COSPLAY. */
     val cosplay: CosplayState? = null,
 ) {
@@ -73,7 +72,7 @@ data class CosplayState(
     val referenceImageUrl: String,
     val remainingSeconds: Int,
     val totalSeconds: Int,
-    /** % giống đáp án, có sau khi Done / hết giờ. */
+    /** % giống đáp án, có sau khi đạt 100% / hết giờ. */
     val scorePercent: Int? = null,
     /** Ảnh nhân vật người chơi (cacheDir) để hiện ở popup điểm. */
     val resultImagePath: String? = null,
@@ -102,6 +101,10 @@ class CustomizeViewModel @Inject constructor(
 
     private val mode: CustomizeMode =
         savedStateHandle.get<String>(CustomizeFragment.ARG_MODE)?.let(CustomizeMode::valueOf) ?: CustomizeMode.MAKER
+
+    /** JSON → config gần nhất: mỗi lần kéo / zoom state phát lại, khỏi parse lại chuỗi vừa serialize. */
+    private var parsedJson: String? = null
+    private var parsedConfig: CharacterConfig? = null
 
     private val initialConfig: CharacterConfig? =
         savedStateHandle.get<String>(CustomizeFragment.ARG_CONFIG_JSON)?.let(::parseConfig)
@@ -148,12 +151,11 @@ class CustomizeViewModel @Inject constructor(
                 selectedCategoryId = category,
                 panel = PanelMode.valueOf(panel),
                 isDirty = dirty,
-                mode = mode,
             )
         },
         cosplayState,
     ) { ui, cosplay -> ui.copy(cosplay = cosplay) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), CustomizeUiState(mode = mode))
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), CustomizeUiState())
 
     private val _events = Channel<CustomizeEvent>(Channel.BUFFERED)
     val events: Flow<CustomizeEvent> = _events.receiveAsFlow()
@@ -173,7 +175,10 @@ class CustomizeViewModel @Inject constructor(
     private val current get() = state.value
 
     init {
-        if (mode == CustomizeMode.COSPLAY && challenge != null) startCountdown()
+        if (mode == CustomizeMode.COSPLAY && challenge != null) {
+            startCountdown()
+            finishWhenComplete()
+        }
         retryWhenBackOnline(networkMonitor, isError = { current.detail is Resource.Error }, retry = ::retry)
     }
 
@@ -190,13 +195,36 @@ class CustomizeViewModel @Inject constructor(
         }
     }
 
-    /** Done hoặc hết giờ: chấm điểm bằng [CosplayScorer] (một lần). */
-    fun finishCosplay() {
+    /**
+     * Người chơi đổi đồ khớp 100% đáp án → nộp bài ngay, không chờ hết giờ. Theo dõi qua [state] để khi
+     * điểm được chốt thì state đã mang config mới (Fragment không chụp nhầm nhân vật cũ).
+     */
+    private fun finishWhenComplete() {
         val answer = challenge?.answer ?: return
-        val config = current.config ?: return
-        if (score.value != null) return
-        savedStateHandle[KEY_SCORE] = CosplayScorer.score(answer, config)
+        viewModelScope.launch {
+            state.first { ui ->
+                ui.cosplay?.isFinished == true ||
+                    (ui.isDirty && ui.config?.let { CosplayScorer.score(answer, it) } == COMPLETE_PERCENT)
+            }
+            finishCosplay()
+        }
     }
+
+    /** % hoàn thành hiện tại so với đáp án (popup ảnh mẫu); null khi chưa có đề bài / nhân vật. */
+    fun cosplayProgressPercent(): Int? {
+        val answer = challenge?.answer ?: return null
+        val config = current.config ?: return null
+        return CosplayScorer.score(answer, config)
+    }
+
+    /** Đạt 100% hoặc hết giờ: chốt điểm bằng [CosplayScorer] (một lần). */
+    fun finishCosplay() {
+        if (score.value != null) return
+        savedStateHandle[KEY_SCORE] = cosplayProgressPercent() ?: return
+    }
+
+    /** false khi đã có / đang lưu ảnh kết quả → Fragment khỏi chụp thêm bitmap. */
+    val needsCosplayResultImage: Boolean get() = resultPath.value == null && !savingResultImage
 
     /** Lưu ảnh nhân vật người chơi (cacheDir) để hiện ở popup điểm. */
     fun setCosplayResultImage(bitmap: Bitmap) {
@@ -404,15 +432,24 @@ class CustomizeViewModel @Inject constructor(
         updateConfig { it.copy(transform = block(it.transform)) }
 
     private fun updateConfig(block: (CharacterConfig) -> CharacterConfig) {
+        if (score.value != null) return // đã nộp bài: không đổi được nữa
         val config = current.config ?: return
         val updated = block(config)
         if (updated == config) return
-        savedStateHandle[KEY_CONFIG] = gson.toJson(updated)
+        val json = gson.toJson(updated)
+        parsedJson = json
+        parsedConfig = updated
+        savedStateHandle[KEY_CONFIG] = json
         savedStateHandle[KEY_DIRTY] = true
     }
 
-    private fun parseConfig(json: String): CharacterConfig? =
-        runCatching { gson.fromJson(json, CharacterConfig::class.java) }.getOrNull()
+    private fun parseConfig(json: String): CharacterConfig? {
+        if (json == parsedJson) return parsedConfig
+        return runCatching { gson.fromJson(json, CharacterConfig::class.java) }.getOrNull().also {
+            parsedJson = json
+            parsedConfig = it
+        }
+    }
 
     private companion object {
         const val TAG = "CustomizeViewModel"
@@ -426,6 +463,7 @@ class CustomizeViewModel @Inject constructor(
         const val KEY_SCORE = "cosplay_score"
         const val KEY_RESULT_PATH = "cosplay_result_path"
         const val COSPLAY_SECONDS = 10 * 60
+        const val COMPLETE_PERCENT = 100
         const val TICK_MS = 1_000L
         const val STOP_TIMEOUT_MS = 5_000L
         const val MIN_SCALE = 0.5f

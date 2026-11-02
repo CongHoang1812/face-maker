@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Popup điểm Cosplay: thẻ giấy rách + ảnh nhân vật + "{percent}%" + nút X bên dưới -->
+<!-- Popup Cosplay (Figma 3:123): thẻ giấy rách + ảnh + "{percent}%" + nút X bên dưới.
+     Dùng chung cho popup ảnh mẫu và popup điểm khi hết giờ. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -30,7 +31,7 @@
             android:id="@+id/tv_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/grid_gap"
+            android:layout_marginTop="@dimen/cosplay_card_padding_bottom"
             android:textAppearance="@style/Text.DialogTitle"
             android:textSize="@dimen/cosplay_score_text"
             tools:text="50%" />

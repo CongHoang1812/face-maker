@@ -16,10 +16,6 @@
         <attr name="icon" />
     </declare-styleable>
 
-    <declare-styleable name="TopBarView">
-        <attr name="showBack" format="boolean" />
-    </declare-styleable>
-
     <declare-styleable name="ShimmerFrameLayout">
         <!-- dark: skeleton trắng mờ trên nền tối | light: skeleton be trên nền sáng -->
         <attr name="shimmerTone" format="enum">

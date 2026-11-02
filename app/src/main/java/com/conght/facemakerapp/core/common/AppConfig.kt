@@ -27,12 +27,6 @@ object AppConfig {
     /** Lucky roll: yêu cầu xem quảng cáo (Random dialog – Watch Ad stub) trước khi random. */
     const val LUCKY_ROLL_REQUIRES_AD: Boolean = false
 
-    /**
-     * Bản debug: chèn 1 lần vài item mẫu (chưa có ảnh → ô ảnh shimmer) vào My creation để xem giao diện.
-     * Bản release luôn tắt.
-     */
-    val SEED_SAMPLE_CREATIONS: Boolean = BuildConfig.DEBUG
-
     /** Link Play Store của app (dùng cho Share app / Rate). */
     fun playStoreUrl(packageName: String): String = "https://play.google.com/store/apps/details?id=$packageName"
 }
