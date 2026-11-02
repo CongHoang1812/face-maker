@@ -47,6 +47,45 @@ sh gradlew :app:assembleDebug :app:testDebugUnitTest
 
 Mở `docs/APP_BRIEF.md`, điền Figma, chủ đề, tài liệu API. **Brief càng rõ, prompt càng ngắn.**
 
+## Lệnh cho Windows
+
+Các lệnh trong tài liệu này viết cho Linux / macOS. Trên Windows có hai cách:
+
+- **Git Bash hoặc WSL**: dùng nguyên các lệnh ở trên, không phải đổi gì.
+- **PowerShell**: đổi theo bảng dưới.
+
+| Linux / macOS | Windows (PowerShell) |
+|---|---|
+| `python3` | `python` (hoặc `py`) |
+| `\` để xuống dòng | gõ liền một dòng (hoặc dùng dấu huyền `` ` ``) |
+| `a && b` | gõ hai dòng riêng (PowerShell 5 không có `&&`) |
+| `sh gradlew ...` | `.\gradlew.bat ...` |
+| `/` trong đường dẫn | `\` hoặc `/` đều được |
+
+Cần Python 3.9 trở lên, và đánh dấu "Add Python to PATH" khi cài.
+
+Tạo project (Bước 1):
+
+```powershell
+python .claude\skills\maker-reskin\scripts\new_app.py --dest ..\anime-oc-maker --app-name "Anime OC Maker" --app-id com.conght.animeocmaker --app-key ST279_AnimeOCMaker --project-code ST279 --base-url https://lvtglobal.tech/ --backup-url https://lvt-api-tech.io.vn/
+
+cd ..\anime-oc-maker
+git init
+git add .
+git commit -m "Tạo project từ template"
+.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest
+```
+
+Kiểm tra API (Bước 2) và nghiệm thu (Bước 4):
+
+```powershell
+python .claude\skills\maker-reskin\scripts\probe_api.py
+python .claude\skills\maker-reskin\scripts\audit.py
+python .claude\skills\maker-reskin\scripts\audit.py --release
+```
+
+Nếu `gradlew.bat` báo thiếu `JAVA_HOME`, mở project bằng Android Studio và build bằng nút Run (Android Studio dùng JDK đi kèm).
+
 ## Bước 2: API
 
 ```bash
