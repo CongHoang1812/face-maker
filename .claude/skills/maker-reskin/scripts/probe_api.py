@@ -101,7 +101,7 @@ def check_server(base: str, key: str) -> list[str]:
     if first_name is not None:
         part = first_parts[0]
         folder = f"{part.get('position') or first_name}/{part['parts']}"
-        colors = [color.strip().lstrip("#").upper() for color in str(part.get("colorArray") or "").split(",") if color.strip()]
+        colors = [color.strip().lstrip("#") for color in str(part.get("colorArray") or "").split(",") if color.strip()]
         layer = f"{folder}/{colors[0]}/1.png" if colors else f"{folder}/1.png"
         samples = {"avatar": f"{first_name}/avatar.png", "icon tab": f"{folder}/nav.png",
                    "thumbnail": f"{folder}/thumb_1.png", "layer": layer}
@@ -116,7 +116,7 @@ def check_server(base: str, key: str) -> list[str]:
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as error:
         problems.append(f"Không đọc được bg/bg.json: {error}")
         return problems
-    folders = {"background": "bg/background", "sticker": "bg/sticker", "speech bubble": "bg/speech bubble"}
+    folders = {"background": "bg/background", "stickers": "bg/stickers", "speech_bubble": "bg/speech_bubble"}
     for group, folder in folders.items():
         items = decor.get(group)
         if not isinstance(items, list):

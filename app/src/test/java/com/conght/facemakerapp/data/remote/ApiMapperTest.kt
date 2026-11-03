@@ -6,6 +6,7 @@ import com.conght.facemakerapp.data.model.layerUrlFor
 import com.conght.facemakerapp.data.remote.dto.DecorCategoryDto
 import com.conght.facemakerapp.data.remote.dto.DecorConfigDto
 import com.conght.facemakerapp.data.remote.dto.PartDto
+import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -50,10 +51,28 @@ class ApiMapperTest {
         assertEquals(listOf("1", "2", "3", "4"), category.items.map { it.id })
         val item = category.items[1]
         assertEquals("${base}11/37-3/thumb_2.png", item.thumbnailUrl)
-        assertEquals(listOf("000000", "FFFFFF"), item.colors.map { it.id })
+        assertEquals(listOf("000000", "ffffff"), item.colors.map { it.id })
         assertEquals("#FFFFFF", item.colors[1].hex)
-        assertEquals("${base}11/37-3/FFFFFF/2.png", category.layerUrlFor(PartSelection("2", "FFFFFF")))
+        assertEquals("${base}11/37-3/ffffff/2.png", category.layerUrlFor(PartSelection("2", "ffffff")))
         assertNull(item.layerUrl)
+    }
+
+    @Test
+    fun detail_colorCodeWithSuffix_keepsFolderName_butHexIsDisplayable() {
+        val suffixed = listOf(PartDto("11", "15-1", "BFCBBF_2,c9ced9", 1, 1))
+        val colors = ApiMapper.toTemplateDetail("11", suffixed, base).categories.single().items.single().colors
+        assertEquals(listOf("BFCBBF_2", "c9ced9"), colors.map { it.id })
+        assertEquals(listOf("#BFCBBF", "#C9CED9"), colors.map { it.hex })
+        assertEquals("${base}11/15-1/BFCBBF_2/1.png", colors[0].layerUrl)
+    }
+
+    @Test
+    fun decorConfig_readsServerKeys() {
+        val json = """{"background":[{"category":"","quantity":90}],"speech_bubble":[{"category":"1","quantity":36}],"stickers":[{"category":"","quantity":50}]}"""
+        val config = Gson().fromJson(json, DecorConfigDto::class.java)
+        assertEquals(90, config.background?.single()?.quantity)
+        assertEquals(50, config.sticker?.single()?.quantity)
+        assertEquals(36, config.speechBubble?.single()?.quantity)
     }
 
     @Test
@@ -89,11 +108,11 @@ class ApiMapperTest {
         val sticker = ApiMapper.toDecorPacks(config, DecorType.STICKER, base)
         assertEquals(1, sticker.size)
         assertEquals("Emoji", sticker[0].name)
-        assertEquals("${base}bg/sticker/Emoji/3.png", sticker[0].items[2].imageUrl)
+        assertEquals("${base}bg/stickers/Emoji/3.png", sticker[0].items[2].imageUrl)
 
         val speech = ApiMapper.toDecorPacks(config, DecorType.SPEECH, base).single()
         assertEquals("", speech.name)
-        assertEquals("${base}bg/speech%20bubble/1/1.png", speech.items[0].imageUrl)
+        assertEquals("${base}bg/speech_bubble/1/1.png", speech.items[0].imageUrl)
         assertEquals(DecorType.SPEECH, speech.type)
     }
 }

@@ -55,7 +55,9 @@ Hàm data source **ném exception** khi lỗi, không trả danh sách rỗng. `
 - **Ảnh từ máy chủ dự phòng**: `getDecorPacks` luôn ghép URL ảnh từ `BASE_URL`, còn ảnh nhân vật lấy theo máy chủ đã trả dữ liệu. Giữ nguyên hay đổi là quyết định riêng, đừng đổi ngầm.
 - **Server chặn ảnh nhưng JSON vẫn 200**: `AssetProbe` kiểm tra một ảnh mẫu trước khi nhận dữ liệu. Giữ bước này với API mới và trỏ nó vào một URL ảnh thật.
 - **Cache trong phiên**: dữ liệu giữ trong bộ nhớ qua `Mutex`, lần lỗi không được cache để Retry gọi lại được. Giữ tính chất này nếu viết lại.
-- **Mã hoá URL**: tên thư mục có dấu cách (`speech bubble`). Dùng `encodePath()`, không nối chuỗi thô.
+- **Mã hoá URL**: tên thư mục có thể có dấu cách. Dùng `encodePath()`, không nối chuỗi thô.
+- **Tên nhóm decor khác nhau giữa các app**: ST279 dùng `sticker` / `speech bubble`, ST247 dùng `stickers` / `speech_bubble`, ở cả key JSON và thư mục ảnh.
+- **Mã màu là tên thư mục**: phân biệt hoa thường và có thể có đuôi (`BFCBBF_2`). URL phải giữ nguyên mã, chỉ `PartColor.hex` mới được chuẩn hoá.
 - **Gson không đảm bảo non-null**: mọi field DTO để nullable, xử lý mặc định trong mapper.
 - **Timeout 6 giây** ở `NetworkModule` là ngưỡng chuyển máy chủ dự phòng. Dữ liệu lớn hơn nhiều thì cần xem lại.
 

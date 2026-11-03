@@ -21,8 +21,8 @@ data class PartDto(
 /** Cấu hình nền / sticker / speech bubble (`bg/bg.json`). */
 data class DecorConfigDto(
     @SerializedName("background") val background: List<DecorCategoryDto>?,
-    @SerializedName("sticker") val sticker: List<DecorCategoryDto>?,
-    @SerializedName("speech bubble") val speechBubble: List<DecorCategoryDto>?,
+    @SerializedName("stickers") val sticker: List<DecorCategoryDto>?,
+    @SerializedName("speech_bubble") val speechBubble: List<DecorCategoryDto>?,
 )
 
 /** [category] = tên thư mục con (có thể rỗng), [quantity] = số ảnh đánh số từ 1. */

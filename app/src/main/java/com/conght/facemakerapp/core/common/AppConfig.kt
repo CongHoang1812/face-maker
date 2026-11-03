@@ -14,9 +14,9 @@ object AppConfig {
 
     /**
      * Mã app trên server (endpoint dữ liệu nhân vật + thư mục ảnh).
-     * TODO(RELEASE): đang mượn dữ liệu ST279 để test vì chưa có mã của ST237; đổi sang mã thật trước khi phát hành.
+     * TODO(RELEASE): đang mượn dữ liệu ST247 để test vì chưa có mã của ST237; đổi sang mã thật trước khi phát hành.
      */
-    const val APP_KEY: String = "ST279_AnimeOCMaker"
+    const val APP_KEY: String = "ST247_ChibiDollDressUp"
 
     /** Thư mục ảnh tính từ base URL. */
     const val ASSET_PATH: String = "public/app/$APP_KEY/"

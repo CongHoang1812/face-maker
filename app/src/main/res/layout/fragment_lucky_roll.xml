@@ -52,6 +52,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />
 
+            <!-- Vùng neo luôn còn kích thước: idle_box bị GONE sau khi Random nên không neo error_state vào đó được -->
+            <Space
+                android:id="@+id/result_area"
+                android:layout_width="@dimen/character_size"
+                android:layout_height="@dimen/character_size"
+                android:layout_marginTop="@dimen/content_top"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <!-- Idle: khung xám + hướng dẫn + mũi tên xoắn chỉ xuống nút Random -->
             <FrameLayout
                 android:id="@+id/idle_box"
@@ -112,10 +122,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/idle_box"
+                app:layout_constraintBottom_toBottomOf="@id/result_area"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/idle_box" />
+                app:layout_constraintTop_toTopOf="@id/result_area" />
 
             <com.conght.facemakerapp.core.widget.WoodButton
                 android:id="@+id/btn_random"

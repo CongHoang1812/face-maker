@@ -21,12 +21,13 @@ import java.net.URLEncoder
  * - avatar template `{key}/avatar.png`
  * - icon tab `{position}/{parts}/nav.png`, thumbnail `{position}/{parts}/thumb_{i}.png`
  * - layer `{position}/{parts}/{màu}/{i}.png` (có màu) hoặc `{position}/{parts}/{i}.png`
- * - decor `bg/background[/{category}]/{i}.png`, `bg/sticker/{category}/{i}.png`,
- *   `bg/speech bubble/{category}/{i}.png`
+ * - decor `bg/background[/{category}]/{i}.png`, `bg/stickers[/{category}]/{i}.png`,
+ *   `bg/speech_bubble/{category}/{i}.png`
  *
- * `parts` = `X-Y`: X = zIndex (lớp vẽ), Y = thứ tự tab. Item id = số thứ tự `i` (1..quantity),
- * color id = mã hex. Category bắt buộc là tab đầu (thân nhân vật); config mặc định chỉ chọn item đầu
- * của category đó, các category khác None.
+ * `parts` = `X-Y`: X = zIndex (lớp vẽ), Y = thứ tự tab. Item id = số thứ tự `i` (1..quantity).
+ * Color id = mã trong `colorArray`, giữ nguyên vì đó cũng là tên thư mục ảnh (phân biệt hoa thường,
+ * có thể có đuôi như `BFCBBF_2`); chỉ `hex` để hiển thị mới được chuẩn hoá. Category bắt buộc là tab
+ * đầu (thân nhân vật); config mặc định chỉ chọn item đầu của category đó, các category khác None.
  */
 object ApiMapper {
 
@@ -58,8 +59,8 @@ object ApiMapper {
     fun toDecorPacks(config: DecorConfigDto, type: DecorType, assetBase: String): List<DecorPack> {
         val (groups, folder) = when (type) {
             DecorType.BACKGROUND -> config.background to "bg/background"
-            DecorType.STICKER -> config.sticker to "bg/sticker"
-            DecorType.SPEECH -> config.speechBubble to "bg/speech bubble"
+            DecorType.STICKER -> config.sticker to "bg/stickers"
+            DecorType.SPEECH -> config.speechBubble to "bg/speech_bubble"
         }
         val prefix = type.name.lowercase()
         return groups.orEmpty()
@@ -85,7 +86,7 @@ object ApiMapper {
     private fun toCategory(templateId: String, dto: PartDto, parsed: ParsedParts, assetBase: String): PartCategory {
         val position = dto.position?.takeIf { it.isNotBlank() } ?: templateId
         val dir = "$assetBase${position.encodePath()}/${parsed.raw.encodePath()}"
-        val hexes = dto.colorArray.orEmpty().split(',').map { it.trim().removePrefix("#").uppercase() }.filter { it.isNotEmpty() }.distinct()
+        val colorCodes = dto.colorArray.orEmpty().split(',').map { it.trim().removePrefix("#") }.filter { it.isNotEmpty() }.distinct()
         return PartCategory(
             id = parsed.raw,
             name = parsed.raw,
@@ -96,8 +97,10 @@ object ApiMapper {
                 PartItem(
                     id = i.toString(),
                     thumbnailUrl = "$dir/thumb_$i.png",
-                    colors = hexes.map { hex -> PartColor(id = hex, hex = "#$hex", layerUrl = "$dir/$hex/$i.png") },
-                    layerUrl = if (hexes.isEmpty()) "$dir/$i.png" else null,
+                    colors = colorCodes.map { code ->
+                        PartColor(id = code, hex = "#${code.substringBefore('_').uppercase()}", layerUrl = "$dir/${code.encodePath()}/$i.png")
+                    },
+                    layerUrl = if (colorCodes.isEmpty()) "$dir/$i.png" else null,
                 )
             },
         )
