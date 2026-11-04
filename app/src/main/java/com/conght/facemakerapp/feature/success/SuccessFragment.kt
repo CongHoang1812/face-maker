@@ -21,7 +21,6 @@ import com.conght.facemakerapp.core.ui.shareImages
 import com.conght.facemakerapp.data.model.CreationType
 import com.conght.facemakerapp.databinding.FragmentSuccessBinding
 import com.conght.facemakerapp.feature.creation.MyCreationFragment
-import com.conght.facemakerapp.feature.dialog.RateUsDialogFragment
 import com.conght.facemakerapp.feature.dialog.setLoadingVisible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,9 +67,6 @@ class SuccessFragment : BaseFragment<FragmentSuccessBinding>(FragmentSuccessBind
             when (event) {
                 SuccessEvent.Downloaded -> showAppToast(R.string.saved)
                 SuccessEvent.DownloadFailed -> showAppToast(R.string.save_failed)
-                SuccessEvent.ShowRateUs -> if (childFragmentManager.findFragmentByTag(RateUsDialogFragment.TAG) == null) {
-                    RateUsDialogFragment.newInstance().show(childFragmentManager, RateUsDialogFragment.TAG)
-                }
             }
         }
     }

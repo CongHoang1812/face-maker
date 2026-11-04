@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.conght.facemakerapp.R
@@ -17,8 +18,10 @@ import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.data.model.CharacterTemplate
 import com.conght.facemakerapp.databinding.FragmentTemplateSelectBinding
+import com.conght.facemakerapp.feature.dialog.NoInternetDialogFragment
 import com.conght.facemakerapp.feature.maker.customize.CustomizeFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * Maker – chọn nhân vật gốc (Figma 3:278). Không có ô None.
@@ -36,7 +39,11 @@ class TemplateSelectFragment : BaseFragment<FragmentTemplateSelectBinding>(Fragm
 
         binding.btnBack.setOnSingleClickListener { findNavController().popBackStack() }
 
-        val adapter = TemplateAdapter(::openCustomize)
+        childFragmentManager.setFragmentResultListener(KEY_NO_INTERNET, viewLifecycleOwner) { _, _ ->
+            viewModel.pendingTemplate?.let(::onTemplateClick)
+        }
+
+        val adapter = TemplateAdapter(::onTemplateClick)
         val columns = resources.getInteger(R.integer.template_grid_columns)
         binding.rvTemplates.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.rvTemplates.addItemDecoration(
@@ -56,6 +63,18 @@ class TemplateSelectFragment : BaseFragment<FragmentTemplateSelectBinding>(Fragm
         }
     }
 
+    /** Có mạng → mở Customize; không → dialog No Internet (Try again gọi lại hàm này). */
+    private fun onTemplateClick(template: CharacterTemplate) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (viewModel.isOnline()) {
+                openCustomize(template)
+            } else {
+                viewModel.pendingTemplate = template
+                NoInternetDialogFragment.showOnce(childFragmentManager, KEY_NO_INTERNET)
+            }
+        }
+    }
+
     private fun openCustomize(template: CharacterTemplate) {
         navigateSafe(
             R.id.action_templateSelect_to_customize,
@@ -65,5 +84,6 @@ class TemplateSelectFragment : BaseFragment<FragmentTemplateSelectBinding>(Fragm
 
     private companion object {
         const val PLACEHOLDER_COUNT = 10
+        const val KEY_NO_INTERNET = "template_no_internet"
     }
 }

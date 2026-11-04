@@ -1,7 +1,6 @@
 package com.conght.facemakerapp.feature.dialog
 
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -12,9 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.children
 import androidx.core.widget.ImageViewCompat
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.conght.facemakerapp.R
 import com.conght.facemakerapp.core.common.AppConfig
 import com.conght.facemakerapp.core.ui.base.BaseDialogFragment
@@ -22,22 +20,18 @@ import com.conght.facemakerapp.core.ui.collectWhenStarted
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.databinding.DialogRateUsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 /**
- * Rate us (Figma 69:339). 0 sao: nút Rate disable; 1–3 sao: mở email góp ý; 4–5 sao: mở Play Store.
- * Sau khi Rate: `setRated(true)`. Kết quả `setFragmentResult(REQUEST_KEY, { KEY_RATED: Boolean })`
- * khi dialog đóng (để màn gọi, vd. Home lúc thoát app, biết mà xử lý tiếp).
+ * Rate us (Figma 69:339), chỉ mở từ Setting.
+ * 0 sao: nút Rate disable; 1–3 sao: mở email góp ý; 4–5 sao: mở Play Store.
  */
 @AndroidEntryPoint
 class RateUsDialogFragment : BaseDialogFragment<DialogRateUsBinding>(DialogRateUsBinding::inflate) {
 
     private val viewModel: RateUsViewModel by viewModels()
-    private var rated = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rated = savedInstanceState?.getBoolean(STATE_RATED) ?: false
         createStars()
         binding.btnRate.setOnSingleClickListener { rate() }
         binding.btnExit.setOnSingleClickListener { dismiss() }
@@ -84,12 +78,8 @@ class RateUsDialogFragment : BaseDialogFragment<DialogRateUsBinding>(DialogRateU
     private fun rate() {
         val stars = viewModel.stars.value
         if (stars == 0) return
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.markRated()
-            rated = true
-            if (stars <= LOW_RATING_MAX) openFeedbackEmail() else openPlayStore()
-            dismiss()
-        }
+        if (stars <= LOW_RATING_MAX) openFeedbackEmail() else openPlayStore()
+        dismiss()
     }
 
     private fun openFeedbackEmail() {
@@ -115,27 +105,14 @@ class RateUsDialogFragment : BaseDialogFragment<DialogRateUsBinding>(DialogRateU
         false
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(STATE_RATED, rated)
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        if (!isStateSaved) {
-            setFragmentResult(REQUEST_KEY, Bundle().apply { putBoolean(KEY_RATED, rated) })
-        }
-    }
-
     companion object {
-        const val TAG = "RateUsDialog"
-        const val REQUEST_KEY = "rate_us"
-        const val KEY_RATED = "rated"
-
-        private const val STATE_RATED = "rated"
+        private const val TAG = "RateUsDialog"
         private const val LOW_RATING_MAX = 3
         private const val DISABLED_ALPHA = 0.5f
 
-        fun newInstance() = RateUsDialogFragment()
+        /** Hiện dialog, bỏ qua nếu đang mở. */
+        fun showOnce(manager: FragmentManager) {
+            if (manager.findFragmentByTag(TAG) == null) RateUsDialogFragment().show(manager, TAG)
+        }
     }
 }

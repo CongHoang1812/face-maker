@@ -43,5 +43,10 @@ data class CharacterTransform(
 data class CharacterConfig(
     val templateId: String,
     val selections: Map<String, PartSelection>, // key = categoryId
+    /** Áp lên cả nhân vật (nút Flip). */
     val transform: CharacterTransform = CharacterTransform(),
-)
+    /** Áp lên từng bộ phận (chế độ Move), key = categoryId. Null với JSON lưu trước khi có field này. */
+    val partTransforms: Map<String, CharacterTransform>? = null,
+) {
+    fun partTransform(categoryId: String): CharacterTransform = partTransforms?.get(categoryId) ?: CharacterTransform()
+}

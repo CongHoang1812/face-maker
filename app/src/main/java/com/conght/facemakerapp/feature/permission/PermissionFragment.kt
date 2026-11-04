@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.conght.facemakerapp.R
@@ -39,6 +40,8 @@ class PermissionFragment : BaseFragment<FragmentPermissionBinding>(FragmentPermi
 
         binding.rowMedia.tvName.setText(R.string.permission_media)
         binding.rowNotification.tvName.setText(R.string.permission_notification)
+        // Dưới Android 13 không có quyền thông báo lúc chạy → ẩn dòng này
+        binding.rowNotification.root.isVisible = AppPermissions.notification != null
 
         binding.rowMedia.root.setOnSingleClickListener {
             if (!AppPermissions.isMediaGranted(requireContext())) mediaLauncher.launch(AppPermissions.media)

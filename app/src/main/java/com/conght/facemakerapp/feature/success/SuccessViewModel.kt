@@ -3,7 +3,6 @@ package com.conght.facemakerapp.feature.success
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.conght.facemakerapp.core.common.RatePrompter
 import com.conght.facemakerapp.data.model.Creation
 import com.conght.facemakerapp.data.repository.CreationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,16 +18,12 @@ import javax.inject.Inject
 sealed interface SuccessEvent {
     data object Downloaded : SuccessEvent
     data object DownloadFailed : SuccessEvent
-
-    /** Lần lưu thành công thứ 2 (chưa rate) → hiện Rate us. */
-    data object ShowRateUs : SuccessEvent
 }
 
 @HiltViewModel
 class SuccessViewModel @Inject constructor(
     private val creationRepository: CreationRepository,
-    private val ratePrompter: RatePrompter,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val creationId: Long = savedStateHandle[SuccessFragment.ARG_CREATION_ID] ?: -1L
@@ -49,11 +44,6 @@ class SuccessViewModel @Inject constructor(
 
     init {
         viewModelScope.launch { _creation.value = creationRepository.get(creationId) }
-        // Chỉ kiểm tra 1 lần cho mỗi màn Successful (không lặp lại khi xoay màn)
-        if (savedStateHandle.get<Boolean>(KEY_RATE_CHECKED) != true) {
-            savedStateHandle[KEY_RATE_CHECKED] = true
-            viewModelScope.launch { if (ratePrompter.shouldPromptAfterSave()) _events.send(SuccessEvent.ShowRateUs) }
-        }
     }
 
     /** Copy ảnh vào internal storage `filesDir/downloads/` (không ra Gallery). */
@@ -69,6 +59,5 @@ class SuccessViewModel @Inject constructor(
 
     private companion object {
         const val MAX_STARS = 3
-        const val KEY_RATE_CHECKED = "rate_checked"
     }
 }

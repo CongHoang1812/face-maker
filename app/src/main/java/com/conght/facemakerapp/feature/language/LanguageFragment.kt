@@ -34,12 +34,15 @@ class LanguageFragment : BaseFragment<FragmentLanguageBinding>(FragmentLanguageB
         binding.btnBack.isVisible = fromSetting
         binding.tvTitle.isVisible = !fromSetting
 
-        val adapter = LanguageAdapter { viewModel.select(it) }
+        val adapter = LanguageAdapter(viewModel.selected.value) { viewModel.select(it) }
         binding.rvLanguages.adapter = adapter
         binding.btnBack.setOnSingleClickListener { findNavController().popBackStack() }
         binding.btnCheck.setOnSingleClickListener { viewModel.confirm() }
 
-        collectWhenStarted(viewModel.selected) { adapter.selected = it }
+        collectWhenStarted(viewModel.selected) {
+            adapter.selected = it
+            binding.btnCheck.isVisible = it != null
+        }
         collectWhenStarted(viewModel.confirmed) { onConfirmed(it) }
     }
 

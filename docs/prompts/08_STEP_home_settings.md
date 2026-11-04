@@ -11,7 +11,7 @@
   3. **Character Random** (Figma ghi "D&D lucky roll") → `luckyRollFragment`
   4. **My creation** → `myCreationFragment`
 - Ảnh thẻ là asset local (không qua API, không shimmer).
-- Back ở Home → thoát app (có thể hiện Rate us dialog lần đầu thoát nếu chưa rate – logic ở bước 7).
+- Back ở Home → thoát app, không hiện Rate us dialog.
 
 ## Setting (`SettingFragment`)
 - Nền `bg_tavern`, nút back. 4 hàng (style giống item language, nền trắng, icon trái 16dp, chữ nâu):

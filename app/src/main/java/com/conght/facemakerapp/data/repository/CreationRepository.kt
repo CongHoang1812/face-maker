@@ -44,7 +44,6 @@ class CreationRepositoryImpl @Inject constructor(
     private val fileStore: ImageFileStore,
     private val gson: Gson,
     private val dispatchers: DispatcherProvider,
-    private val settingsRepository: SettingsRepository,
 ) : CreationRepository {
 
     override fun observe(type: CreationType): Flow<List<Creation>> =
@@ -66,7 +65,7 @@ class CreationRepositoryImpl @Inject constructor(
                     configJson = config?.let(gson::toJson),
                     createdAt = System.currentTimeMillis(),
                 ),
-            ).also { settingsRepository.incrementCreationSaveCount() }
+            )
         }
 
     override suspend fun delete(ids: List<Long>) = withContext(dispatchers.io) {

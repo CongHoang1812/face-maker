@@ -20,7 +20,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipChildren="false">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_center"
@@ -39,7 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <com.conght.facemakerapp.core.widget.OutlinedTextView
             android:id="@+id/tv_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +50,11 @@
             android:textAppearance="@style/Text.Logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:textOutlineColor="@color/brown_primary"
+            app:textOutlineShadowColor="@android:color/black"
+            app:textOutlineShadowOffset="@dimen/logo_shadow_offset"
+            app:textOutlineWidth="@dimen/logo_stroke" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_maker"
@@ -124,9 +129,12 @@
             android:layout_marginTop="@dimen/home_card_gap"
             app:layout_constraintTop_toBottomOf="@id/card_maker">
 
+            <!-- Ảnh gốc có khung tròn và góc trắng: phóng to như Figma để cắt phần đó -->
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/home_lucky_image_size"
+                android:layout_height="@dimen/home_lucky_image_size"
+                android:layout_marginStart="@dimen/home_lucky_image_offset_start"
+                android:layout_marginTop="@dimen/home_lucky_image_offset_top"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_home_lucky" />

@@ -11,6 +11,9 @@
 
     <!-- Splash -->
     <dimen name="splash_title_top">198dp</dimen>
+    <!-- Viền + bóng logo (splash, home) -->
+    <dimen name="logo_stroke">2dp</dimen>
+    <dimen name="logo_shadow_offset">1.6dp</dimen>
     <dimen name="splash_progress_w">240dp</dimen>
     <dimen name="splash_progress_h">16dp</dimen>
     <dimen name="splash_progress_inset">3dp</dimen>
@@ -38,7 +41,8 @@
     <dimen name="wood_button_inset_bottom">5dp</dimen>
     <dimen name="wood_button_medium_width">112dp</dimen>
     <dimen name="wood_button_large_width">160dp</dimen>
-    <dimen name="wood_button_tab_width">124dp</dimen>
+    <dimen name="wood_button_tab_width">104dp</dimen>
+    <dimen name="wood_button_tab_height">34dp</dimen>
     <dimen name="wood_button_text_stroke">2dp</dimen>
 
     <!-- Nhân vật & panel -->
@@ -113,7 +117,7 @@
     <!-- Decor editor (Figma 3:773 / 3:913 / 3:993 / 3:1155) -->
     <dimen name="editor_tab_row_h">48dp</dimen>
     <dimen name="editor_tab_gap">32dp</dimen>
-    <dimen name="editor_sub_tab_row_h">56dp</dimen>
+    <dimen name="editor_sub_tab_row_h">50dp</dimen>
     <dimen name="editor_chip">32dp</dimen>
     <dimen name="editor_input_h">36dp</dimen>
     <dimen name="editor_input_text">16sp</dimen>
@@ -167,6 +171,9 @@
     <dimen name="home_card_half_gap">4dp</dimen>
     <dimen name="home_cards_top">192dp</dimen>
     <dimen name="home_card_label_bottom">9dp</dimen>
+    <dimen name="home_lucky_image_size">212dp</dimen>
+    <dimen name="home_lucky_image_offset_start">-26dp</dimen>
+    <dimen name="home_lucky_image_offset_top">-25dp</dimen>
 
     <!-- My creation -->
     <dimen name="creation_card_image">136dp</dimen>

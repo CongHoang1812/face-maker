@@ -21,7 +21,7 @@
 - Nút Done ở play screen, time-up dùng score popup, Exit dialog khi back (đã nêu ở bước 13 – kiểm tra lại).
 
 ## 6. Rate us trigger
-- Hiện RateUsDialog khi: người dùng lưu thành công lần thứ 2, hoặc back ở Home lần đầu (nếu `rated == false`). Không hiện quá 1 lần/ngày.
+- Không tự hiện RateUsDialog ở bất kỳ màn nào (back ở Home, lưu, download). Dialog chỉ mở khi bấm Rate us trong Setting.
 
 ## 7. Polish chung
 - Hiệu ứng nhấn cho mọi nút (scale 0.95, 100ms), ripple tắt cho WoodButton.

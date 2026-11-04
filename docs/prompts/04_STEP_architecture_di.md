@@ -63,7 +63,8 @@ data class CharacterTransform(
 data class CharacterConfig(
     val templateId: String,
     val selections: Map<String, PartSelection>, // key = categoryId
-    val transform: CharacterTransform = CharacterTransform(),
+    val transform: CharacterTransform = CharacterTransform(),                // cả nhân vật (Flip)
+    val partTransforms: Map<String, CharacterTransform>? = null,             // từng bộ phận (Move), key = categoryId
 )
 
 enum class DecorType { BACKGROUND, STICKER, SPEECH }
@@ -112,7 +113,7 @@ sealed interface Resource<out T> {
 | `CosplayRepository` | `randomChallenge(): Flow<Resource<CosplayChallenge>>` | như trên |
 | `LuckyRollRepository` | `roll(): Flow<Resource<LuckyRollResult>>` | như trên |
 | `CreationRepository` | `observe(type)`, `get(id)`, `save(type, bitmap, config?)`, `delete(ids)`, `download(ids): Result<List<File>>` | **Thật**: Room + file nội bộ (internal storage) |
-| `SettingsRepository` | `languageCode: Flow<String?>`, `setLanguage`, `onboardingDone: Flow<Boolean>`, `setOnboardingDone`, `rated`, `setRated` | **Thật**: DataStore |
+| `SettingsRepository` | `languageCode: Flow<String?>`, `setLanguage`, `onboardingDone: Flow<Boolean>`, `setOnboardingDone` | **Thật**: DataStore |
 
 ## Local
 

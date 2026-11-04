@@ -8,13 +8,16 @@ import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.databinding.ItemLanguageBinding
 
 class LanguageAdapter(
+    initialSelected: AppLanguage?,
     private val onClick: (AppLanguage) -> Unit,
 ) : RecyclerView.Adapter<LanguageAdapter.ViewHolder>() {
 
     private val items = AppLanguage.entries
 
-    var selected: AppLanguage? = null
+    /** null = chưa chọn item nào (lần đầu mở app). */
+    var selected: AppLanguage? = initialSelected
         set(value) {
+            if (field == value) return
             val old = field
             field = value
             old?.let { notifyItemChanged(items.indexOf(it)) }

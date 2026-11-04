@@ -28,7 +28,7 @@
   - 4: ☺️ "We love you too!" / "Thanks for your feedback"
   - 5: 😍 "We love you too!" / ...
   (emoji dùng ảnh export từ Figma hoặc emoji unicode trong TextView)
-- Rate: 0 sao → disable; 1–3 sao → mở email feedback (`ACTION_SENDTO mailto:` – địa chỉ placeholder `AppConfig.FEEDBACK_EMAIL`), 4–5 sao → Play In-App Review hoặc mở Play Store; sau đó `setRated(true)`.
+- Rate: 0 sao → disable; 1–3 sao → mở email feedback (`ACTION_SENDTO mailto:` – địa chỉ placeholder `AppConfig.FEEDBACK_EMAIL`), 4–5 sao → Play In-App Review hoặc mở Play Store.
 
 ## Tiêu chí hoàn thành
 - Tất cả dialog hiển thị đúng Figma, sống sót khi xoay/recreate, kết quả trả qua Fragment Result API.

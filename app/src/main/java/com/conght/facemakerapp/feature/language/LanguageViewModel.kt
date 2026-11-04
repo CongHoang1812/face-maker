@@ -8,11 +8,8 @@ import com.conght.facemakerapp.data.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,11 +19,14 @@ class LanguageViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    /** Mã ngôn ngữ đang chọn – lưu trong SavedStateHandle để sống sót recreate/process death. */
-    val selected: StateFlow<AppLanguage> = savedStateHandle
-        .getStateFlow(KEY_SELECTED, AppLanguage.current().code)
-        .map { AppLanguage.fromCode(it) ?: AppLanguage.DEFAULT }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, AppLanguage.current())
+    /**
+     * Ngôn ngữ đang chọn – lưu trong SavedStateHandle để sống sót recreate/process death.
+     * Lần đầu mở app: null cho đến khi người dùng chọn. Từ setting: ngôn ngữ hiện tại.
+     */
+    val selected: StateFlow<AppLanguage?> = savedStateHandle.getStateFlow(
+        KEY_SELECTED,
+        if (savedStateHandle.get<Boolean>(LanguageFragment.ARG_FROM_SETTING) == true) AppLanguage.current() else null,
+    )
 
     private val _confirmed = Channel<AppLanguage>(Channel.BUFFERED)
 
@@ -34,11 +34,11 @@ class LanguageViewModel @Inject constructor(
     val confirmed: Flow<AppLanguage> = _confirmed.receiveAsFlow()
 
     fun select(language: AppLanguage) {
-        savedStateHandle[KEY_SELECTED] = language.code
+        savedStateHandle[KEY_SELECTED] = language
     }
 
     fun confirm() {
-        val language = selected.value
+        val language = selected.value ?: return
         viewModelScope.launch {
             settingsRepository.setLanguage(language.code)
             _confirmed.send(language)

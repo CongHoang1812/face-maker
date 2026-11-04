@@ -4,12 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
@@ -27,7 +31,8 @@ import com.conght.facemakerapp.data.model.layerUrlFor
 
 /**
  * Vẽ nhân vật từ nhiều layer ảnh (mỗi [com.conght.facemakerapp.data.model.PartCategory] một layer,
- * xếp theo zIndex) và áp [CharacterTransform] (dịch / phóng to / xoay / lật) lên cả nhóm layer.
+ * xếp theo zIndex). [CharacterConfig.transform] áp lên cả nhóm layer, [CharacterConfig.partTransforms]
+ * áp lên từng layer.
  *
  * Khi [gesturesEnabled] (chế độ Move): kéo 1 ngón để dịch, pinch để zoom → báo qua [onGesture].
  */
@@ -42,13 +47,13 @@ class CharacterCanvasView @JvmOverloads constructor(
     var gesturesEnabled = false
 
     private val layerContainer = FrameLayout(context)
-    private val layers = mutableMapOf<String, ImageView>()
+    private val layers = mutableMapOf<String, LayerView>()
     private val layerUrls = mutableMapOf<String, String?>()
     private var layerOrder: List<String> = emptyList()
 
     /** Layer mới đang chờ hiện: categoryId → url đích (null = None) / view ẩn đang tải ảnh. */
     private val pendingUrls = mutableMapOf<String, String?>()
-    private val pendingViews = mutableMapOf<String, ImageView>()
+    private val pendingViews = mutableMapOf<String, LayerView>()
     private val loadingIds = mutableSetOf<String>()
     private var staging = false
 
@@ -90,7 +95,10 @@ class CharacterCanvasView @JvmOverloads constructor(
             renderedSelections = config.selections
             renderLayers(detail, config)
         }
-        applyTransform(config.transform)
+        layerContainer.applyTransform(config.transform, density)
+        // Gồm cả layer đang chờ để lúc đổi layer bộ phận không bị nhảy về vị trí gốc
+        layers.forEach { (id, view) -> view.applyPartTransform(config.partTransform(id), density) }
+        pendingViews.forEach { (id, view) -> view.applyPartTransform(config.partTransform(id), density) }
     }
 
     private fun renderLayers(detail: TemplateDetail, config: CharacterConfig) {
@@ -206,7 +214,7 @@ class CharacterCanvasView @JvmOverloads constructor(
         }
     }
 
-    private fun newLayerView() = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+    private fun newLayerView() = LayerView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
 
     private fun layerParams() = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 
@@ -227,14 +235,6 @@ class CharacterCanvasView @JvmOverloads constructor(
             // Không dùng HARDWARE bitmap để exportBitmap() vẽ được ra canvas phần mềm
             Glide.with(view).load(url).disallowHardwareConfig().into(view)
         }
-    }
-
-    fun applyTransform(transform: CharacterTransform) {
-        layerContainer.translationX = transform.offsetX * density
-        layerContainer.translationY = transform.offsetY * density
-        layerContainer.scaleX = transform.scale * if (transform.flipped) -1f else 1f
-        layerContainer.scaleY = transform.scale
-        layerContainer.rotation = transform.rotation
     }
 
     /** Vẽ nhân vật (kèm transform) ra bitmap vuông [size]px – lấy ô vuông giữa view. Gọi trên main thread. */
@@ -283,4 +283,95 @@ class CharacterCanvasView @JvmOverloads constructor(
     private companion object {
         const val EXPORT_SIZE = 1024
     }
+}
+
+private fun View.applyTransform(transform: CharacterTransform, density: Float) {
+    translationX = transform.offsetX * density
+    translationY = transform.offsetY * density
+    scaleX = transform.scale * if (transform.flipped) -1f else 1f
+    scaleY = transform.scale
+    rotation = transform.rotation
+}
+
+/**
+ * Layer của 1 bộ phận. Ảnh layer thường rộng bằng cả canvas còn bộ phận chỉ chiếm một góc, nên phóng to / xoay
+ * quanh tâm phần ảnh có nội dung (không phải tâm view) để bộ phận đổi kích thước tại chỗ.
+ */
+private class LayerView(context: Context) : AppCompatImageView(context) {
+
+    private var hasTransform = false
+
+    /** Tâm phần có nội dung của ảnh hiện tại (tỉ lệ 0..1), tính khi cần rồi giữ đến lúc đổi ảnh. */
+    private var cachedCenter: Pair<Float, Float>? = null
+    private var cachedCenterValid = false
+
+    fun applyPartTransform(transform: CharacterTransform, density: Float) {
+        applyTransform(transform, density)
+        hasTransform = transform.scale != 1f || transform.rotation != 0f
+        updatePivot()
+    }
+
+    override fun setImageDrawable(drawable: Drawable?) {
+        super.setImageDrawable(drawable)
+        cachedCenterValid = false
+        updatePivot()
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        updatePivot()
+    }
+
+    /** Scale 1 và không xoay thì pivot không ảnh hưởng gì → khỏi quét ảnh của những layer chưa chỉnh. */
+    private fun updatePivot() {
+        if (!hasTransform || width == 0 || height == 0) return
+        if (!cachedCenterValid) {
+            cachedCenter = findContentCenter()
+            cachedCenterValid = true
+        }
+        val center = cachedCenter
+        val image = drawable
+        if (center == null || image == null) {
+            pivotX = width / 2f
+            pivotY = height / 2f
+            return
+        }
+        // FIT_CENTER: ảnh được thu theo cạnh chạm khung trước và nằm giữa view
+        val fit = minOf(width.toFloat() / image.intrinsicWidth, height.toFloat() / image.intrinsicHeight)
+        val shownWidth = image.intrinsicWidth * fit
+        val shownHeight = image.intrinsicHeight * fit
+        pivotX = (width - shownWidth) / 2f + center.first * shownWidth
+        pivotY = (height - shownHeight) / 2f + center.second * shownHeight
+    }
+
+    private fun findContentCenter(): Pair<Float, Float>? {
+        val bitmap = (drawable as? BitmapDrawable)?.bitmap?.takeUnless { it.isRecycled } ?: return null
+        return contentCenter(bitmap.width, bitmap.height) { x, y -> Color.alpha(bitmap.getPixel(x, y)) }
+    }
+}
+
+private const val MAX_CONTENT_SAMPLES = 128
+private const val MIN_CONTENT_ALPHA = 16
+
+/**
+ * Tâm khung bao phần có nội dung của ảnh [width]×[height], theo tỉ lệ 0..1; null nếu ảnh trong suốt hoàn toàn.
+ * Chỉ lấy mẫu theo lưới tối đa [MAX_CONTENT_SAMPLES] điểm mỗi chiều vì hàm chạy trên main thread.
+ */
+internal fun contentCenter(width: Int, height: Int, alphaAt: (x: Int, y: Int) -> Int): Pair<Float, Float>? {
+    val step = maxOf(1, maxOf(width, height) / MAX_CONTENT_SAMPLES)
+    var left = Int.MAX_VALUE
+    var top = Int.MAX_VALUE
+    var right = -1
+    var bottom = -1
+    for (y in 0 until height step step) {
+        for (x in 0 until width step step) {
+            if (alphaAt(x, y) < MIN_CONTENT_ALPHA) continue
+            if (x < left) left = x
+            if (x > right) right = x
+            if (y < top) top = y
+            if (y > bottom) bottom = y
+        }
+    }
+    if (right < 0) return null
+    return (left + right + 1) / 2f / width to (top + bottom + 1) / 2f / height
 }

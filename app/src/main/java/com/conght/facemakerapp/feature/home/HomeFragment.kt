@@ -14,12 +14,11 @@ import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.databinding.FragmentHomeBinding
 import com.conght.facemakerapp.feature.dialog.NoInternetDialogFragment
-import com.conght.facemakerapp.feature.dialog.RateUsDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
- * Home (Figma 3:438). Back ở Home = thoát app; lần đầu (chưa rate) hiện Rate us trước.
+ * Home (Figma 3:438). Back ở Home = thoát app.
  * Maker / Cosplay / Lucky roll cần mạng: mất mạng → dialog No Internet (Try again kiểm tra lại).
  */
 @AndroidEntryPoint
@@ -42,12 +41,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             navigateOnline(NoInternetDialogFragment.destination(bundle))
         }
 
-        // Rate us đóng (đã rate hay chưa) → thoát app
-        childFragmentManager.setFragmentResultListener(RateUsDialogFragment.REQUEST_KEY, viewLifecycleOwner) { _, _ ->
-            requireActivity().finish()
-        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() = onBack()
+            override fun handleOnBackPressed() = requireActivity().finish()
         })
     }
 
@@ -56,20 +51,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         viewLifecycleOwner.lifecycleScope.launch {
             if (viewModel.isOnline()) {
                 navigateSafe(action)
-            } else if (childFragmentManager.findFragmentByTag(NoInternetDialogFragment.TAG) == null) {
-                NoInternetDialogFragment.newInstance(KEY_NO_INTERNET, action)
-                    .show(childFragmentManager, NoInternetDialogFragment.TAG)
-            }
-        }
-    }
-
-    private fun onBack() {
-        if (childFragmentManager.findFragmentByTag(RateUsDialogFragment.TAG) != null) return
-        viewLifecycleOwner.lifecycleScope.launch {
-            if (viewModel.shouldPromptRateOnExit()) {
-                RateUsDialogFragment.newInstance().show(childFragmentManager, RateUsDialogFragment.TAG)
             } else {
-                requireActivity().finish()
+                NoInternetDialogFragment.showOnce(childFragmentManager, KEY_NO_INTERNET, action)
             }
         }
     }

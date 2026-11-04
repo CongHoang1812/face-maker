@@ -37,6 +37,7 @@ import com.conght.facemakerapp.feature.cosplay.CosplayReferenceDialogFragment
 import com.conght.facemakerapp.feature.cosplay.CosplayScoreDialogFragment
 import com.conght.facemakerapp.feature.dialog.ConfirmDialogFragment
 import com.conght.facemakerapp.feature.dialog.ConfirmDialogs
+import com.conght.facemakerapp.feature.dialog.NoInternetDialogFragment
 import com.conght.facemakerapp.feature.dialog.setLoadingVisible
 import com.conght.facemakerapp.feature.maker.move.MovePanelView
 import com.conght.facemakerapp.feature.success.SuccessFragment
@@ -65,6 +66,9 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
     private var listsDetail: TemplateDetail? = null
     private var listsCategoryId: String? = null
     private var listsSelections: Map<String, PartSelection>? = null
+
+    /** Lựa chọn vừa random, chờ 2 danh sách cập nhật xong (DiffUtil chạy nền) rồi mới cuộn tới. */
+    private var pendingScroll: PartSelection? = null
 
     private lateinit var noneAdapter: NoneAdapter
     private lateinit var partAdapter: PartItemAdapter
@@ -114,6 +118,14 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
 
                 CustomizeEvent.SaveFailed ->
                     showAppToast(R.string.save_failed)
+
+                CustomizeEvent.NoInternet ->
+                    NoInternetDialogFragment.showOnce(childFragmentManager, KEY_NO_INTERNET)
+
+                is CustomizeEvent.ScrollToSelection -> {
+                    pendingScroll = event.selection
+                    scrollToPendingSelection()
+                }
             }
         }
     }
@@ -122,14 +134,14 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         val gap = resources.getDimensionPixelSize(R.dimen.grid_gap)
         val columns = resources.getInteger(R.integer.part_grid_columns)
         noneAdapter = NoneAdapter(R.layout.item_none_part) { viewModel.selectItem(null) }
-        val diceAdapter = NoneAdapter(R.layout.item_dice_part) { viewModel.randomCategory() }
-        partAdapter = PartItemAdapter { viewModel.selectItem(it.id) }
+        val diceAdapter = NoneAdapter(R.layout.item_dice_part) { viewModel.runWhenOnline { randomCategory() } }
+        partAdapter = PartItemAdapter { viewModel.runWhenOnline { selectItem(it.id) } }
         loadingParts = noneFirst(noneAdapter, diceAdapter, SkeletonAdapter(R.layout.item_skeleton_part, SKELETON_PARTS))
         readyParts = noneFirst(noneAdapter, diceAdapter, partAdapter)
         binding.rvParts.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.rvParts.addItemDecoration(GridSpacingItemDecoration(columns, gap, gap))
 
-        colorAdapter = ColorDotAdapter { viewModel.selectColor(it.id) }
+        colorAdapter = ColorDotAdapter { viewModel.runWhenOnline { selectColor(it.id) } }
         loadingColors = SkeletonAdapter(R.layout.item_skeleton_color_dot, SKELETON_COLORS)
         binding.rvColors.addItemDecoration(
             LinearSpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.color_dot_gap)),
@@ -191,6 +203,9 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         childFragmentManager.setFragmentResultListener(CosplayScoreDialogFragment.REQUEST_KEY, viewLifecycleOwner) { _, _ ->
             viewModel.saveCosplayResult()
         }
+        childFragmentManager.setFragmentResultListener(KEY_NO_INTERNET, viewLifecycleOwner) { _, _ ->
+            viewModel.retryPendingAction()
+        }
     }
 
     private fun onBack() {
@@ -229,9 +244,11 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         // COSPLAY: không có nút Next / Done (Figma 3:132), bài tự nộp khi đạt 100% hoặc hết giờ
         binding.btnNext.isInvisible = moving || isCosplay
         // COSPLAY: bỏ cột tool trái + random-all (ô xúc xắc trong lưới vẫn giữ)
-        listOf(binding.btnReset, binding.btnFlip, binding.btnMove, binding.btnRandomAll).forEach {
+        listOf(binding.btnReset, binding.btnFlip, binding.btnRandomAll).forEach {
             it.isVisible = !moving && !isCosplay
         }
+        binding.btnMove.isVisible = !moving && !isCosplay && state.canMovePart
+        binding.movePanel.setLimits(state.moveLimits)
         renderCosplay(state.cosplay)
 
         if (!ready) {
@@ -257,11 +274,29 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         val selection = state.selection
         noneAdapter.isSelected = selection?.itemId == null
         tabAdapter.submitList(detail.categories.map { Selectable(it, it.id == state.selectedCategoryId) })
-        partAdapter.submitList(state.selectedCategory?.items.orEmpty().map { Selectable(it, it.id == selection?.itemId) })
+        partAdapter.submitList(state.selectedCategory?.items.orEmpty().map { Selectable(it, it.id == selection?.itemId) }) {
+            scrollToPendingSelection()
+        }
 
         val colors = state.selectedItem?.colors.orEmpty()
         binding.colorBar.isInvisible = colors.isEmpty()
-        colorAdapter.submitList(colors.map { Selectable(it, it.id == selection?.colorId) })
+        colorAdapter.submitList(colors.map { Selectable(it, it.id == selection?.colorId) }) {
+            scrollToPendingSelection()
+        }
+    }
+
+    /** Cuộn khi cả 2 danh sách đã hiện đúng lựa chọn [pendingScroll]; chưa thì chờ lần cập nhật danh sách sau. */
+    private fun scrollToPendingSelection() {
+        val target = pendingScroll ?: return
+        if (view == null) return
+        val itemIndex = partAdapter.currentList.indexOfFirst { it.selected && it.value.id == target.itemId }
+        val colorIndex = colorAdapter.currentList.indexOfFirst { it.selected && it.value.id == target.colorId }
+        if ((target.itemId != null && itemIndex < 0) || (target.colorId != null && colorIndex < 0)) return
+        pendingScroll = null
+        // None → ô đầu lưới; item nằm sau các ô cố định (None, Xúc xắc)
+        val fixedCells = readyParts.itemCount - partAdapter.itemCount
+        binding.rvParts.smoothScrollToPosition(if (itemIndex < 0) 0 else fixedCells + itemIndex)
+        if (colorIndex >= 0) binding.rvColors.smoothScrollToPosition(colorIndex)
     }
 
     /**
@@ -341,6 +376,7 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         private const val KEY_EXIT = "customize_exit"
         private const val KEY_RESET = "customize_reset"
         private const val KEY_RANDOM = "customize_random"
+        private const val KEY_NO_INTERNET = "customize_no_internet"
         private const val SKELETON_PARTS = 18
         private const val SKELETON_COLORS = 8
         private const val SKELETON_TABS = 6

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="OutlinedTextView">
+        <attr name="textOutlineColor" format="color" />
+        <!-- Độ dày viền tính từ đường bao chữ ra ngoài (Figma stroke Outside) -->
+        <attr name="textOutlineWidth" format="dimension" />
+        <attr name="textOutlineShadowColor" format="color" />
+        <!-- Độ lệch hai bóng cứng: (+x, +y) và (-x, +y) -->
+        <attr name="textOutlineShadowOffset" format="dimension" />
+    </declare-styleable>
+
     <declare-styleable name="WoodButton">
         <attr name="android:text" />
         <!-- orange (mặc định) | gray (tab không chọn) -->
@@ -9,6 +18,8 @@
         </attr>
         <!-- Chiều rộng cố định của nút (bỏ trống = wrap_content theo chữ) -->
         <attr name="buttonWidth" format="dimension" />
+        <!-- Độ dày viền chữ (bỏ trống = wood_button_text_stroke, 0dp = không viền) -->
+        <attr name="woodTextStroke" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="RoundIconButton">

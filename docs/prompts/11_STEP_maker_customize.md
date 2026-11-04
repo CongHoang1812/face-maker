@@ -20,7 +20,7 @@
 ## CharacterCanvasView (core/widget hoặc feature/maker)
 - `FrameLayout` chứa nhiều `ImageView` layer xếp theo `PartCategory.zIndex`.
 - `render(detail: TemplateDetail, config: CharacterConfig)`: với mỗi category lấy `PartSelection` → url layer (theo colorId, fallback màu đầu) → Glide load; None → ẩn layer.
-- Áp `CharacterTransform` lên container: `translationX/Y`, `scaleX/Y` (flip = scaleX âm), `rotation`.
+- Áp `config.transform` lên container và `config.partTransforms[categoryId]` lên từng layer: `translationX/Y`, `scaleX/Y` (flip = scaleX âm), `rotation`. Layer phóng to / xoay quanh tâm phần ảnh có nội dung để bộ phận đổi kích thước tại chỗ.
 - `exportBitmap(): Bitmap` – vẽ ô vuông giữa view ra bitmap 1024×1024 (dùng ở Next / save).
 
 ## ViewModel (`CustomizeViewModel`, @HiltViewModel, dùng `SavedStateHandle`)
@@ -29,8 +29,8 @@
 - Hành động:
   - `selectCategory(id)`, `selectItem(itemId?)`, `selectColor(colorId)`
   - `reset()` → về `detail.defaultConfig` (sau khi Reset dialog xác nhận)
-  - `flip()` → đảo `transform.flipped`
-  - `move(dx, dy)`, `rotate(deg)`, `zoom(factor)` (giới hạn scale 0.5–2.0, bước 10dp / 15° / 0.1)
+  - `flip()` → đảo `transform.flipped` (cả nhân vật)
+  - `move(dx, dy)`, `rotate(deg)`, `zoom(factor)` → chỉ đổi bộ phận đang chọn, đang là None thì bỏ qua (giới hạn scale 0.5–2.0, bước 10dp / 15° / 0.1)
   - `randomCategory()` → **để trống**:
     ```kotlin
     fun randomCategory() {
@@ -49,7 +49,8 @@
 
 ## Chế độ Move (`8:24`)
 - Nhấn nút move → panel dưới đổi sang `MovePanelView` (cùng nền `panel_brown`, chiếm vị trí panel): WoodButton "Exit" (trái trên), cột trái: xoay trái / xoay phải; giữa: D-pad 4 mũi tên tròn; phải: zoom + / −. Giữ nút để lặp (repeat 80ms).
-- Cho phép kéo/pinch trực tiếp trên canvas ở chế độ Move (tuỳ chọn, nên có).
+- Cho phép kéo/pinch trực tiếp trên canvas ở chế độ Move (tuỳ chọn, nên có). Mọi thao tác ở chế độ Move chỉ tác động lên bộ phận đang chọn.
+- Đang focus ô None → ẩn nút move. Bộ phận chạm giới hạn (offset ±200dp, scale 0.5–2.0) → disable nút của đúng hướng đó (alpha 0.5), rời giới hạn thì bật lại.
 - Exit → về panel thường.
 
 ## Điều hướng

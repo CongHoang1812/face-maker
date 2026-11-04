@@ -16,6 +16,11 @@ fun View.setOnRepeatClickListener(
 ) {
     val repeater = object : Runnable {
         override fun run() {
+            // View bị disable khi đang giữ thì không nhận được ACTION_UP nữa → phải tự dừng lặp
+            if (!isEnabled) {
+                isPressed = false
+                return
+            }
             action()
             postDelayed(this, intervalMs)
         }

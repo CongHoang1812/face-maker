@@ -34,11 +34,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
                 Bundle().apply { putBoolean(LanguageFragment.ARG_FROM_SETTING, true) },
             )
         }
-        binding.rowRate.setOnSingleClickListener {
-            if (childFragmentManager.findFragmentByTag(RateUsDialogFragment.TAG) == null) {
-                RateUsDialogFragment.newInstance().show(childFragmentManager, RateUsDialogFragment.TAG)
-            }
-        }
+        binding.rowRate.setOnSingleClickListener { RateUsDialogFragment.showOnce(childFragmentManager) }
         binding.rowShare.setOnSingleClickListener { shareApp() }
         binding.rowPrivacy.setOnSingleClickListener { openPrivacyPolicy() }
     }

@@ -20,9 +20,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipChildren="false">
 
-        <TextView
+        <com.conght.facemakerapp.core.widget.OutlinedTextView
             android:id="@+id/tv_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +33,11 @@
             android:textAppearance="@style/Text.Logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:textOutlineColor="@color/brown_primary"
+            app:textOutlineShadowColor="@android:color/black"
+            app:textOutlineShadowOffset="@dimen/logo_shadow_offset"
+            app:textOutlineWidth="@dimen/logo_stroke" />
 
         <TextView
             android:id="@+id/tv_ads"

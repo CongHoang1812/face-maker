@@ -12,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -19,8 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class TemplateSelectViewModel @Inject constructor(
     private val makerRepository: MakerRepository,
-    networkMonitor: NetworkMonitor,
+    private val networkMonitor: NetworkMonitor,
 ) : ViewModel() {
+
+    /** Template vừa bấm lúc mất mạng: Try again có mạng thì mở tiếp (sống qua xoay màn). */
+    var pendingTemplate: CharacterTemplate? = null
 
     /** Mỗi lần tăng = tải lại danh sách (Retry). */
     private val reloadKey = MutableStateFlow(0)
@@ -37,6 +41,8 @@ class TemplateSelectViewModel @Inject constructor(
     fun retry() {
         reloadKey.value++
     }
+
+    suspend fun isOnline(): Boolean = networkMonitor.isOnline.first()
 
     private companion object {
         const val STOP_TIMEOUT_MS = 5_000L

@@ -22,6 +22,7 @@ import com.conght.facemakerapp.data.model.TemplateDetail
 import com.conght.facemakerapp.data.model.layerUrlFor
 import com.conght.facemakerapp.data.repository.CreationRepository
 import com.conght.facemakerapp.data.repository.MakerRepository
+import com.conght.facemakerapp.feature.maker.move.MoveLimits
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
@@ -46,6 +47,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+private const val MIN_SCALE = 0.5f
+private const val MAX_SCALE = 2f
+private const val MAX_OFFSET_DP = 200f
+
 enum class CustomizeMode { MAKER, COSPLAY }
 
 enum class PanelMode { EDIT, MOVE }
@@ -65,6 +70,29 @@ data class CustomizeUiState(
     val selection: PartSelection? get() = selectedCategoryId?.let { config?.selections?.get(it) }
     val selectedItem: PartItem? get() = selectedCategory?.items?.firstOrNull { it.id == selection?.itemId }
     val isReady: Boolean get() = templateDetail != null && config != null
+
+    /** Đang focus ô None thì không có bộ phận nào để di chuyển. */
+    val canMovePart: Boolean get() = selection?.itemId != null
+
+    /** Trạng thái các nút ở panel Move theo bộ phận đang chọn. */
+    val moveLimits: MoveLimits
+        get() {
+            val categoryId = selectedCategoryId ?: return MoveLimits()
+            val current = config ?: return MoveLimits()
+            val part = current.partTransform(categoryId)
+            // Cả nhân vật đang lật thì đi sang trái trên màn hình là tăng offsetX
+            val canIncreaseX = part.offsetX < MAX_OFFSET_DP
+            val canDecreaseX = part.offsetX > -MAX_OFFSET_DP
+            val flipped = current.transform.flipped
+            return MoveLimits(
+                canMoveLeft = if (flipped) canIncreaseX else canDecreaseX,
+                canMoveRight = if (flipped) canDecreaseX else canIncreaseX,
+                canMoveUp = part.offsetY > -MAX_OFFSET_DP,
+                canMoveDown = part.offsetY < MAX_OFFSET_DP,
+                canZoomIn = part.scale < MAX_SCALE,
+                canZoomOut = part.scale > MIN_SCALE,
+            )
+        }
 }
 
 /** Trạng thái màn chơi Cosplay (đồng hồ 10 phút, điểm khi nộp bài). */
@@ -84,6 +112,10 @@ sealed interface CustomizeEvent {
     data class OpenEditor(val characterPath: String, val configJson: String) : CustomizeEvent
     data class OpenCosplaySuccess(val creationId: Long, val stars: Int) : CustomizeEvent
     data object SaveFailed : CustomizeEvent
+    data object NoInternet : CustomizeEvent
+
+    /** Vừa random: cuộn lưới item và thanh màu tới lựa chọn mới của category đang mở. */
+    data class ScrollToSelection(val selection: PartSelection) : CustomizeEvent
 }
 
 /**
@@ -96,7 +128,7 @@ class CustomizeViewModel @Inject constructor(
     private val creationRepository: CreationRepository,
     private val gson: Gson,
     private val savedStateHandle: SavedStateHandle,
-    networkMonitor: NetworkMonitor,
+    private val networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
     private val mode: CustomizeMode =
@@ -308,6 +340,28 @@ class CustomizeViewModel @Inject constructor(
         reloadKey.value++
     }
 
+    /** Thao tác vừa bấm lúc mất mạng: Try again có mạng thì làm tiếp (sống qua xoay màn). */
+    private var pendingOnlineAction: (CustomizeViewModel.() -> Unit)? = null
+
+    /** Có mạng → chạy [action]; không → giữ lại [action] và phát [CustomizeEvent.NoInternet]. */
+    fun runWhenOnline(action: CustomizeViewModel.() -> Unit) {
+        viewModelScope.launch {
+            if (networkMonitor.isOnline.first()) {
+                action()
+            } else {
+                pendingOnlineAction = action
+                _events.send(CustomizeEvent.NoInternet)
+            }
+        }
+    }
+
+    /** Try again trên dialog No Internet. */
+    fun retryPendingAction() {
+        val action = pendingOnlineAction ?: return
+        pendingOnlineAction = null
+        runWhenOnline(action)
+    }
+
     fun selectCategory(id: String) {
         savedStateHandle[KEY_CATEGORY] = id
         if (current.isReady) prepareRandomCategory(id)
@@ -345,23 +399,25 @@ class CustomizeViewModel @Inject constructor(
         savedStateHandle[KEY_DIRTY] = false
     }
 
-    fun flip() = updateTransform { it.copy(flipped = !it.flipped) }
+    /** Lật cả nhân vật. */
+    fun flip() = updateConfig { it.copy(transform = it.transform.copy(flipped = !it.transform.flipped)) }
 
-    /** Dịch theo dp. */
-    fun move(dxDp: Float, dyDp: Float) = updateTransform {
+    /** Dịch bộ phận đang chọn theo dp. */
+    fun move(dxDp: Float, dyDp: Float) = updatePartTransform {
         it.copy(
-            offsetX = (it.offsetX + dxDp).coerceIn(-MAX_OFFSET_DP, MAX_OFFSET_DP),
+            offsetX = (it.offsetX + dxDp * flipSign).coerceIn(-MAX_OFFSET_DP, MAX_OFFSET_DP),
             offsetY = (it.offsetY + dyDp).coerceIn(-MAX_OFFSET_DP, MAX_OFFSET_DP),
         )
     }
 
-    fun rotate(degrees: Float) = updateTransform { it.copy(rotation = (it.rotation + degrees) % FULL_TURN) }
+    /** Xoay bộ phận đang chọn. */
+    fun rotate(degrees: Float) = updatePartTransform { it.copy(rotation = (it.rotation + degrees * flipSign) % FULL_TURN) }
 
-    /** Cộng [delta] vào scale (nút +/−), giới hạn [MIN_SCALE]..[MAX_SCALE]. */
-    fun zoom(delta: Float) = updateTransform { it.copy(scale = (it.scale + delta).coerceIn(MIN_SCALE, MAX_SCALE)) }
+    /** Cộng [delta] vào scale bộ phận đang chọn (nút +/−), giới hạn [MIN_SCALE]..[MAX_SCALE]. */
+    fun zoom(delta: Float) = updatePartTransform { it.copy(scale = (it.scale + delta).coerceIn(MIN_SCALE, MAX_SCALE)) }
 
-    /** Nhân scale với [factor] (pinch). */
-    fun zoomBy(factor: Float) = updateTransform { it.copy(scale = (it.scale * factor).coerceIn(MIN_SCALE, MAX_SCALE)) }
+    /** Nhân scale bộ phận đang chọn với [factor] (pinch). */
+    fun zoomBy(factor: Float) = updatePartTransform { it.copy(scale = (it.scale * factor).coerceIn(MIN_SCALE, MAX_SCALE)) }
 
     fun setPanel(mode: PanelMode) {
         savedStateHandle[KEY_PANEL] = mode.name
@@ -377,6 +433,7 @@ class CustomizeViewModel @Inject constructor(
         viewModelScope.launch {
             val selection = prepared ?: randomOrNull { makerRepository.randomizeCategory(id, categoryId) } ?: return@launch
             updateConfig { it.copy(selections = it.selections + (categoryId to selection)) }
+            _events.send(CustomizeEvent.ScrollToSelection(selection))
             prepareRandomCategory(categoryId)
         }
     }
@@ -390,6 +447,7 @@ class CustomizeViewModel @Inject constructor(
         viewModelScope.launch {
             val random = prepared ?: randomOrNull { makerRepository.randomizeCharacter(id) } ?: return@launch
             updateConfig { it.copy(selections = random.selections) }
+            random.selections[current.selectedCategoryId]?.let { _events.send(CustomizeEvent.ScrollToSelection(it)) }
             current.templateDetail?.let(::prepareRandomAll)
         }
     }
@@ -428,8 +486,18 @@ class CustomizeViewModel @Inject constructor(
         }
     }
 
-    private fun updateTransform(block: (CharacterTransform) -> CharacterTransform) =
-        updateConfig { it.copy(transform = block(it.transform)) }
+    /** Cả nhân vật đang lật thì layer cũng bị lật: đảo chiều ngang để bộ phận đi đúng hướng tay kéo. */
+    private val flipSign: Float get() = if (current.config?.transform?.flipped == true) -1f else 1f
+
+    /** Đổi transform của bộ phận đang chọn; đang là None (không có gì để di chuyển) thì bỏ qua. */
+    private fun updatePartTransform(block: (CharacterTransform) -> CharacterTransform) {
+        val categoryId = current.selectedCategoryId ?: return
+        if (current.selection?.itemId == null) return
+        updateConfig { config ->
+            val updated = block(config.partTransform(categoryId))
+            config.copy(partTransforms = config.partTransforms.orEmpty() + (categoryId to updated))
+        }
+    }
 
     private fun updateConfig(block: (CharacterConfig) -> CharacterConfig) {
         if (score.value != null) return // đã nộp bài: không đổi được nữa
@@ -466,9 +534,6 @@ class CustomizeViewModel @Inject constructor(
         const val COMPLETE_PERCENT = 100
         const val TICK_MS = 1_000L
         const val STOP_TIMEOUT_MS = 5_000L
-        const val MIN_SCALE = 0.5f
-        const val MAX_SCALE = 2f
-        const val MAX_OFFSET_DP = 200f
         const val FULL_TURN = 360f
     }
 }

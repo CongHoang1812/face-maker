@@ -15,7 +15,7 @@ import com.conght.facemakerapp.R
 
 /**
  * Nút chữ "gỗ" (nền [WoodButtonDrawable]), chữ trắng có viền.
- * attr: `android:text`, `app:variant` (orange | gray), `app:buttonWidth`.
+ * attr: `android:text`, `app:variant` (orange | gray), `app:buttonWidth`, `app:woodTextStroke`.
  * Nhấn: scale 0.95.
  */
 class WoodButton @JvmOverloads constructor(
@@ -39,7 +39,7 @@ class WoodButton @JvmOverloads constructor(
 
     @ColorInt
     private var textStrokeColor = 0
-    private val textStrokeWidth = resources.getDimension(R.dimen.wood_button_text_stroke)
+    private var textStrokeWidth = resources.getDimension(R.dimen.wood_button_text_stroke)
 
     init {
         // Text.Button mặc định, trừ khi layout đã đặt android:textAppearance (vd. Text.TabSmall)
@@ -62,6 +62,7 @@ class WoodButton @JvmOverloads constructor(
         context.withStyledAttributes(attrs, R.styleable.WoodButton, defStyleAttr) {
             variant = Variant.entries[getInt(R.styleable.WoodButton_variant, 0)]
             buttonWidth = getDimensionPixelSize(R.styleable.WoodButton_buttonWidth, -1)
+            textStrokeWidth = getDimension(R.styleable.WoodButton_woodTextStroke, textStrokeWidth)
         }
         applyVariant()
     }

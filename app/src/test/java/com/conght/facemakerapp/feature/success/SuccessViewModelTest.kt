@@ -4,12 +4,10 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.conght.facemakerapp.core.common.RatePrompter
 import com.conght.facemakerapp.data.model.CharacterConfig
 import com.conght.facemakerapp.data.model.Creation
 import com.conght.facemakerapp.data.model.CreationType
 import com.conght.facemakerapp.data.repository.CreationRepository
-import com.conght.facemakerapp.testutil.FakeSettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -41,8 +39,6 @@ class SuccessViewModelTest {
         override suspend fun importImage(uri: Uri) = ""
     }
 
-    private fun prompter() = RatePrompter(FakeSettingsRepository()) { 0L }
-
     @Before
     fun setUp() = Dispatchers.setMain(UnconfinedTestDispatcher())
 
@@ -55,7 +51,7 @@ class SuccessViewModelTest {
 
     @Test
     fun readsArgsAndLoadsCreation() {
-        val vm = SuccessViewModel(FakeRepo(), prompter(), handle(source = "COSPLAY", stars = 9))
+        val vm = SuccessViewModel(FakeRepo(), handle(source = "COSPLAY", stars = 9))
         assertEquals(SuccessFragment.Source.COSPLAY, vm.source)
         assertEquals(3, vm.stars)
         assertEquals("/files/creations/7.png", vm.creation.value?.imagePath)
@@ -64,14 +60,14 @@ class SuccessViewModelTest {
     @Test
     fun download_success_and_failure_emitEvents() = runTest {
         val ok = FakeRepo()
-        val vm = SuccessViewModel(ok, prompter(), handle())
+        val vm = SuccessViewModel(ok, handle())
         vm.events.test {
             vm.download()
             assertEquals(SuccessEvent.Downloaded, awaitItem())
         }
         assertEquals(listOf(listOf(7L)), ok.downloaded)
 
-        val failing = SuccessViewModel(FakeRepo(fail = true), prompter(), handle())
+        val failing = SuccessViewModel(FakeRepo(fail = true), handle())
         failing.events.test {
             failing.download()
             assertEquals(SuccessEvent.DownloadFailed, awaitItem())
@@ -81,7 +77,7 @@ class SuccessViewModelTest {
     @Test
     fun missingId_doesNotDownload() {
         val repo = FakeRepo()
-        SuccessViewModel(repo, prompter(), SavedStateHandle()).download()
+        SuccessViewModel(repo, SavedStateHandle()).download()
         assertEquals(emptyList<List<Long>>(), repo.downloaded)
     }
 }

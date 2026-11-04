@@ -88,9 +88,8 @@ class MyCreationFragment : BaseFragment<FragmentMyCreationBinding>(FragmentMyCre
         collectWhenStarted(viewModel.state, ::render)
         collectWhenStarted(viewModel.busy) { setLoadingVisible(it) }
         collectWhenStarted(viewModel.events) { event ->
-            if (event is MyCreationEvent.Downloaded) {
-                val message = if (event.success) R.string.saved else R.string.save_failed
-                showAppToast(message)
+            when (event) {
+                is MyCreationEvent.Downloaded -> showAppToast(if (event.success) R.string.saved else R.string.save_failed)
             }
         }
     }
