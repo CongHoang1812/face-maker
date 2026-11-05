@@ -17,6 +17,7 @@
     <string name="saving">Guardando…</string>
     <string name="saved">Guardado</string>
     <string name="save_failed">Error al guardar</string>
+    <string name="save_permission_denied">Permite el acceso al almacenamiento para guardar imágenes</string>
     <string name="coming_soon">Próximamente</string>
     <string name="error_generic">Algo salió mal. Inténtalo de nuevo.</string>
     <string name="error_no_internet">Sin conexión a internet</string>
@@ -44,7 +45,7 @@
     <string name="tab_image">Imagen</string>
     <string name="tab_pack">Paquete</string>
     <string name="tab_pack_number">Paquete %1$d</string>
-    <string name="text_hint">Hola</string>
+    <string name="text_hint">Escribe tu contenido...</string>
 
     <string name="cosplay">Cosplay</string>
     <string name="instruction">Instrucciones</string>
@@ -58,6 +59,12 @@
     <string name="no_design_here">No hay diseños aquí</string>
     <string name="add_to_telegram">Añadir a Telegram</string>
     <string name="add_to_whatsapp">Añadir a WhatsApp</string>
+    <string name="whatsapp_sticker_count">Los paquetes de stickers de WhatsApp necesitan de %1$d a %2$d personajes</string>
+    <string name="sticker_added_to_whatsapp">Añadido a WhatsApp</string>
+    <string name="sticker_already_in_whatsapp">Este paquete ya está en WhatsApp</string>
+    <string name="sticker_export_failed">No se pudieron crear los stickers</string>
+    <string name="whatsapp_not_installed">WhatsApp no está instalado</string>
+    <string name="telegram_not_installed">Telegram no está instalado</string>
 
     <string name="dialog_exit_title">Salir</string>
     <string name="dialog_exit_message">Aún no lo has guardado, ¿quieres salir?</string>

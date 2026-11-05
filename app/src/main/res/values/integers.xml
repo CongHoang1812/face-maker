@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="press_anim_ms">100</integer>
-    <integer name="fragment_fade_ms">150</integer>
+    <integer name="fragment_slide_ms">250</integer>
 
     <!-- Số cột lưới; tablet ghi đè trong values-sw600dp -->
     <integer name="template_grid_columns">2</integer>

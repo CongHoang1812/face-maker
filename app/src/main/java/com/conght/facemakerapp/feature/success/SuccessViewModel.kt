@@ -46,7 +46,7 @@ class SuccessViewModel @Inject constructor(
         viewModelScope.launch { _creation.value = creationRepository.get(creationId) }
     }
 
-    /** Copy ảnh vào internal storage `filesDir/downloads/` (không ra Gallery). */
+    /** Lưu ảnh ra thư viện máy (Gallery). */
     fun download() {
         if (_downloading.value || creationId < 0) return
         _downloading.value = true

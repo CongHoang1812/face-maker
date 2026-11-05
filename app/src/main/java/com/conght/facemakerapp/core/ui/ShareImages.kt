@@ -9,7 +9,7 @@ import androidx.core.content.FileProvider
 import java.io.File
 
 /**
- * Chia sẻ ảnh trong internal storage (filesDir/creations, filesDir/downloads, cacheDir)
+ * Chia sẻ ảnh trong internal storage (filesDir/creations, cacheDir)
  * qua FileProvider `${applicationId}.fileprovider` – không cần quyền storage.
  * Trả về false nếu không có app nào nhận / file không chia sẻ được.
  */

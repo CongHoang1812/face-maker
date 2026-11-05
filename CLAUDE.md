@@ -31,6 +31,6 @@ Luồng dữ liệu: `Fragment → ViewModel (StateFlow) → Repository → Make
 - Danh sách phụ kiện luôn có ô None ở đầu, do UI chèn qua `noneFirst()`, không lấy từ API.
 - Data source ném exception khi lỗi, `resourceFlow` đổi thành `Resource.Error` để UI hiện Retry.
 - Thiết kế 360 × 800, 1px Figma = 1dp.
-- Ảnh chỉ lưu ở internal storage, không ghi ra Gallery.
+- Ảnh của app lưu ở internal storage. Chỉ nút Download mới ghi ra Gallery (`Pictures/<tên app>`).
 
 Cấu hình app (`APP_KEY`, máy chủ, cờ mock) nằm ở `core/common/AppConfig.kt` và `app/build.gradle.kts`.

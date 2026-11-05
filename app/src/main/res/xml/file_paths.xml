@@ -7,7 +7,4 @@
     <files-path
         name="creations"
         path="creations/" />
-    <files-path
-        name="downloads"
-        path="downloads/" />
 </paths>

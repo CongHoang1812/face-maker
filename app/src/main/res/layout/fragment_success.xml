@@ -55,18 +55,20 @@
             app:layout_constraintEnd_toStartOf="@id/btn_my_creation"
             app:layout_constraintTop_toTopOf="@id/btn_home" />
 
-        <!-- Ảnh kết quả 328×328 nền trắng (cosplay: viền nâu 4dp) -->
+        <!-- Ảnh kết quả vuông, rộng tối đa 352, nền trắng (cosplay: viền nâu 4dp) -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_result"
-            android:layout_width="@dimen/character_size"
-            android:layout_height="@dimen/character_size"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="140dp"
             android:background="@color/white"
             android:contentDescription="@string/cd_result_image"
             android:scaleType="fitCenter"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/character_size_large"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem"
             app:strokeColor="@color/brown_primary" />
 

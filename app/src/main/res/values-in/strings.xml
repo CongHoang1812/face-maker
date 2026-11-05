@@ -17,6 +17,7 @@
     <string name="saving">Menyimpan…</string>
     <string name="saved">Tersimpan</string>
     <string name="save_failed">Gagal menyimpan</string>
+    <string name="save_permission_denied">Izinkan akses penyimpanan untuk menyimpan gambar</string>
     <string name="coming_soon">Segera hadir</string>
     <string name="error_generic">Terjadi kesalahan. Silakan coba lagi.</string>
     <string name="error_no_internet">Tidak ada koneksi internet</string>
@@ -44,7 +45,7 @@
     <string name="tab_image">Gambar</string>
     <string name="tab_pack">Paket</string>
     <string name="tab_pack_number">Paket %1$d</string>
-    <string name="text_hint">Halo</string>
+    <string name="text_hint">Ketik konten Anda...</string>
 
     <string name="cosplay">Cosplay</string>
     <string name="instruction">Petunjuk</string>
@@ -58,6 +59,12 @@
     <string name="no_design_here">Belum ada desain</string>
     <string name="add_to_telegram">Tambah ke Telegram</string>
     <string name="add_to_whatsapp">Tambah ke WhatsApp</string>
+    <string name="whatsapp_sticker_count">Paket stiker WhatsApp memerlukan %1$d hingga %2$d karakter</string>
+    <string name="sticker_added_to_whatsapp">Ditambahkan ke WhatsApp</string>
+    <string name="sticker_already_in_whatsapp">Paket ini sudah ada di WhatsApp</string>
+    <string name="sticker_export_failed">Tidak dapat membuat stiker</string>
+    <string name="whatsapp_not_installed">WhatsApp belum terpasang</string>
+    <string name="telegram_not_installed">Telegram belum terpasang</string>
 
     <string name="dialog_exit_title">Keluar</string>
     <string name="dialog_exit_message">Belum disimpan, apakah kamu ingin keluar?</string>

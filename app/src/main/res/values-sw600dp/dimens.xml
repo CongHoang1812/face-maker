@@ -12,6 +12,7 @@
 
     <!-- Nhân vật & panel -->
     <dimen name="character_size">480dp</dimen>
+    <dimen name="character_size_large">515dp</dimen>
     <dimen name="bottom_panel_height">440dp</dimen>
 
     <!-- Cosplay: nút nằm dưới nhân vật = content_top + character_size + 16 -->

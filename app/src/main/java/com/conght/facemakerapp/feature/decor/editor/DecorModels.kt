@@ -33,7 +33,7 @@ data class DecorElement(
     @param:ColorInt val color: Int? = null,
 )
 
-/** Nền canvas: null hết = trắng (None). */
+/** Nền canvas: null hết = trong suốt (None). */
 data class DecorBackground(
     @param:ColorInt val color: Int? = null,
     /** Ảnh người dùng chọn (đã copy vào cacheDir) hoặc ảnh pack (URL). */
@@ -56,6 +56,14 @@ data class EditorData(
     val isDirty: Boolean = false,
 ) {
     val selected: DecorElement? get() = elements.firstOrNull { it.id == selectedId }
+
+    /** Phần tử chữ mà font / màu / ô nhập đang tác động: chỉ phần tử đúng loại của tab hiện tại. */
+    val textTarget: DecorElement?
+        get() = selected?.takeIf {
+            (mainTab == EditorTab.SPEECH && it.type == ElementType.SPEECH) ||
+                (mainTab == EditorTab.TEXT && it.type == ElementType.TEXT)
+        }
+
     val subTab: Int get() = subTabs[mainTab] ?: 0
 
     companion object {

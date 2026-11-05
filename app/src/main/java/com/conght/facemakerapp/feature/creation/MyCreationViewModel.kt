@@ -5,7 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.conght.facemakerapp.data.model.Creation
 import com.conght.facemakerapp.data.model.CreationType
+import com.conght.facemakerapp.data.model.StickerExport
+import com.conght.facemakerapp.data.model.StickerTarget
+import com.conght.facemakerapp.data.model.WHATSAPP_PACK_MAX_STICKERS
+import com.conght.facemakerapp.data.model.WHATSAPP_PACK_MIN_STICKERS
 import com.conght.facemakerapp.data.repository.CreationRepository
+import com.conght.facemakerapp.data.repository.StickerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -24,7 +29,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class MyCreationUiState(
-    val tab: CreationType = CreationType.DESIGN,
+    val tab: CreationType = CreationType.CHARACTER,
     /** null = đang tải lần đầu. */
     val items: List<Creation>? = null,
     val selectionMode: Boolean = false,
@@ -35,6 +40,9 @@ data class MyCreationUiState(
 
 sealed interface MyCreationEvent {
     data class Downloaded(val success: Boolean) : MyCreationEvent
+    data object InvalidWhatsAppStickerCount : MyCreationEvent
+    data class StickersReady(val export: StickerExport) : MyCreationEvent
+    data object StickerExportFailed : MyCreationEvent
 }
 
 /**
@@ -44,12 +52,13 @@ sealed interface MyCreationEvent {
 @HiltViewModel
 class MyCreationViewModel @Inject constructor(
     private val creationRepository: CreationRepository,
+    private val stickerRepository: StickerRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val tab = savedStateHandle.getStateFlow(
         MyCreationFragment.ARG_TAB,
-        CreationType.DESIGN.name,
+        CreationType.CHARACTER.name,
     )
     private val selectionMode = savedStateHandle.getStateFlow(KEY_SELECTION_MODE, false)
     private val selectedIds = savedStateHandle.getStateFlow(KEY_SELECTED, LongArray(0))
@@ -74,8 +83,8 @@ class MyCreationViewModel @Inject constructor(
     val events: Flow<MyCreationEvent> = _events.receiveAsFlow()
 
     fun selectTab(type: CreationType) {
-        if (state.value.tab == type) return
         exitSelection()
+        if (state.value.tab == type) return
         savedStateHandle[MyCreationFragment.ARG_TAB] = type.name
     }
 
@@ -110,7 +119,7 @@ class MyCreationViewModel @Inject constructor(
         }
     }
 
-    /** Copy ảnh vào internal storage `filesDir/downloads/` (không ra Gallery). */
+    /** Lưu ảnh ra thư viện máy (Gallery). */
     fun download(ids: Collection<Long>) {
         if (ids.isEmpty() || _busy.value) return
         _busy.value = true
@@ -118,6 +127,30 @@ class MyCreationViewModel @Inject constructor(
             try {
                 val result = creationRepository.download(ids.toList())
                 _events.send(MyCreationEvent.Downloaded(result.isSuccess))
+            } finally {
+                _busy.value = false
+            }
+        }
+    }
+
+    /** Tạo sticker từ các nhân vật đang chọn; WhatsApp giới hạn số sticker trong một gói. */
+    fun exportStickers(target: StickerTarget) {
+        val paths = state.value.selectedItems.map { it.imagePath }
+        if (paths.isEmpty() || _busy.value) return
+        _busy.value = true
+        viewModelScope.launch {
+            try {
+                val countValid = target != StickerTarget.WHATSAPP ||
+                    paths.size in WHATSAPP_PACK_MIN_STICKERS..WHATSAPP_PACK_MAX_STICKERS
+                val event = if (countValid) {
+                    stickerRepository.export(target, paths).fold(
+                        onSuccess = { MyCreationEvent.StickersReady(it) },
+                        onFailure = { MyCreationEvent.StickerExportFailed },
+                    )
+                } else {
+                    MyCreationEvent.InvalidWhatsAppStickerCount
+                }
+                _events.send(event)
             } finally {
                 _busy.value = false
             }
@@ -134,7 +167,7 @@ class MyCreationViewModel @Inject constructor(
     }
 
     private fun parseType(name: String) =
-        runCatching { CreationType.valueOf(name) }.getOrDefault(CreationType.DESIGN)
+        runCatching { CreationType.valueOf(name) }.getOrDefault(CreationType.CHARACTER)
 
     private companion object {
         const val KEY_SELECTION_MODE = "selection_mode"

@@ -17,6 +17,7 @@
     <string name="saving">Enregistrement…</string>
     <string name="saved">Enregistré</string>
     <string name="save_failed">Échec de l\'enregistrement</string>
+    <string name="save_permission_denied">Autorisez l\'accès au stockage pour enregistrer les images</string>
     <string name="coming_soon">Bientôt disponible</string>
     <string name="error_generic">Une erreur s\'est produite. Veuillez réessayer.</string>
     <string name="error_no_internet">Pas de connexion Internet</string>
@@ -44,7 +45,7 @@
     <string name="tab_image">Image</string>
     <string name="tab_pack">Pack</string>
     <string name="tab_pack_number">Pack %1$d</string>
-    <string name="text_hint">Bonjour</string>
+    <string name="text_hint">Saisissez votre contenu...</string>
 
     <string name="cosplay">Cosplay</string>
     <string name="instruction">Instructions</string>
@@ -58,6 +59,12 @@
     <string name="no_design_here">Aucun design ici</string>
     <string name="add_to_telegram">Ajouter à Telegram</string>
     <string name="add_to_whatsapp">Ajouter à WhatsApp</string>
+    <string name="whatsapp_sticker_count">Les packs de stickers WhatsApp nécessitent de %1$d à %2$d personnages</string>
+    <string name="sticker_added_to_whatsapp">Ajouté à WhatsApp</string>
+    <string name="sticker_already_in_whatsapp">Ce pack est déjà dans WhatsApp</string>
+    <string name="sticker_export_failed">Impossible de créer les stickers</string>
+    <string name="whatsapp_not_installed">WhatsApp n\'est pas installé</string>
+    <string name="telegram_not_installed">Telegram n\'est pas installé</string>
 
     <string name="dialog_exit_title">Quitter</string>
     <string name="dialog_exit_message">Ce n\'est pas encore enregistré, voulez-vous quitter ?</string>

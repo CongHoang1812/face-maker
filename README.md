@@ -62,7 +62,7 @@ Trên Windows dùng `.\gradlew.bat` thay cho `sh gradlew`.
 
 - API chỉ dùng GET, không cần token. Máy chủ chính lỗi hoặc quá 6 giây thì tự chuyển sang máy chủ dự phòng.
 - Đặt `USE_MOCK_DATA` thành `"true"` để làm giao diện bằng dữ liệu giả khi chưa có API. Nhớ tắt lại trước khi phát hành.
-- Ảnh chỉ lưu trong internal storage của app, không ghi ra Gallery.
+- Ảnh của app lưu trong internal storage. Chỉ nút Download mới ghi ra Gallery (`Pictures/<tên app>`).
 
 ## Quy ước
 

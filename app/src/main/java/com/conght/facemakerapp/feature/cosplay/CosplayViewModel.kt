@@ -26,7 +26,7 @@ class CosplayViewModel @Inject constructor(
     private val cosplayRepository: CosplayRepository,
     private val settingsRepository: SettingsRepository,
     private val gson: Gson,
-    networkMonitor: NetworkMonitor,
+    private val networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
     private val reloadKey = MutableStateFlow(0)
@@ -45,6 +45,8 @@ class CosplayViewModel @Inject constructor(
     fun random() {
         reloadKey.value++
     }
+
+    suspend fun isOnline(): Boolean = networkMonitor.isOnline.first()
 
     fun challengeJson(challenge: CosplayChallenge): String = gson.toJson(challenge)
 

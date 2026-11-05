@@ -27,7 +27,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DecorEditorViewModelTest {
@@ -41,7 +40,7 @@ class DecorEditorViewModelTest {
         override suspend fun get(id: Long): Creation? = null
         override suspend fun save(type: CreationType, bitmap: Bitmap, config: CharacterConfig?) = 1L
         override suspend fun delete(ids: List<Long>) = Unit
-        override suspend fun download(ids: List<Long>): Result<List<File>> = Result.success(emptyList())
+        override suspend fun download(ids: List<Long>): Result<Unit> = Result.success(Unit)
         override suspend fun saveTemp(bitmap: Bitmap, fileName: String) = "/cache/$fileName"
         override suspend fun importImage(uri: Uri) = "/cache/imports/1"
     }
@@ -82,22 +81,42 @@ class DecorEditorViewModelTest {
     }
 
     @Test
-    fun none_deletesSelectedOfSameType_otherwiseDeselects() {
+    fun addSpeech_startsEmpty_textCanBeEditedAndCleared() {
         val vm = viewModel()
-        vm.addSticker("s1")
-        vm.noneFor(ElementType.SPEECH) // khác loại → chỉ bỏ chọn
-        assertNull(vm.data.value.selectedId)
-        assertEquals(1, vm.data.value.elements.size)
+        vm.addSpeech("b1")
+        val id = vm.data.value.selectedId!!
+        assertEquals("", vm.data.value.selected!!.text)
 
-        vm.select(vm.data.value.elements.first().id)
-        vm.noneFor(ElementType.STICKER)
-        assertTrue(vm.data.value.elements.isEmpty())
+        vm.setSpeechText(id, "Hi")
+        assertEquals("Hi", vm.data.value.selected!!.text)
+
+        vm.setSpeechText(id, "")
+        assertEquals("", vm.data.value.selected!!.text)
+    }
+
+    @Test
+    fun textTab_doesNotChangeSelectedSpeech() {
+        val vm = viewModel()
+        vm.selectMainTab(EditorTab.SPEECH)
+        vm.addSpeech("b1")
+        val speechId = vm.data.value.selectedId!!
+        val speechFont = vm.data.value.selected!!.fontId
+
+        vm.selectMainTab(EditorTab.TEXT)
+        vm.setFont(DecorFonts.BANGERS.id)
+        vm.submitText("Hi")
+
+        val speech = vm.data.value.elements.first { it.id == speechId }
+        assertEquals(speechFont, speech.fontId)
+        assertEquals("", speech.text)
+        assertEquals(ElementType.TEXT, vm.data.value.selected!!.type)
+        assertEquals("Hi", vm.data.value.selected!!.text)
     }
 
     @Test
     fun transform_clamped_flip_delete() {
         val vm = viewModel()
-        vm.addSpeech("b1", "Hello")
+        vm.addSpeech("b1")
         val id = vm.data.value.selectedId!!
         vm.transform(id, x = 2f, y = -1f, scale = 10f, rotation = 370f)
         val e = vm.data.value.selected!!
@@ -114,6 +133,7 @@ class DecorEditorViewModelTest {
     @Test
     fun fontAndColor_applyToSelectedTextAndBecomeDefault() {
         val vm = viewModel()
+        vm.selectMainTab(EditorTab.TEXT)
         vm.submitText("Hi")
         vm.setFont(DecorFonts.BANGERS.id)
         vm.setTextColor(0xFF00FF00.toInt())

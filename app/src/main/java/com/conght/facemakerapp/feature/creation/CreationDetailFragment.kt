@@ -11,6 +11,7 @@ import com.conght.facemakerapp.core.ui.base.BaseFragment
 import com.conght.facemakerapp.core.ui.collectWhenStarted
 import com.conght.facemakerapp.core.ui.loadWithShimmer
 import com.conght.facemakerapp.core.ui.navigateSafe
+import com.conght.facemakerapp.core.ui.registerGalleryDownload
 import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.core.ui.showAppToast
@@ -27,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class CreationDetailFragment : BaseFragment<FragmentCreationDetailBinding>(FragmentCreationDetailBinding::inflate) {
 
     private val viewModel: CreationDetailViewModel by viewModels()
+    private val download = registerGalleryDownload { viewModel.download() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +45,7 @@ class CreationDetailFragment : BaseFragment<FragmentCreationDetailBinding>(Fragm
                 showAppToast(R.string.error_generic)
             }
         }
-        binding.btnDownload.setOnSingleClickListener { viewModel.download() }
+        binding.btnDownload.setOnSingleClickListener { download() }
         binding.btnEdit.setOnSingleClickListener {
             val creation = viewModel.creation.value ?: return@setOnSingleClickListener
             navigateSafe(

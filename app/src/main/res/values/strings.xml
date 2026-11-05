@@ -18,6 +18,7 @@
     <string name="saving">Saving…</string>
     <string name="saved">Saved</string>
     <string name="save_failed">Save failed</string>
+    <string name="save_permission_denied">Allow storage access to save images</string>
     <string name="coming_soon">Coming soon</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
     <string name="error_no_internet">No internet connection</string>
@@ -55,7 +56,7 @@
     <string name="tab_image">Image</string>
     <string name="tab_pack">Pack</string>
     <string name="tab_pack_number">Pack %1$d</string>
-    <string name="text_hint">Hello</string>
+    <string name="text_hint">Type your content...</string>
     <string name="font_sample" translatable="false">Aa</string>
     <string name="font_default_sample" translatable="false">T</string>
 
@@ -76,6 +77,12 @@
     <string name="no_design_here">No design here</string>
     <string name="add_to_telegram">Add to Telegram</string>
     <string name="add_to_whatsapp">Add to Whatsapp</string>
+    <string name="whatsapp_sticker_count">WhatsApp sticker packs need %1$d to %2$d characters</string>
+    <string name="sticker_added_to_whatsapp">Added to WhatsApp</string>
+    <string name="sticker_already_in_whatsapp">This pack is already in WhatsApp</string>
+    <string name="sticker_export_failed">Couldn\'t create stickers</string>
+    <string name="whatsapp_not_installed">WhatsApp is not installed</string>
+    <string name="telegram_not_installed">Telegram is not installed</string>
 
     <!-- Dialog -->
     <string name="dialog_exit_title">Exit</string>

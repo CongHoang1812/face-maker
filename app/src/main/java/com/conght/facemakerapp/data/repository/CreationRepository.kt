@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import java.io.File
 import javax.inject.Inject
 
 interface CreationRepository {
@@ -29,8 +28,8 @@ interface CreationRepository {
     /** Xoá bản ghi và file ảnh. */
     suspend fun delete(ids: List<Long>)
 
-    /** Copy ảnh vào internal storage `filesDir/downloads/` (không ra Gallery). */
-    suspend fun download(ids: List<Long>): Result<List<File>>
+    /** Lưu ảnh ra thư viện máy (Gallery). */
+    suspend fun download(ids: List<Long>): Result<Unit>
 
     /** Ảnh tạm truyền giữa các màn (cacheDir, internal), trả về đường dẫn. */
     suspend fun saveTemp(bitmap: Bitmap, fileName: String): String
@@ -78,9 +77,10 @@ class CreationRepositoryImpl @Inject constructor(
 
     override suspend fun importImage(uri: Uri): String = fileStore.importImage(uri)
 
-    override suspend fun download(ids: List<Long>): Result<List<File>> = withContext(dispatchers.io) {
+    override suspend fun download(ids: List<Long>): Result<Unit> = withContext(dispatchers.io) {
         try {
-            Result.success(dao.getByIds(ids).map { fileStore.copyToDownloads(it.imagePath) })
+            dao.getByIds(ids).forEach { fileStore.copyToGallery(it.imagePath) }
+            Result.success(Unit)
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {

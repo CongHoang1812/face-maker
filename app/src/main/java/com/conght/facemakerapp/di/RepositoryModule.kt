@@ -12,6 +12,8 @@ import com.conght.facemakerapp.data.repository.MakerRepository
 import com.conght.facemakerapp.data.repository.MakerRepositoryImpl
 import com.conght.facemakerapp.data.repository.SettingsRepository
 import com.conght.facemakerapp.data.repository.SettingsRepositoryImpl
+import com.conght.facemakerapp.data.repository.StickerRepository
+import com.conght.facemakerapp.data.repository.StickerRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,4 +41,7 @@ abstract class RepositoryModule {
 
     @Binds @Singleton
     abstract fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
+
+    @Binds @Singleton
+    abstract fun bindStickerRepository(impl: StickerRepositoryImpl): StickerRepository
 }

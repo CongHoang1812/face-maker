@@ -37,7 +37,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CustomizeViewModelTest {
@@ -75,7 +74,7 @@ class CustomizeViewModelTest {
             return 1
         }
         override suspend fun delete(ids: List<Long>) = Unit
-        override suspend fun download(ids: List<Long>): Result<List<File>> = Result.success(emptyList())
+        override suspend fun download(ids: List<Long>): Result<Unit> = Result.success(Unit)
         override suspend fun saveTemp(bitmap: Bitmap, fileName: String) = "/cache/$fileName"
         override suspend fun importImage(uri: android.net.Uri) = "/cache/import"
     }

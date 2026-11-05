@@ -17,6 +17,7 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
+import com.bumptech.glide.Glide
 import com.conght.facemakerapp.R
 import com.conght.facemakerapp.core.ui.loadImage
 import kotlin.math.abs
@@ -26,7 +27,7 @@ import kotlin.math.hypot
 import kotlin.math.sin
 
 /**
- * Canvas editor 328×328: nền (màu / ảnh) → ảnh nhân vật → các phần tử sticker / speech / text.
+ * Canvas editor vuông: nền (màu / ảnh) → ảnh nhân vật → các phần tử sticker / speech / text.
  *
  * Phần tử đang chọn có viền nét đứt `brown_primary` + 3 handle: flip (trên-phải), delete (dưới-trái),
  * resize/rotate (dưới-phải). Kéo thân để di chuyển, 2 ngón để scale/xoay, chạm 2 lần vào
@@ -106,7 +107,6 @@ class DecorCanvasView @JvmOverloads constructor(
         addView(backgroundView, match)
         addView(characterView, LayoutParams(match))
         addView(elementLayer, LayoutParams(match))
-        backgroundView.setImageDrawable(ContextCompat.getColor(context, R.color.white).toDrawable())
         setWillNotDraw(false)
     }
 
@@ -118,10 +118,12 @@ class DecorCanvasView @JvmOverloads constructor(
         if (backgroundKey != data.background) {
             backgroundKey = data.background
             val bg = data.background
+            // Huỷ ảnh nền đang tải dở để nó không đè lên lựa chọn mới khi tải xong
+            Glide.with(backgroundView).clear(backgroundView)
             when {
                 bg.color != null -> backgroundView.setImageDrawable(bg.color.toDrawable())
                 bg.imagePath != null -> backgroundView.loadImage(bg.imagePath, R.color.white, forExport = true)
-                else -> backgroundView.setImageDrawable(ContextCompat.getColor(context, R.color.white).toDrawable())
+                else -> backgroundView.setImageDrawable(null)
             }
         }
         elements = data.elements

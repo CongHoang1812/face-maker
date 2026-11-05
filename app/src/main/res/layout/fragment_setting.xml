@@ -62,6 +62,7 @@
                 android:focusable="true"
                 android:text="@string/rate_us"
                 android:textAppearance="@style/Text.Body"
+                android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_star" />
 
             <TextView

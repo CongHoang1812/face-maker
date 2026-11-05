@@ -13,6 +13,10 @@ interface SettingsRepository {
     /** Instruction của Cosplay đã tự hiện lần đầu chưa. */
     val cosplayInstructionShown: Flow<Boolean>
     suspend fun setCosplayInstructionShown()
+
+    /** Người dùng đã đánh giá app chưa. Đã đánh giá thì Setting ẩn dòng Rate us. */
+    val appRated: Flow<Boolean>
+    suspend fun setAppRated()
 }
 
 class SettingsRepositoryImpl @Inject constructor(
@@ -24,4 +28,6 @@ class SettingsRepositoryImpl @Inject constructor(
     override suspend fun setOnboardingDone(done: Boolean) = dataStore.setOnboardingDone(done)
     override val cosplayInstructionShown = dataStore.cosplayInstructionShown
     override suspend fun setCosplayInstructionShown() = dataStore.setCosplayInstructionShown()
+    override val appRated = dataStore.appRated
+    override suspend fun setAppRated() = dataStore.setAppRated()
 }

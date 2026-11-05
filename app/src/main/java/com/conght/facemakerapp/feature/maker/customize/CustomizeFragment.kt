@@ -79,6 +79,16 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
     private lateinit var loadingColors: SkeletonAdapter
     private lateinit var loadingTabs: SkeletonAdapter
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.setCountdownPaused(false)
+    }
+
+    override fun onStop() {
+        viewModel.setCountdownPaused(true)
+        super.onStop()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         referenceUrl = null

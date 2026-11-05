@@ -31,7 +31,7 @@
             android:id="@+id/tv_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cosplay_card_padding_bottom"
+            android:layout_marginTop="@dimen/cosplay_percent_margin_top"
             android:textAppearance="@style/Text.DialogTitle"
             android:textSize="@dimen/cosplay_score_text"
             tools:text="50%" />

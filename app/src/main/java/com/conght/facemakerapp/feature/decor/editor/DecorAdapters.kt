@@ -1,6 +1,7 @@
 package com.conght.facemakerapp.feature.decor.editor
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,9 +27,9 @@ sealed interface DecorCell {
     val key: String
     val selected: Boolean
 
-    data object ColorWheel : DecorCell {
+    /** [selected] = màu đang dùng là màu tự chọn, không nằm trong bảng màu có sẵn. */
+    data class ColorWheel(override val selected: Boolean) : DecorCell {
         override val key = "wheel"
-        override val selected = false
     }
 
     data object AddImage : DecorCell {
@@ -70,7 +71,7 @@ class DecorCellAdapter(
             binding.root.contentDescription = null
             if (cell !is DecorCell.Image) Glide.with(image).clear(image)
             when (cell) {
-                DecorCell.ColorWheel -> {
+                is DecorCell.ColorWheel -> {
                     image.layoutParams = image.layoutParams.apply {
                         width = res.getDimensionPixelSize(R.dimen.editor_icon_color_wheel)
                         height = width
@@ -176,7 +177,7 @@ class ColorChipAdapter(
         val color = colors[position]
         val view = holder.view
         if (color == null) {
-            view.backgroundTintList = null
+            view.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
             view.setImageResource(R.drawable.img_color_wheel)
             view.contentDescription = view.context.getString(R.string.cd_color_wheel)
         } else {
@@ -184,7 +185,11 @@ class ColorChipAdapter(
             view.backgroundTintList = ColorStateList.valueOf(color)
             view.contentDescription = String.format("#%06X", color and 0xFFFFFF)
         }
-        view.isSelected = color != null && color == selectedColor
+        view.isSelected = if (color == null) {
+            selectedColor != null && selectedColor !in colors
+        } else {
+            color == selectedColor
+        }
         view.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         view.setOnSingleClickListener(intervalMs = CLICK_DEBOUNCE_MS, haptic = true) { onClick(color) }
     }

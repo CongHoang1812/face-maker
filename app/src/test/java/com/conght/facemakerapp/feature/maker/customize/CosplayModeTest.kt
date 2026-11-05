@@ -35,7 +35,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CosplayModeTest {
@@ -71,7 +70,7 @@ class CosplayModeTest {
         override suspend fun get(id: Long): Creation? = null
         override suspend fun save(type: CreationType, bitmap: Bitmap, config: CharacterConfig?) = 1L
         override suspend fun delete(ids: List<Long>) = Unit
-        override suspend fun download(ids: List<Long>): Result<List<File>> = Result.success(emptyList())
+        override suspend fun download(ids: List<Long>): Result<Unit> = Result.success(Unit)
         override suspend fun saveTemp(bitmap: Bitmap, fileName: String) = "/cache/$fileName"
         override suspend fun importImage(uri: Uri) = ""
     }
@@ -139,13 +138,32 @@ class CosplayModeTest {
         val vm = viewModel(h)
         advanceTimeBy(5_000)
         runCurrent()
-        assertEquals(10 * 60 - 5, vm.state.value.cosplay?.remainingSeconds)
-        assertEquals(10 * 60 - 5, h.get<Int>("cosplay_remaining")) // giữ được khi recreate
+        assertEquals(3 * 60 - 5, vm.state.value.cosplay?.remainingSeconds)
+        assertEquals(3 * 60 - 5, h.get<Int>("cosplay_remaining")) // giữ được khi recreate
 
-        advanceTimeBy(10 * 60 * 1_000L)
+        advanceTimeBy(3 * 60 * 1_000L)
         runCurrent()
         assertEquals(0, vm.state.value.cosplay?.remainingSeconds)
         assertEquals(0, vm.state.value.cosplay?.scorePercent)
+    }
+
+    @Test
+    fun timer_pausesInBackground_andResumesFromRemaining() = runTest(dispatcher) {
+        val vm = viewModel(handle())
+        advanceTimeBy(5_000)
+        runCurrent()
+
+        vm.setCountdownPaused(true)
+        runCurrent()
+        advanceTimeBy(60_000)
+        runCurrent()
+        assertEquals(3 * 60 - 5, vm.state.value.cosplay?.remainingSeconds)
+
+        vm.setCountdownPaused(false)
+        runCurrent()
+        advanceTimeBy(3_000)
+        runCurrent()
+        assertEquals(3 * 60 - 8, vm.state.value.cosplay?.remainingSeconds)
     }
 }
 

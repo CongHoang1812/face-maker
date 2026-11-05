@@ -6,10 +6,14 @@ import androidx.lifecycle.SavedStateHandle
 import com.conght.facemakerapp.data.model.CharacterConfig
 import com.conght.facemakerapp.data.model.Creation
 import com.conght.facemakerapp.data.model.CreationType
+import com.conght.facemakerapp.data.model.StickerExport
+import com.conght.facemakerapp.data.model.StickerTarget
 import com.conght.facemakerapp.data.repository.CreationRepository
+import com.conght.facemakerapp.data.repository.StickerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -24,7 +28,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MyCreationViewModelTest {
@@ -46,9 +49,9 @@ class MyCreationViewModelTest {
         override suspend fun delete(ids: List<Long>) {
             db.value = db.value.filterNot { it.id in ids }
         }
-        override suspend fun download(ids: List<Long>): Result<List<File>> {
+        override suspend fun download(ids: List<Long>): Result<Unit> {
             downloaded += ids
-            return Result.success(emptyList())
+            return Result.success(Unit)
         }
         override suspend fun saveTemp(bitmap: Bitmap, fileName: String) = ""
         override suspend fun importImage(uri: Uri) = ""
@@ -60,10 +63,70 @@ class MyCreationViewModelTest {
     @After
     fun tearDown() = Dispatchers.resetMain()
 
-    private fun TestScope.viewModel(repo: FakeRepo, handle: SavedStateHandle = SavedStateHandle(mapOf("tab" to "CHARACTER"))) =
-        MyCreationViewModel(repo, handle).also { vm ->
+    private class FakeStickerRepo : StickerRepository {
+        val calls = mutableListOf<Pair<StickerTarget, List<String>>>()
+        var result: Result<StickerExport> = Result.success(StickerExport.Telegram(listOf("/s/1.webp"), listOf("😀")))
+
+        override suspend fun export(target: StickerTarget, imagePaths: List<String>): Result<StickerExport> {
+            calls += target to imagePaths
+            return result
+        }
+    }
+
+    private val stickers = FakeStickerRepo()
+
+    private fun TestScope.viewModel(
+        repo: FakeRepo,
+        handle: SavedStateHandle = SavedStateHandle(mapOf("tab" to "CHARACTER")),
+    ) =
+        MyCreationViewModel(repo, stickers, handle).also { vm ->
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { vm.state.collect {} }
         }
+
+    @Test
+    fun defaultTabIsCharacter() = runTest {
+        val vm = viewModel(FakeRepo(), SavedStateHandle())
+        assertEquals(CreationType.CHARACTER, vm.state.value.tab)
+    }
+
+    @Test
+    fun whatsAppStickers_needAtLeastThree() = runTest {
+        val vm = viewModel(FakeRepo())
+        vm.startSelection(1)
+        vm.exportStickers(StickerTarget.WHATSAPP)
+        assertEquals(MyCreationEvent.InvalidWhatsAppStickerCount, vm.events.first())
+        assertTrue(stickers.calls.isEmpty())
+        assertFalse(vm.busy.value)
+    }
+
+    @Test
+    fun telegramStickers_exportSelectedImages() = runTest {
+        val vm = viewModel(FakeRepo())
+        vm.startSelection(2)
+        vm.exportStickers(StickerTarget.TELEGRAM)
+        assertEquals(MyCreationEvent.StickersReady(stickers.result.getOrThrow()), vm.events.first())
+        assertEquals(listOf(StickerTarget.TELEGRAM to listOf("/c/2.png")), stickers.calls)
+        assertFalse(vm.busy.value)
+    }
+
+    @Test
+    fun stickerExportFailure_sendsFailedEvent() = runTest {
+        stickers.result = Result.failure(IllegalStateException("boom"))
+        val vm = viewModel(FakeRepo())
+        vm.startSelection(1)
+        vm.exportStickers(StickerTarget.TELEGRAM)
+        assertEquals(MyCreationEvent.StickerExportFailed, vm.events.first())
+    }
+
+    @Test
+    fun tappingCurrentTab_exitsSelection() = runTest {
+        val vm = viewModel(FakeRepo())
+        vm.startSelection(1)
+        vm.selectTab(CreationType.CHARACTER)
+        assertFalse(vm.state.value.selectionMode)
+        assertTrue(vm.state.value.selectedIds.isEmpty())
+        assertEquals(CreationType.CHARACTER, vm.state.value.tab)
+    }
 
     @Test
     fun tabFiltersItems_andSwitchingClearsSelection() = runTest {

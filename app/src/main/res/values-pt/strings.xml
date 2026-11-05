@@ -17,6 +17,7 @@
     <string name="saving">Salvando…</string>
     <string name="saved">Salvo</string>
     <string name="save_failed">Falha ao salvar</string>
+    <string name="save_permission_denied">Permita o acesso ao armazenamento para salvar imagens</string>
     <string name="coming_soon">Em breve</string>
     <string name="error_generic">Algo deu errado. Tente novamente.</string>
     <string name="error_no_internet">Sem conexão com a internet</string>
@@ -44,7 +45,7 @@
     <string name="tab_image">Imagem</string>
     <string name="tab_pack">Pacote</string>
     <string name="tab_pack_number">Pacote %1$d</string>
-    <string name="text_hint">Olá</string>
+    <string name="text_hint">Digite seu conteúdo...</string>
 
     <string name="cosplay">Cosplay</string>
     <string name="instruction">Instruções</string>
@@ -58,6 +59,12 @@
     <string name="no_design_here">Nenhum design aqui</string>
     <string name="add_to_telegram">Adicionar ao Telegram</string>
     <string name="add_to_whatsapp">Adicionar ao WhatsApp</string>
+    <string name="whatsapp_sticker_count">Os pacotes de figurinhas do WhatsApp precisam de %1$d a %2$d personagens</string>
+    <string name="sticker_added_to_whatsapp">Adicionado ao WhatsApp</string>
+    <string name="sticker_already_in_whatsapp">Este pacote já está no WhatsApp</string>
+    <string name="sticker_export_failed">Não foi possível criar as figurinhas</string>
+    <string name="whatsapp_not_installed">O WhatsApp não está instalado</string>
+    <string name="telegram_not_installed">O Telegram não está instalado</string>
 
     <string name="dialog_exit_title">Sair</string>
     <string name="dialog_exit_message">Você ainda não salvou, deseja sair?</string>

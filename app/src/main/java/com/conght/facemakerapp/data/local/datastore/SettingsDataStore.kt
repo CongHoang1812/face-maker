@@ -24,6 +24,7 @@ class SettingsDataStore @Inject constructor(
     val languageCode: Flow<String?> = dataStore.data.map { it[KEY_LANGUAGE] }
     val onboardingDone: Flow<Boolean> = dataStore.data.map { it[KEY_ONBOARDING_DONE] ?: false }
     val cosplayInstructionShown: Flow<Boolean> = dataStore.data.map { it[KEY_COSPLAY_INSTRUCTION] ?: false }
+    val appRated: Flow<Boolean> = dataStore.data.map { it[KEY_APP_RATED] ?: false }
 
     suspend fun setLanguage(code: String) {
         dataStore.edit { it[KEY_LANGUAGE] = code }
@@ -37,9 +38,14 @@ class SettingsDataStore @Inject constructor(
         dataStore.edit { it[KEY_COSPLAY_INSTRUCTION] = true }
     }
 
+    suspend fun setAppRated() {
+        dataStore.edit { it[KEY_APP_RATED] = true }
+    }
+
     private companion object {
         val KEY_LANGUAGE = stringPreferencesKey("language_code")
         val KEY_ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
         val KEY_COSPLAY_INSTRUCTION = booleanPreferencesKey("cosplay_instruction_shown")
+        val KEY_APP_RATED = booleanPreferencesKey("app_rated")
     }
 }

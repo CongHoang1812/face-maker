@@ -5,13 +5,17 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.use
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
@@ -45,8 +49,8 @@ import kotlinx.coroutines.flow.combine
 
 /**
  * Decor editor (Figma 3:773 / 3:843 / 3:913 / 3:993 / 3:1155).
- * Local làm đầy đủ: Color, Image (Photo Picker), Text, font, màu chữ. Pack (API) → skeleton,
- * ô None ở mọi lưới luôn đứng đầu và hoạt động.
+ * Local làm đầy đủ: Color, Image (Photo Picker), Text, font, màu chữ. Pack (API) → skeleton.
+ * Ô None chỉ có ở lưới Background; Sticker / Speech không có, xoá phần tử bằng handle trên canvas.
  */
 @AndroidEntryPoint
 class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDecorEditorBinding::inflate) {
@@ -61,6 +65,7 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
     private lateinit var cellAdapter: DecorCellAdapter
     private lateinit var gridLoading: ConcatAdapter
     private lateinit var gridReady: ConcatAdapter
+    private lateinit var gridSkeleton: SkeletonAdapter
     private lateinit var subTabAdapter: SubTabAdapter
     private lateinit var subTabsWithLoading: ConcatAdapter
     private lateinit var subTabSkeleton: SkeletonAdapter
@@ -75,18 +80,23 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
     private var renderedGridKey: GridKey? = null
     private var renderedPacks: Map<DecorType, Resource<List<DecorPack>>>? = null
 
+    /** Bong bóng mà ô nhập ẩn et_speech đang sửa. */
+    private var editingSpeechId: String? = null
+    private var renderedInputFontId: String? = null
+
     private data class GridKey(
         val tab: EditorTab,
         val subTab: Int,
         val background: DecorBackground,
         val recentImages: List<String>,
-        val selectedType: ElementType?,
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         renderedGridKey = null
         renderedPacks = null
+        editingSpeechId = null
+        renderedInputFontId = null
         binding.content.applyStatusBarPadding()
         setLightStatusBar(true)
 
@@ -151,12 +161,17 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
             override fun onFlip(id: String) = viewModel.flip(id)
             override fun onDelete(id: String) = viewModel.delete(id)
             override fun onEditText(id: String) {
+                val element = viewModel.data.value.elements.firstOrNull { it.id == id } ?: return
                 viewModel.select(id)
-                viewModel.selectMainTab(EditorTab.TEXT)
-                val text = viewModel.data.value.elements.firstOrNull { it.id == id }?.text.orEmpty()
-                binding.etText.setText(text)
-                binding.etText.setSelection(text.length)
-                showKeyboard()
+                if (element.type == ElementType.SPEECH) {
+                    viewModel.selectMainTab(EditorTab.SPEECH)
+                    showKeyboard(binding.etSpeech)
+                } else {
+                    viewModel.selectMainTab(EditorTab.TEXT)
+                    binding.inputRow.isVisible = true
+                    binding.etText.setTextAndMoveCursor(element.text.orEmpty())
+                    showKeyboard(binding.etText)
+                }
             }
         }
     }
@@ -174,9 +189,10 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         val gap = resources.getDimensionPixelSize(R.dimen.grid_gap)
         val columns = resources.getInteger(R.integer.part_grid_columns)
 
-        noneAdapter = NoneAdapter(R.layout.item_none_decor) { onNoneClick() }
+        noneAdapter = NoneAdapter(R.layout.item_none_decor) { viewModel.setBackgroundNone() }
         cellAdapter = DecorCellAdapter(::onCellClick)
-        gridLoading = noneFirst(noneAdapter, SkeletonAdapter(R.layout.item_skeleton_decor, SKELETON_CELLS))
+        gridSkeleton = SkeletonAdapter(R.layout.item_skeleton_decor, SKELETON_CELLS)
+        gridLoading = noneFirst(noneAdapter, gridSkeleton)
         gridReady = noneFirst(noneAdapter, cellAdapter)
         binding.rvGrid.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.rvGrid.addItemDecoration(GridSpacingItemDecoration(columns, gap, gap))
@@ -193,7 +209,7 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         val textColors = resources.obtainTypedArray(R.array.decor_text_colors).use { it.colors() }
         colorChipAdapter = ColorChipAdapter(listOf<Int?>(null) + textColors) { color ->
             if (color == null) {
-                showColorPicker(KEY_TEXT_COLOR, viewModel.data.value.textColor)
+                showColorPicker(KEY_TEXT_COLOR)
             } else {
                 viewModel.setTextColor(color)
             }
@@ -202,8 +218,38 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         binding.rvTextColors.addItemDecoration(LinearSpacingItemDecoration(gap))
     }
 
+    /**
+     * Edge-to-edge nên adjustResize không đẩy layout lên: tự dịch panel vừa đủ để hàng nhập chữ
+     * nằm trên bàn phím. Canvas giữ nguyên kích thước.
+     */
+    private fun liftPanelAboveKeyboard() {
+        val panel = binding.panel
+        val row = binding.inputRow
+        val insets = ViewCompat.getRootWindowInsets(panel)
+        val ime = insets?.getInsets(WindowInsetsCompat.Type.ime())?.bottom ?: 0
+        val navBar = insets?.getInsets(WindowInsetsCompat.Type.systemBars())?.bottom ?: 0
+        val overlap = ime - navBar - (panel.height - row.bottom) + resources.getDimensionPixelSize(R.dimen.grid_gap)
+        panel.translationY = if (ime > 0 && row.isVisible) -overlap.coerceAtLeast(0).toFloat() else 0f
+    }
+
     private fun setupTextInput() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.panel) { _, insets ->
+            liftPanelAboveKeyboard()
+            insets
+        }
+        binding.panel.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> liftPanelAboveKeyboard() }
         binding.btnTextDone.setOnSingleClickListener { submitText() }
+        binding.etSpeech.doAfterTextChanged { text ->
+            editingSpeechId?.let { viewModel.setSpeechText(it, text?.toString().orEmpty()) }
+        }
+        binding.etSpeech.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard()
+                true
+            } else {
+                false
+            }
+        }
         binding.etText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submitText()
@@ -239,17 +285,29 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         binding.tabText.isSelected = tab == EditorTab.TEXT
 
         val showText = tab == EditorTab.SPEECH || tab == EditorTab.TEXT
+        val target = data.textTarget
+        val speech = target?.takeIf { it.type == ElementType.SPEECH }
+        val leftTextInput = tab != EditorTab.TEXT && binding.etText.hasFocus()
+        val leftSpeechInput = speech == null && binding.etSpeech.hasFocus()
+        if (leftTextInput || leftSpeechInput) hideKeyboard()
         binding.inputRow.isVisible = tab == EditorTab.TEXT
+        if (speech?.id != editingSpeechId) {
+            editingSpeechId = speech?.id
+            binding.etSpeech.setTextAndMoveCursor(speech?.text.orEmpty())
+        }
         binding.rvFonts.isVisible = showText
         binding.rvTextColors.isVisible = showText
         binding.rvGrid.isVisible = tab != EditorTab.TEXT
         binding.rvSubTabs.isVisible = tab != EditorTab.TEXT
-        val selected = data.selected
-        val selectedText = selected?.takeIf { it.type != ElementType.STICKER }
-        fontAdapter.selectedId = selectedText?.fontId ?: data.fontId
-        colorChipAdapter.selectedColor = selectedText?.color ?: data.textColor
+        val fontId = target?.fontId ?: data.fontId
+        fontAdapter.selectedId = fontId
+        colorChipAdapter.selectedColor = target?.color ?: data.textColor
+        if (fontId != renderedInputFontId) {
+            renderedInputFontId = fontId
+            binding.etText.typeface = ResourcesCompat.getFont(requireContext(), DecorFonts.of(fontId).fontRes)
+        }
 
-        val gridKey = GridKey(tab, data.subTab, data.background, data.recentImages, selected?.type)
+        val gridKey = GridKey(tab, data.subTab, data.background, data.recentImages)
         if (gridKey != renderedGridKey || packs !== renderedPacks) {
             renderedGridKey = gridKey
             renderedPacks = packs
@@ -292,7 +350,8 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
             EditorTab.BACKGROUND -> when (data.subTab) {
                 SUB_COLOR -> {
                     noneAdapter.isSelected = bg.isNone
-                    showCells(listOf(DecorCell.ColorWheel) + backgroundColors.map { DecorCell.Color(it, it == bg.color) })
+                    val customColor = bg.color != null && bg.color !in backgroundColors
+                    showCells(listOf(DecorCell.ColorWheel(customColor)) + backgroundColors.map { DecorCell.Color(it, it == bg.color) })
                 }
 
                 SUB_IMAGE -> {
@@ -306,44 +365,31 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
                 }
             }
 
-            EditorTab.STICKER, EditorTab.SPEECH -> {
-                val type = if (data.mainTab == EditorTab.STICKER) ElementType.STICKER else ElementType.SPEECH
-                noneAdapter.isSelected = data.selected?.type != type
-                showPack(pack) { false }
-            }
+            EditorTab.STICKER, EditorTab.SPEECH -> showPack(pack, withNone = false) { false }
 
             EditorTab.TEXT -> Unit
         }
     }
 
-    private fun showPack(pack: Resource<DecorPack>?, selected: (DecorItem) -> Boolean) {
+    private fun showPack(pack: Resource<DecorPack>?, withNone: Boolean = true, selected: (DecorItem) -> Boolean) {
         if (pack is Resource.Success) {
-            showCells(pack.data.items.map { DecorCell.Image(it.id, it.thumbnailUrl, selected(it)) })
+            showCells(pack.data.items.map { DecorCell.Image(it.id, it.thumbnailUrl, selected(it)) }, withNone)
         } else {
-            binding.rvGrid.swapAdapter(gridLoading)
+            binding.rvGrid.swapAdapter(if (withNone) gridLoading else gridSkeleton)
         }
     }
 
-    private fun showCells(cells: List<DecorCell>) {
+    private fun showCells(cells: List<DecorCell>, withNone: Boolean = true) {
         cellAdapter.submitList(cells)
-        binding.rvGrid.swapAdapter(gridReady)
+        binding.rvGrid.swapAdapter(if (withNone) gridReady else cellAdapter)
     }
 
     // ---------- Hành động ----------
 
-    private fun onNoneClick() {
-        when (viewModel.data.value.mainTab) {
-            EditorTab.BACKGROUND -> viewModel.setBackgroundNone()
-            EditorTab.STICKER -> viewModel.noneFor(ElementType.STICKER)
-            EditorTab.SPEECH -> viewModel.noneFor(ElementType.SPEECH)
-            EditorTab.TEXT -> Unit
-        }
-    }
-
     private fun onCellClick(cell: DecorCell) {
         val data = viewModel.data.value
         when (cell) {
-            DecorCell.ColorWheel -> showColorPicker(KEY_BG_COLOR, data.background.color ?: Color.WHITE)
+            is DecorCell.ColorWheel -> showColorPicker(KEY_BG_COLOR)
             DecorCell.AddImage -> pickImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             is DecorCell.Color -> viewModel.setBackgroundColor(cell.color)
             is DecorCell.Image -> {
@@ -351,7 +397,10 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
                 when (data.mainTab) {
                     EditorTab.BACKGROUND -> viewModel.setBackgroundImage(packItem?.imageUrl ?: cell.url)
                     EditorTab.STICKER -> packItem?.let { viewModel.addSticker(it.imageUrl) }
-                    EditorTab.SPEECH -> packItem?.let { viewModel.addSpeech(it.imageUrl, getString(R.string.text_hint)) }
+                    EditorTab.SPEECH -> packItem?.let {
+                        viewModel.addSpeech(it.imageUrl)
+                        showKeyboard(binding.etSpeech)
+                    }
                     EditorTab.TEXT -> Unit
                 }
             }
@@ -366,15 +415,21 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         return list.getOrNull(data.subTab - fixed)?.items.orEmpty()
     }
 
+    private fun EditText.setTextAndMoveCursor(value: String) {
+        setText(value)
+        setSelection(value.length)
+    }
+
     private fun submitText() {
         viewModel.submitText(binding.etText.text?.toString().orEmpty())
         binding.etText.text?.clear()
         hideKeyboard()
     }
 
-    private fun showColorPicker(requestKey: String, initial: Int) {
+    /** Mỗi lần mở bảng màu đều bắt đầu từ màu mặc định, không giữ màu đã chọn lần trước. */
+    private fun showColorPicker(requestKey: String) {
         if (childFragmentManager.findFragmentByTag(ColorPickerDialogFragment.TAG) == null) {
-            ColorPickerDialogFragment.newInstance(requestKey, initial).show(childFragmentManager, ColorPickerDialogFragment.TAG)
+            ColorPickerDialogFragment.newInstance(requestKey, Color.RED).show(childFragmentManager, ColorPickerDialogFragment.TAG)
         }
     }
 
@@ -386,15 +441,16 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         }
     }
 
-    private fun showKeyboard() {
-        binding.etText.post {
-            binding.etText.requestFocus()
-            WindowCompat.getInsetsController(requireActivity().window, binding.etText).show(WindowInsetsCompat.Type.ime())
+    private fun showKeyboard(input: EditText) {
+        input.post {
+            input.requestFocus()
+            WindowCompat.getInsetsController(requireActivity().window, input).show(WindowInsetsCompat.Type.ime())
         }
     }
 
     private fun hideKeyboard() {
         binding.etText.clearFocus()
+        binding.etSpeech.clearFocus()
         WindowCompat.getInsetsController(requireActivity().window, binding.etText).hide(WindowInsetsCompat.Type.ime())
     }
 

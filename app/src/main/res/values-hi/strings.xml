@@ -17,6 +17,7 @@
     <string name="saving">सेव हो रहा है…</string>
     <string name="saved">सेव हो गया</string>
     <string name="save_failed">सेव नहीं हो सका</string>
+    <string name="save_permission_denied">इमेज सेव करने के लिए स्टोरेज की अनुमति दें</string>
     <string name="coming_soon">जल्द आ रहा है</string>
     <string name="error_generic">कुछ गलत हो गया। कृपया फिर से कोशिश करें।</string>
     <string name="error_no_internet">इंटरनेट कनेक्शन नहीं है</string>
@@ -44,7 +45,7 @@
     <string name="tab_image">इमेज</string>
     <string name="tab_pack">पैक</string>
     <string name="tab_pack_number">पैक %1$d</string>
-    <string name="text_hint">नमस्ते</string>
+    <string name="text_hint">अपनी सामग्री लिखें...</string>
 
     <string name="cosplay">कॉसप्ले</string>
     <string name="instruction">निर्देश</string>
@@ -58,6 +59,12 @@
     <string name="no_design_here">यहाँ कोई डिज़ाइन नहीं है</string>
     <string name="add_to_telegram">Telegram में जोड़ें</string>
     <string name="add_to_whatsapp">WhatsApp में जोड़ें</string>
+    <string name="whatsapp_sticker_count">WhatsApp स्टिकर पैक के लिए %1$d से %2$d किरदार चाहिए</string>
+    <string name="sticker_added_to_whatsapp">WhatsApp में जोड़ा गया</string>
+    <string name="sticker_already_in_whatsapp">यह पैक पहले से WhatsApp में है</string>
+    <string name="sticker_export_failed">स्टिकर नहीं बन सके</string>
+    <string name="whatsapp_not_installed">WhatsApp इंस्टॉल नहीं है</string>
+    <string name="telegram_not_installed">Telegram इंस्टॉल नहीं है</string>
 
     <string name="dialog_exit_title">बाहर निकलें</string>
     <string name="dialog_exit_message">अभी तक सेव नहीं किया है, क्या आप बाहर निकलना चाहते हैं?</string>

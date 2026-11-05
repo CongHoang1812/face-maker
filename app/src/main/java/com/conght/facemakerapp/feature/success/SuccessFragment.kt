@@ -14,6 +14,7 @@ import com.conght.facemakerapp.core.ui.base.BaseFragment
 import com.conght.facemakerapp.core.ui.collectWhenStarted
 import com.conght.facemakerapp.core.ui.loadImage
 import com.conght.facemakerapp.core.ui.navigateSafe
+import com.conght.facemakerapp.core.ui.registerGalleryDownload
 import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.core.ui.showAppToast
@@ -26,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Successful (Figma 3:1109 maker / 3:223 cosplay).
- * Download → copy vào internal storage (`filesDir/downloads/`), không ra Gallery.
+ * Download → lưu ra thư viện máy (Gallery).
  * Share → FileProvider. Re-edit → quay lại editor. Back = Home.
  */
 @AndroidEntryPoint
@@ -35,6 +36,7 @@ class SuccessFragment : BaseFragment<FragmentSuccessBinding>(FragmentSuccessBind
     enum class Source { MAKER, COSPLAY }
 
     private val viewModel: SuccessViewModel by viewModels()
+    private val download = registerGalleryDownload { viewModel.download() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,7 +51,7 @@ class SuccessFragment : BaseFragment<FragmentSuccessBinding>(FragmentSuccessBind
             navigateSafe(R.id.action_success_to_myCreation, Bundle().apply { putString(MyCreationFragment.ARG_TAB, tab.name) })
         }
         binding.btnHome.setOnSingleClickListener { goHome() }
-        binding.btnDownload.setOnSingleClickListener { viewModel.download() }
+        binding.btnDownload.setOnSingleClickListener { download() }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() = goHome()
         })

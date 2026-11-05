@@ -45,13 +45,30 @@
             android:layout_marginTop="@dimen/content_top"
             app:layout_constraintBottom_toTopOf="@id/panel"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/character_size"
+            app:layout_constraintHeight_max="@dimen/character_size_large"
             app:layout_constraintVertical_bias="0"
-            app:layout_constraintWidth_max="@dimen/character_size"
+            app:layout_constraintWidth_max="@dimen/character_size_large"
             android:contentDescription="@string/cd_design_canvas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Ô nhập ẩn cho bong bóng: chỉ để nhận bàn phím, chữ hiện trực tiếp trên canvas -->
+        <EditText
+            android:id="@+id/et_speech"
+            android:layout_width="@dimen/hidden_input_size"
+            android:layout_height="@dimen/hidden_input_size"
+            android:alpha="0"
+            android:background="@null"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:importantForAccessibility="no"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="LabelFor" />
 
         <!-- Panel dưới -->
         <LinearLayout

@@ -20,7 +20,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SuccessViewModelTest {
@@ -31,9 +30,9 @@ class SuccessViewModelTest {
         override suspend fun get(id: Long) = Creation(id, CreationType.DESIGN, "/files/creations/$id.png", null, 0)
         override suspend fun save(type: CreationType, bitmap: Bitmap, config: CharacterConfig?) = 1L
         override suspend fun delete(ids: List<Long>) = Unit
-        override suspend fun download(ids: List<Long>): Result<List<File>> {
+        override suspend fun download(ids: List<Long>): Result<Unit> {
             downloaded += ids
-            return if (fail) Result.failure(IllegalStateException()) else Result.success(listOf(File("/files/downloads/a.png")))
+            return if (fail) Result.failure(IllegalStateException()) else Result.success(Unit)
         }
         override suspend fun saveTemp(bitmap: Bitmap, fileName: String) = ""
         override suspend fun importImage(uri: Uri) = ""

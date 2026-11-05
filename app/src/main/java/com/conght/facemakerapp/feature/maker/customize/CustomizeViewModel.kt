@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -168,6 +169,7 @@ class CustomizeViewModel @Inject constructor(
     private val dirty = savedStateHandle.getStateFlow(KEY_DIRTY, false)
 
     private val remaining = savedStateHandle.getStateFlow(KEY_REMAINING, COSPLAY_SECONDS)
+    private val countdownPaused = MutableStateFlow(false)
     private val score = savedStateHandle.getStateFlow<Int?>(KEY_SCORE, null)
     private val resultPath = savedStateHandle.getStateFlow<String?>(KEY_RESULT_PATH, null)
 
@@ -214,17 +216,28 @@ class CustomizeViewModel @Inject constructor(
         retryWhenBackOnline(networkMonitor, isError = { current.detail is Resource.Error }, retry = ::retry)
     }
 
-    /** Đếm ngược trong ViewModel (sống qua xoay màn); bắt đầu khi nhân vật đã sẵn sàng. */
+    /**
+     * Đếm ngược trong ViewModel (sống qua xoay màn); bắt đầu khi nhân vật đã sẵn sàng.
+     * Dừng khi [setCountdownPaused] true, chạy tiếp từ số giây còn lại khi false.
+     */
     private fun startCountdown() {
         viewModelScope.launch {
             state.first { it.isReady }
-            while (remaining.value > 0 && score.value == null) {
-                delay(TICK_MS)
-                if (score.value != null) break
-                savedStateHandle[KEY_REMAINING] = (remaining.value - 1).coerceAtLeast(0)
+            countdownPaused.collectLatest { paused ->
+                if (paused) return@collectLatest
+                while (remaining.value > 0 && score.value == null) {
+                    delay(TICK_MS)
+                    if (score.value != null) break
+                    savedStateHandle[KEY_REMAINING] = (remaining.value - 1).coerceAtLeast(0)
+                }
+                if (score.value == null) finishCosplay()
             }
-            if (score.value == null) finishCosplay()
         }
+    }
+
+    /** App vào nền (Home, tắt màn hình...) thì dừng đồng hồ Cosplay, quay lại thì chạy tiếp. */
+    fun setCountdownPaused(paused: Boolean) {
+        countdownPaused.value = paused
     }
 
     /**
@@ -530,7 +543,7 @@ class CustomizeViewModel @Inject constructor(
         const val KEY_REMAINING = "cosplay_remaining"
         const val KEY_SCORE = "cosplay_score"
         const val KEY_RESULT_PATH = "cosplay_result_path"
-        const val COSPLAY_SECONDS = 10 * 60
+        const val COSPLAY_SECONDS = 3 * 60
         const val COMPLETE_PERCENT = 100
         const val TICK_MS = 1_000L
         const val STOP_TIMEOUT_MS = 5_000L

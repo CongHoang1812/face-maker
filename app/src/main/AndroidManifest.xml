@@ -4,13 +4,23 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Chỉ để chọn ảnh nền từ thư viện. App lưu ảnh vào internal storage nên không khai báo WRITE_EXTERNAL_STORAGE. -->
+    <!-- Nút Download ghi ảnh ra thư viện máy. Android 10+ dùng MediaStore nên không cần quyền này. -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <!-- Chỉ để chọn ảnh nền từ thư viện. -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Kiểm tra WhatsApp đã cài và gói sticker đã được thêm chưa. -->
+    <queries>
+        <package android:name="com.whatsapp" />
+        <package android:name="com.whatsapp.w4b" />
+    </queries>
 
     <application
         android:name=".FaceMakerApp"
@@ -55,6 +65,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- Chỉ WhatsApp giữ quyền này; authority phải bắt đầu bằng package name. -->
+        <provider
+            android:name=".data.local.file.StickerContentProvider"
+            android:authorities="${applicationId}.stickercontentprovider"
+            android:enabled="true"
+            android:exported="true"
+            android:readPermission="com.whatsapp.sticker.READ" />
     </application>
 
 </manifest>

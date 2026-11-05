@@ -106,16 +106,20 @@ class DecorEditorViewModel @Inject constructor(
 
     fun addSticker(url: String) = addElement(DecorElement(newId(), ElementType.STICKER, imageUrl = url))
 
-    fun addSpeech(url: String, defaultText: String) = addElement(
-        DecorElement(newId(), ElementType.SPEECH, imageUrl = url, text = defaultText, fontId = current.fontId, color = current.textColor),
+    /** Bong bóng mới luôn để trống chữ, người dùng nhập ngay ở tab Speech. */
+    fun addSpeech(url: String) = addElement(
+        DecorElement(newId(), ElementType.SPEECH, imageUrl = url, text = "", fontId = current.fontId, color = current.textColor),
     )
 
-    /** ✓ ở tab Text: cập nhật text của phần tử chữ đang chọn, hoặc thêm text mới. */
+    /** Chữ trong bong bóng, cập nhật theo từng ký tự nhập; được phép rỗng. */
+    fun setSpeechText(id: String, text: String) = updateElement(id) { it.copy(text = text) }
+
+    /** ✓ ở tab Text: cập nhật phần tử text đang chọn, hoặc thêm text mới. Không đụng đến bong bóng. */
     fun submitText(text: String) {
         val value = text.trim()
         if (value.isEmpty()) return
         val selected = current.selected
-        if (selected != null && selected.type != ElementType.STICKER) {
+        if (selected?.type == ElementType.TEXT) {
             updateElement(selected.id) { it.copy(text = value) }
         } else {
             addElement(DecorElement(newId(), ElementType.TEXT, text = value, fontId = current.fontId, color = current.textColor))
@@ -127,14 +131,6 @@ class DecorEditorViewModel @Inject constructor(
     }
 
     fun select(id: String?) = update(dirty = false) { it.copy(selectedId = id) }
-
-    /**
-     * Ô None ở lưới Sticker / Speech: xoá phần tử cùng loại đang chọn (nếu có), ngược lại bỏ chọn.
-     */
-    fun noneFor(type: ElementType) {
-        val selected = current.selected
-        if (selected != null && selected.type == type) delete(selected.id) else select(null)
-    }
 
     fun transform(id: String, x: Float, y: Float, scale: Float, rotation: Float) = updateElement(id) {
         it.copy(
@@ -154,12 +150,12 @@ class DecorEditorViewModel @Inject constructor(
     /** Đổi font: áp cho phần tử chữ đang chọn và làm mặc định cho chữ mới. */
     fun setFont(fontId: String) {
         update { it.copy(fontId = fontId) }
-        current.selected?.takeIf { it.type != ElementType.STICKER }?.let { updateElement(it.id) { e -> e.copy(fontId = fontId) } }
+        current.textTarget?.let { updateElement(it.id) { e -> e.copy(fontId = fontId) } }
     }
 
     fun setTextColor(@ColorInt color: Int) {
         update { it.copy(textColor = color) }
-        current.selected?.takeIf { it.type != ElementType.STICKER }?.let { updateElement(it.id) { e -> e.copy(color = color) } }
+        current.textTarget?.let { updateElement(it.id) { e -> e.copy(color = color) } }
     }
 
     // ---------- Lưu ----------

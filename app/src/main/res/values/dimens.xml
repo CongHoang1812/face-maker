@@ -7,6 +7,7 @@
     <dimen name="top_bar_top">16dp</dimen>
     <dimen name="top_bar_action_gap">16dp</dimen>
     <dimen name="content_top">72dp</dimen>
+    <dimen name="content_top_lucky_roll">100dp</dimen>
     <dimen name="list_top">80dp</dimen>
 
     <!-- Splash -->
@@ -47,6 +48,8 @@
 
     <!-- Nhân vật & panel -->
     <dimen name="character_size">328dp</dimen>
+    <!-- Ô nhân vật lớn hơn của Customize, Decor, Success -->
+    <dimen name="character_size_large">352dp</dimen>
     <dimen name="bottom_panel_height">356dp</dimen>
     <!-- Customize (Figma 3:335): cột tool trái, nút random-all, Move panel (8:24) -->
     <dimen name="tool_gap">8dp</dimen>
@@ -87,7 +90,8 @@
     <dimen name="cosplay_reference">80dp</dimen>
     <dimen name="cosplay_reference_end">4dp</dimen>
     <dimen name="cosplay_reference_border">2dp</dimen>
-    <dimen name="cosplay_card_padding_bottom">24dp</dimen>
+    <dimen name="cosplay_card_padding_bottom">36dp</dimen>
+    <dimen name="cosplay_percent_margin_top">12dp</dimen>
     <dimen name="cosplay_score_image">280dp</dimen>
     <dimen name="cosplay_score_text">24sp</dimen>
 
@@ -103,6 +107,7 @@
     <dimen name="lucky_arrow_w">80dp</dimen>
     <dimen name="lucky_arrow_h">128dp</dimen>
     <dimen name="lucky_arrow_top">135dp</dimen>
+    <dimen name="lucky_random_top">444dp</dimen>
 
     <!-- Successful (Figma 3:1109 maker / 3:223 cosplay) -->
     <dimen name="success_cosplay_image_top">124dp</dimen>
@@ -120,9 +125,10 @@
     <dimen name="editor_sub_tab_row_h">50dp</dimen>
     <dimen name="editor_chip">32dp</dimen>
     <dimen name="editor_input_h">36dp</dimen>
+    <dimen name="hidden_input_size">1dp</dimen>
     <dimen name="editor_input_text">16sp</dimen>
     <dimen name="editor_chip_text">10sp</dimen>
-    <dimen name="editor_icon_color_wheel">40dp</dimen>
+    <dimen name="editor_icon_color_wheel">36dp</dimen>
     <dimen name="editor_icon_add_image">48dp</dimen>
     <dimen name="decor_sticker_w">152dp</dimen>
     <dimen name="decor_sticker_h">96dp</dimen>

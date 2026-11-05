@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.conght.facemakerapp.R
 import com.conght.facemakerapp.core.common.AppConfig
 import com.conght.facemakerapp.core.ui.applyStatusBarPadding
 import com.conght.facemakerapp.core.ui.base.BaseFragment
+import com.conght.facemakerapp.core.ui.collectWhenStarted
 import com.conght.facemakerapp.core.ui.navigateSafe
 import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
@@ -18,9 +21,13 @@ import com.conght.facemakerapp.core.ui.showAppToast
 import com.conght.facemakerapp.databinding.FragmentSettingBinding
 import com.conght.facemakerapp.feature.dialog.RateUsDialogFragment
 import com.conght.facemakerapp.feature.language.LanguageFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 /** Setting (Figma 3:468): Language / Rate us / Share app / Privacy & Policy. */
+@AndroidEntryPoint
 class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate) {
+
+    private val viewModel: SettingViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,6 +44,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
         binding.rowRate.setOnSingleClickListener { RateUsDialogFragment.showOnce(childFragmentManager) }
         binding.rowShare.setOnSingleClickListener { shareApp() }
         binding.rowPrivacy.setOnSingleClickListener { openPrivacyPolicy() }
+
+        childFragmentManager.setFragmentResultListener(RateUsDialogFragment.KEY_RATED, viewLifecycleOwner) { _, _ ->
+            viewModel.markAppRated()
+        }
+        collectWhenStarted(viewModel.appRated) { rated -> binding.rowRate.isVisible = !rated }
     }
 
     private fun shareApp() {

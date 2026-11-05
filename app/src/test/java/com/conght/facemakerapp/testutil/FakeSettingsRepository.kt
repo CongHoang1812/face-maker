@@ -19,4 +19,9 @@ class FakeSettingsRepository : SettingsRepository {
     override suspend fun setCosplayInstructionShown() {
         cosplayInstructionShown.value = true
     }
+
+    override val appRated = MutableStateFlow(false)
+    override suspend fun setAppRated() {
+        appRated.value = true
+    }
 }

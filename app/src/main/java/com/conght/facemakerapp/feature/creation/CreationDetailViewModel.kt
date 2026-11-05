@@ -47,7 +47,7 @@ class CreationDetailViewModel @Inject constructor(
         }
     }
 
-    /** Copy ảnh vào internal storage `filesDir/downloads/` (không ra Gallery). */
+    /** Lưu ảnh ra thư viện máy (Gallery). */
     fun download() {
         if (creationId < 0) return
         viewModelScope.launch {
