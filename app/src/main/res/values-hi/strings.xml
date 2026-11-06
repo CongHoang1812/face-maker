@@ -15,11 +15,9 @@
     <string name="retry">फिर से कोशिश करें</string>
     <string name="loading">लोड हो रहा है…</string>
     <string name="saving">सेव हो रहा है…</string>
-    <string name="saved">सेव हो गया</string>
     <string name="save_failed">सेव नहीं हो सका</string>
     <string name="download_success">%1$s एल्बम में डाउनलोड सफल रहा</string>
     <string name="save_permission_denied">इमेज सेव करने के लिए स्टोरेज की अनुमति दें</string>
-    <string name="coming_soon">जल्द आ रहा है</string>
     <string name="error_generic">कुछ गलत हो गया। कृपया फिर से कोशिश करें।</string>
     <string name="error_no_internet">इंटरनेट कनेक्शन नहीं है</string>
 

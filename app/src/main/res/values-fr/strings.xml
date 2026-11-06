@@ -15,11 +15,9 @@
     <string name="retry">Réessayer</string>
     <string name="loading">Chargement…</string>
     <string name="saving">Enregistrement…</string>
-    <string name="saved">Enregistré</string>
     <string name="save_failed">Échec de l\'enregistrement</string>
     <string name="download_success">Téléchargement réussi dans l\'album %1$s</string>
     <string name="save_permission_denied">Autorisez l\'accès au stockage pour enregistrer les images</string>
-    <string name="coming_soon">Bientôt disponible</string>
     <string name="error_generic">Une erreur s\'est produite. Veuillez réessayer.</string>
     <string name="error_no_internet">Pas de connexion Internet</string>
 

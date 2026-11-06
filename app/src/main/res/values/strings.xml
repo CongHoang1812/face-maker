@@ -16,11 +16,9 @@
     <string name="retry">Retry</string>
     <string name="loading">Loading…</string>
     <string name="saving">Saving…</string>
-    <string name="saved">Saved</string>
     <string name="save_failed">Save failed</string>
     <string name="download_success">Download successful to the %1$s album</string>
     <string name="save_permission_denied">Allow storage access to save images</string>
-    <string name="coming_soon">Coming soon</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
     <string name="error_no_internet">No internet connection</string>
 

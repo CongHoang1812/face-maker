@@ -15,11 +15,9 @@
     <string name="retry">Tentar novamente</string>
     <string name="loading">Carregando…</string>
     <string name="saving">Salvando…</string>
-    <string name="saved">Salvo</string>
     <string name="save_failed">Falha ao salvar</string>
     <string name="download_success">Download concluído no álbum %1$s</string>
     <string name="save_permission_denied">Permita o acesso ao armazenamento para salvar imagens</string>
-    <string name="coming_soon">Em breve</string>
     <string name="error_generic">Algo deu errado. Tente novamente.</string>
     <string name="error_no_internet">Sem conexão com a internet</string>
 
