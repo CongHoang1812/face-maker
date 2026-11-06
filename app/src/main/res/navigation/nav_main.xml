@@ -217,6 +217,16 @@
             android:name="stars"
             android:defaultValue="0"
             app:argType="integer" />
+        <!-- Re-edit sau Cosplay: Success đã thay chỗ màn chơi nên mở lại, giữ Cosplay Start phía dưới -->
+        <action
+            android:id="@+id/action_success_to_cosplayPlay"
+            app:destination="@id/cosplayPlayFragment"
+            app:popUpTo="@id/cosplayStartFragment"
+            app:popUpToInclusive="false"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_success_to_myCreation"
             app:destination="@id/myCreationFragment"
@@ -232,10 +242,6 @@
         android:id="@+id/myCreationFragment"
         android:name="com.conght.facemakerapp.feature.creation.MyCreationFragment"
         tools:layout="@layout/fragment_my_creation">
-        <argument
-            android:name="tab"
-            android:defaultValue="CHARACTER"
-            app:argType="string" />
         <action
             android:id="@+id/action_myCreation_to_creationDetail"
             app:destination="@id/creationDetailFragment"

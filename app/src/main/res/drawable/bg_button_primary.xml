@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nút chính: nền màu chủ đề (chữ trắng) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/brown_primary" />
+    <corners android:radius="@dimen/rate_button_radius" />
+</shape>

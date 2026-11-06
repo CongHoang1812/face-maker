@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.conght.facemakerapp.data.model.Creation
 import com.conght.facemakerapp.data.repository.CreationRepository
+import com.conght.facemakerapp.feature.maker.customize.CustomizeFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +31,10 @@ class SuccessViewModel @Inject constructor(
 
     val source: SuccessFragment.Source = savedStateHandle.get<String>(SuccessFragment.ARG_SOURCE)
         ?.let { runCatching { SuccessFragment.Source.valueOf(it) }.getOrNull() } ?: SuccessFragment.Source.MAKER
+
+    /** COSPLAY: đề bài vừa chơi, để Re-edit mở lại màn chơi. */
+    val cosplayTemplateId: String? = savedStateHandle[CustomizeFragment.ARG_TEMPLATE_ID]
+    val cosplayChallengeJson: String? = savedStateHandle[CustomizeFragment.ARG_CHALLENGE_JSON]
 
     val stars: Int = (savedStateHandle.get<Int>(SuccessFragment.ARG_STARS) ?: 0).coerceIn(0, MAX_STARS)
 

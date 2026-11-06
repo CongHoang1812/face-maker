@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.conght.facemakerapp.data.model.Creation
 import com.conght.facemakerapp.data.model.CreationType
+import com.conght.facemakerapp.data.model.PACK_NAME_MAX_LENGTH
 import com.conght.facemakerapp.data.model.StickerExport
 import com.conght.facemakerapp.data.model.StickerTarget
 import com.conght.facemakerapp.data.model.WHATSAPP_PACK_MAX_STICKERS
@@ -42,6 +43,9 @@ sealed interface MyCreationEvent {
     data class Downloaded(val success: Boolean) : MyCreationEvent
     data object InvalidWhatsAppStickerCount : MyCreationEvent
     data class StickersReady(val export: StickerExport) : MyCreationEvent
+
+    /** Hỏi tên gói sticker trước khi thêm vào WhatsApp. */
+    data object RequestPackName : MyCreationEvent
     data object StickerExportFailed : MyCreationEvent
 }
 
@@ -56,10 +60,7 @@ class MyCreationViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val tab = savedStateHandle.getStateFlow(
-        MyCreationFragment.ARG_TAB,
-        CreationType.CHARACTER.name,
-    )
+    private val tab = savedStateHandle.getStateFlow(KEY_TAB, CreationType.CHARACTER.name)
     private val selectionMode = savedStateHandle.getStateFlow(KEY_SELECTION_MODE, false)
     private val selectedIds = savedStateHandle.getStateFlow(KEY_SELECTED, LongArray(0))
 
@@ -77,7 +78,12 @@ class MyCreationViewModel @Inject constructor(
             // bỏ id đã bị xoá khỏi DB
             selectedIds = ids.filter { existing == null || it in existing }.toSet(),
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), MyCreationUiState())
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
+        // Giá trị đầu đã đúng tab được truyền vào, tránh khung hình đầu hiện tab Character rồi mới nhảy
+        MyCreationUiState(tab = parseType(tab.value)),
+    )
 
     private val _events = Channel<MyCreationEvent>(Channel.BUFFERED)
     val events: Flow<MyCreationEvent> = _events.receiveAsFlow()
@@ -85,7 +91,7 @@ class MyCreationViewModel @Inject constructor(
     fun selectTab(type: CreationType) {
         exitSelection()
         if (state.value.tab == type) return
-        savedStateHandle[MyCreationFragment.ARG_TAB] = type.name
+        savedStateHandle[KEY_TAB] = type.name
     }
 
     /** Long-press: vào chế độ chọn và chọn luôn item đó. */
@@ -133,23 +139,49 @@ class MyCreationViewModel @Inject constructor(
         }
     }
 
-    /** Tạo sticker từ các nhân vật đang chọn; WhatsApp giới hạn số sticker trong một gói. */
+    /**
+     * Tạo sticker từ các nhân vật đang chọn; WhatsApp giới hạn số sticker trong một gói.
+     * WhatsApp cần tên gói: đủ điều kiện thì hỏi tên trước ([MyCreationEvent.RequestPackName]),
+     * người dùng nhập xong gọi [exportToWhatsApp].
+     */
     fun exportStickers(target: StickerTarget) {
+        val paths = selectedPaths(target) ?: return
+        if (target == StickerTarget.WHATSAPP) {
+            _events.trySend(MyCreationEvent.RequestPackName)
+            return
+        }
+        export(target, paths, packName = null)
+    }
+
+    /** Sau dialog Create Package Name. Tên rỗng thì bỏ qua (dialog không cho bấm Yes). */
+    fun exportToWhatsApp(packName: String) {
+        val name = packName.trim().take(PACK_NAME_MAX_LENGTH)
+        if (name.isEmpty()) return
+        val paths = selectedPaths(StickerTarget.WHATSAPP) ?: return
+        export(StickerTarget.WHATSAPP, paths, name)
+    }
+
+    /** `null` = không có gì để xuất hoặc sai số lượng (đã báo toast), không hiện dialog Saving. */
+    private fun selectedPaths(target: StickerTarget): List<String>? {
         val paths = state.value.selectedItems.map { it.imagePath }
-        if (paths.isEmpty() || _busy.value) return
+        if (paths.isEmpty() || _busy.value) return null
+        val countValid = target != StickerTarget.WHATSAPP ||
+            paths.size in WHATSAPP_PACK_MIN_STICKERS..WHATSAPP_PACK_MAX_STICKERS
+        if (!countValid) {
+            _events.trySend(MyCreationEvent.InvalidWhatsAppStickerCount)
+            return null
+        }
+        return paths
+    }
+
+    private fun export(target: StickerTarget, paths: List<String>, packName: String?) {
         _busy.value = true
         viewModelScope.launch {
             try {
-                val countValid = target != StickerTarget.WHATSAPP ||
-                    paths.size in WHATSAPP_PACK_MIN_STICKERS..WHATSAPP_PACK_MAX_STICKERS
-                val event = if (countValid) {
-                    stickerRepository.export(target, paths).fold(
-                        onSuccess = { MyCreationEvent.StickersReady(it) },
-                        onFailure = { MyCreationEvent.StickerExportFailed },
-                    )
-                } else {
-                    MyCreationEvent.InvalidWhatsAppStickerCount
-                }
+                val event = stickerRepository.export(target, paths, packName).fold(
+                    onSuccess = { MyCreationEvent.StickersReady(it) },
+                    onFailure = { MyCreationEvent.StickerExportFailed },
+                )
                 _events.send(event)
             } finally {
                 _busy.value = false
@@ -170,6 +202,7 @@ class MyCreationViewModel @Inject constructor(
         runCatching { CreationType.valueOf(name) }.getOrDefault(CreationType.CHARACTER)
 
     private companion object {
+        const val KEY_TAB = "tab"
         const val KEY_SELECTION_MODE = "selection_mode"
         const val KEY_SELECTED = "selected_ids"
         const val KEY_PENDING_DELETE = "pending_delete"

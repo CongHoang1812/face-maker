@@ -17,6 +17,7 @@
     <string name="saving">Guardando…</string>
     <string name="saved">Guardado</string>
     <string name="save_failed">Error al guardar</string>
+    <string name="download_success">Descarga completada en el álbum %1$s</string>
     <string name="save_permission_denied">Permite el acceso al almacenamiento para guardar imágenes</string>
     <string name="coming_soon">Próximamente</string>
     <string name="error_generic">Algo salió mal. Inténtalo de nuevo.</string>
@@ -114,6 +115,7 @@
     <string name="cd_confirm">Confirmar</string>
 
     <string name="rate_feedback_subject">Comentarios sobre %1$s</string>
+    <string name="rate_thank_you">Gracias por calificar nuestra app.</string>
     <plurals name="cd_rate_stars">
         <item quantity="one">%1$d estrella</item>
         <item quantity="many">%1$d estrellas</item>
@@ -131,4 +133,6 @@
     <string name="cd_re_edit">Volver a editar</string>
     <string name="cd_result_image">Tu creación</string>
     <string name="cd_reference_image">Imagen de referencia</string>
+    <string name="create_pack_name_title">Crear nombre del paquete</string>
+    <string name="pack_name_hint">Introduce el nombre del paquete</string>
 </resources>

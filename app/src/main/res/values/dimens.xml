@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Kích thước theo docs/prompts/02_DESIGN_SYSTEM.md (1px Figma = 1dp) -->
 <resources>
+    <!-- Chữ (dùng trong styles.xml; tablet phóng to trong values-sw600dp) -->
+    <dimen name="text_12">12sp</dimen>
+    <dimen name="text_14">14sp</dimen>
+    <dimen name="text_16">16sp</dimen>
+    <dimen name="text_18">18sp</dimen>
+    <dimen name="text_24">24sp</dimen>
+    <dimen name="text_32">32sp</dimen>
+    <dimen name="text_48">48sp</dimen>
+    <dimen name="line_16">16sp</dimen>
+    <dimen name="line_20">20sp</dimen>
+    <dimen name="line_24">24sp</dimen>
+    <dimen name="line_28">28sp</dimen>
+    <dimen name="line_32">32sp</dimen>
+    <dimen name="line_48">48sp</dimen>
+
     <!-- Màn hình. Toạ độ dọc tính TỪ DƯỚI status bar: y_Figma - 44 (status bar Figma),
          root của màn cộng thêm status bar thật qua View.applyStatusBarPadding() -->
     <dimen name="screen_padding">16dp</dimen>
@@ -24,6 +39,10 @@
     <dimen name="intro_image_h">560dp</dimen>
     <dimen name="intro_controls_top">640dp</dimen>
     <dimen name="intro_controls_h">20dp</dimen>
+    <!-- Tablet (layout-sw600dp): đặt theo % chiều cao màn thay cho toạ độ cố định 560 / 640.
+         Ảnh 60%, chữ ngay dưới ảnh, indicator + Next ở 76% (chữ 2 dòng kết thúc ~70%) -->
+    <item name="intro_image_percent" format="float" type="dimen">0.6</item>
+    <item name="intro_controls_percent" format="float" type="dimen">0.76</item>
     <dimen name="check_button">48dp</dimen>
     <dimen name="permission_image">300dp</dimen>
     <dimen name="permission_continue_gap">72dp</dimen>
@@ -110,6 +129,7 @@
     <dimen name="lucky_random_top">444dp</dimen>
 
     <!-- Successful (Figma 3:1109 maker / 3:223 cosplay) -->
+    <dimen name="success_image_top">140dp</dimen>
     <dimen name="success_cosplay_image_top">124dp</dimen>
     <dimen name="success_image_border">4dp</dimen>
     <dimen name="success_badge_w">160dp</dimen>
@@ -152,6 +172,7 @@
     <dimen name="category_tab_h">48dp</dimen>
     <dimen name="category_tab_selected_h">56dp</dimen>
     <dimen name="category_tab_radius">8dp</dimen>
+    <dimen name="category_tab_icon">32dp</dimen>
     <dimen name="color_bar_height">40dp</dimen>
     <dimen name="color_bar_radius">24dp</dimen>
     <dimen name="color_bar_padding">8dp</dimen>
@@ -187,6 +208,8 @@
     <dimen name="creation_tab_h">40dp</dimen>
     <dimen name="small_icon">24dp</dimen>
     <dimen name="small_icon_glyph">12dp</dimen>
+    <!-- (small_icon - small_icon_glyph) / 2: icon trong nút nhỏ phóng theo nút -->
+    <dimen name="small_icon_padding">6dp</dimen>
     <dimen name="small_icon_radius">8dp</dimen>
 
     <!-- Template (cata) -->
@@ -208,6 +231,7 @@
     <dimen name="instruction_card_h">218dp</dimen>
     <dimen name="instruction_card_padding_top">10dp</dimen>
     <dimen name="dialog_button_w">142dp</dimen>
+    <dimen name="pack_name_input_h">44dp</dimen>
     <dimen name="dialog_padding">16dp</dimen>
     <!-- Khoảng cách dọc trong PaperDialogContainer (Figma 69:34, 69:101).
          TextView (includeFontPadding=false, 1 dòng) chỉ cao ascent+descent của Londrina (1.183em),

@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -42,10 +43,15 @@ class SettingsDataStore @Inject constructor(
         dataStore.edit { it[KEY_APP_RATED] = true }
     }
 
+    /** Tăng số lần bấm Back ở Home, trả về giá trị mới. */
+    suspend fun incrementHomeBackCount(): Int =
+        dataStore.edit { it[KEY_HOME_BACK_COUNT] = (it[KEY_HOME_BACK_COUNT] ?: 0) + 1 }[KEY_HOME_BACK_COUNT] ?: 0
+
     private companion object {
         val KEY_LANGUAGE = stringPreferencesKey("language_code")
         val KEY_ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
         val KEY_COSPLAY_INSTRUCTION = booleanPreferencesKey("cosplay_instruction_shown")
         val KEY_APP_RATED = booleanPreferencesKey("app_rated")
+        val KEY_HOME_BACK_COUNT = intPreferencesKey("home_back_count")
     }
 }

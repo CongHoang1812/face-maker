@@ -40,18 +40,28 @@ class StickerPackStore @Inject constructor(
 ) {
     private val packsDir get() = File(context.filesDir, DIR_PACKS)
 
-    /** Cùng danh sách ảnh thì trả lại gói cũ, nên WhatsApp nhận ra gói đã thêm. */
+    /**
+     * Cùng danh sách ảnh thì trả lại gói cũ, nên WhatsApp nhận ra gói đã thêm.
+     * [name]: tên người dùng đặt, lưu vào `pack.json`; gói cũ chưa thêm vào WhatsApp thì đổi theo tên mới.
+     * `null` / rỗng = "<tên app> <số thứ tự>".
+     */
     @Synchronized
-    fun getOrCreatePack(imagePaths: List<String>): StickerPack {
+    fun getOrCreatePack(imagePaths: List<String>, name: String? = null): StickerPack {
         val id = stickerPackId(imagePaths)
-        pack(id)?.let { return it }
+        val customName = name?.trim()?.takeIf { it.isNotEmpty() }
+        pack(id)?.let { old ->
+            if (customName == null || customName == old.name) return old
+            val renamed = old.copy(name = customName)
+            writeInfo(File(packsDir, id), renamed)
+            return renamed
+        }
 
         val existing = packs()
         val appName = context.getString(R.string.app_name)
         val sequence = (existing.maxOfOrNull { it.sequence } ?: 0) + 1
         val pack = StickerPack(
             id = id,
-            name = "$appName $sequence",
+            name = customName ?: "$appName $sequence",
             publisher = appName,
             sequence = sequence,
             stickerFiles = imagePaths.indices.map(::stickerFileName),
@@ -79,6 +89,13 @@ class StickerPackStore @Inject constructor(
             File(packsDir, it.id).deleteRecursively()
         }
         return pack
+    }
+
+    /** Ghi file tạm rồi đổi tên để provider không đọc phải `pack.json` ghi dở. */
+    private fun writeInfo(dir: File, pack: StickerPack) {
+        val temp = File(dir, "$TEMP_PREFIX$INFO_FILE")
+        temp.writeText(pack.toJson())
+        check(temp.renameTo(File(dir, INFO_FILE))) { "Không đổi tên được: $temp" }
     }
 
     fun packs(): List<StickerPack> =

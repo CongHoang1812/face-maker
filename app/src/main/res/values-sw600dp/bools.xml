@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tablet: toàn màn hình, không chừa vùng thanh điều hướng ở đáy -->
+    <bool name="hide_navigation_bar">true</bool>
+</resources>

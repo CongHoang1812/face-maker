@@ -31,10 +31,15 @@ class CosplayViewModel @Inject constructor(
 
     private val reloadKey = MutableStateFlow(0)
 
+    /**
+     * Lazily (không dừng khi màn ẩn): sang màn chơi rồi Back vẫn giữ đúng đề cũ.
+     * WhileSubscribed sẽ huỷ luồng sau vài giây và tự random đề mới khi quay lại.
+     * Chỉ [random] mới đổi đề.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     val challenge: StateFlow<Resource<CosplayChallenge>> = reloadKey
         .flatMapLatest { cosplayRepository.randomChallenge() }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), Resource.Loading)
+        .stateIn(viewModelScope, SharingStarted.Lazily, Resource.Loading)
 
     init {
         cosplayRepository.prepare()
@@ -59,9 +64,5 @@ class CosplayViewModel @Inject constructor(
 
     fun markInstructionSeen() {
         viewModelScope.launch { settingsRepository.setCosplayInstructionShown() }
-    }
-
-    private companion object {
-        const val STOP_TIMEOUT_MS = 5_000L
     }
 }

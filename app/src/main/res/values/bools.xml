@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- true = ẩn thanh điều hướng hệ thống (toàn màn hình), vuốt từ đáy để hiện tạm -->
+    <bool name="hide_navigation_bar">false</bool>
+</resources>

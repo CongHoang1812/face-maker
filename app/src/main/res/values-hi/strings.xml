@@ -17,6 +17,7 @@
     <string name="saving">सेव हो रहा है…</string>
     <string name="saved">सेव हो गया</string>
     <string name="save_failed">सेव नहीं हो सका</string>
+    <string name="download_success">%1$s एल्बम में डाउनलोड सफल रहा</string>
     <string name="save_permission_denied">इमेज सेव करने के लिए स्टोरेज की अनुमति दें</string>
     <string name="coming_soon">जल्द आ रहा है</string>
     <string name="error_generic">कुछ गलत हो गया। कृपया फिर से कोशिश करें।</string>
@@ -114,6 +115,7 @@
     <string name="cd_confirm">पुष्टि करें</string>
 
     <string name="rate_feedback_subject">%1$s के लिए प्रतिक्रिया</string>
+    <string name="rate_thank_you">हमारे ऐप को रेट करने के लिए धन्यवाद।</string>
     <plurals name="cd_rate_stars">
         <item quantity="one">%1$d स्टार</item>
         <item quantity="other">%1$d स्टार</item>
@@ -130,4 +132,6 @@
     <string name="cd_re_edit">फिर से संपादित करें</string>
     <string name="cd_result_image">आपकी रचना</string>
     <string name="cd_reference_image">संदर्भ इमेज</string>
+    <string name="create_pack_name_title">पैकेज का नाम बनाएं</string>
+    <string name="pack_name_hint">अपने पैकेज का नाम दर्ज करें</string>
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ô nhập tên gói: viền màu chủ đề -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/white" />
+    <stroke
+        android:width="@dimen/stroke_medium"
+        android:color="@color/brown_primary" />
+    <corners android:radius="@dimen/radius_medium" />
+</shape>

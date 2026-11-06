@@ -2,6 +2,7 @@ package com.conght.facemakerapp.feature.dialog
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -25,9 +26,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
 /**
- * Rate us (Figma 69:339), chỉ mở từ Setting.
+ * Rate us (Figma 69:339), mở từ Setting hoặc khi Back ở Home.
  * 0 sao: nút Rate disable; 1–3 sao: mở email góp ý; 4–5 sao: chỉ đóng dialog.
- * Sau khi rate, báo [KEY_RATED] cho Setting để ẩn dòng Rate us.
+ * Sau khi rate, báo [KEY_RATED] cho màn cha để lưu đã rate (Setting ẩn dòng Rate us).
+ * Bấm Exit hoặc Back/chạm ngoài dialog thì báo [KEY_EXIT] (Home dùng để thoát app).
  */
 @AndroidEntryPoint
 class RateUsDialogFragment : BaseDialogFragment<DialogRateUsBinding>(DialogRateUsBinding::inflate) {
@@ -38,8 +40,16 @@ class RateUsDialogFragment : BaseDialogFragment<DialogRateUsBinding>(DialogRateU
         super.onViewCreated(view, savedInstanceState)
         createStars()
         binding.btnRate.setOnSingleClickListener { rate() }
-        binding.btnExit.setOnSingleClickListener { dismiss() }
+        binding.btnExit.setOnSingleClickListener {
+            parentFragmentManager.setFragmentResult(KEY_EXIT, Bundle.EMPTY)
+            dismiss()
+        }
         collectWhenStarted(viewModel.stars, ::render)
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        parentFragmentManager.setFragmentResult(KEY_EXIT, Bundle.EMPTY)
     }
 
     private fun createStars() {
@@ -130,6 +140,9 @@ class RateUsDialogFragment : BaseDialogFragment<DialogRateUsBinding>(DialogRateU
     companion object {
         /** Fragment result báo người dùng đã bấm Rate. */
         const val KEY_RATED = "rate_us_rated"
+
+        /** Fragment result báo người dùng đóng dialog mà không rate. */
+        const val KEY_EXIT = "rate_us_exit"
 
         private const val TAG = "RateUsDialog"
         private const val LOW_RATING_MAX = 3

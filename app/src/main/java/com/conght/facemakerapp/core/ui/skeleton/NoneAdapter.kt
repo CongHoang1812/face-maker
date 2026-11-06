@@ -24,7 +24,15 @@ class NoneAdapter(
             notifyItemChanged(0)
         }
 
-    override fun getItemCount(): Int = 1
+    /** false → ẩn ô None khỏi lưới (vd. layer đầu tiên của màn Customize luôn phải có item). */
+    var isVisible: Boolean = true
+        set(value) {
+            if (field == value) return
+            field = value
+            if (value) notifyItemInserted(0) else notifyItemRemoved(0)
+        }
+
+    override fun getItemCount(): Int = if (isVisible) 1 else 0
 
     override fun getItemViewType(position: Int): Int = layoutRes
 

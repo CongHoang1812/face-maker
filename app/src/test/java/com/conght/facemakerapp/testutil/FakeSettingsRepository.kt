@@ -24,4 +24,7 @@ class FakeSettingsRepository : SettingsRepository {
     override suspend fun setAppRated() {
         appRated.value = true
     }
+
+    var homeBackCount = 0
+    override suspend fun incrementHomeBackCount(): Int = ++homeBackCount
 }

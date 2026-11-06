@@ -9,7 +9,10 @@ import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.content.res.use
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -187,7 +190,7 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
 
     private fun setupLists() {
         val gap = resources.getDimensionPixelSize(R.dimen.grid_gap)
-        val columns = resources.getInteger(R.integer.part_grid_columns)
+        val columns = resources.getInteger(R.integer.decor_grid_columns)
 
         noneAdapter = NoneAdapter(R.layout.item_none_decor) { viewModel.setBackgroundNone() }
         cellAdapter = DecorCellAdapter(::onCellClick)
@@ -301,7 +304,9 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         binding.rvSubTabs.isVisible = tab != EditorTab.TEXT
         val fontId = target?.fontId ?: data.fontId
         fontAdapter.selectedId = fontId
-        colorChipAdapter.selectedColor = target?.color ?: data.textColor
+        val textColor = target?.color ?: data.textColor
+        colorChipAdapter.selectedColor = textColor
+        renderInputColor(textColor)
         if (fontId != renderedInputFontId) {
             renderedInputFontId = fontId
             binding.etText.typeface = ResourcesCompat.getFont(requireContext(), DecorFonts.of(fontId).fontRes)
@@ -427,6 +432,20 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
     }
 
     /** Mỗi lần mở bảng màu đều bắt đầu từ màu mặc định, không giữ màu đã chọn lần trước. */
+    /**
+     * Chữ đã gõ theo màu đang chọn. Placeholder "Type your content..." là màu đó làm nhạt;
+     * màu quá sáng (vd. trắng, trùng nền ô nhập) thì dùng xám nhạt để vẫn đọc được.
+     */
+    private fun renderInputColor(@ColorInt textColor: Int) {
+        binding.etText.setTextColor(textColor)
+        val hint = if (ColorUtils.calculateLuminance(textColor) > LIGHT_LUMINANCE) {
+            ContextCompat.getColor(requireContext(), R.color.hint_gray_light)
+        } else {
+            ColorUtils.setAlphaComponent(textColor, HINT_ALPHA)
+        }
+        binding.etText.setHintTextColor(hint)
+    }
+
     private fun showColorPicker(requestKey: String) {
         if (childFragmentManager.findFragmentByTag(ColorPickerDialogFragment.TAG) == null) {
             ColorPickerDialogFragment.newInstance(requestKey, Color.RED).show(childFragmentManager, ColorPickerDialogFragment.TAG)
@@ -476,5 +495,7 @@ class DecorEditorFragment : BaseFragment<FragmentDecorEditorBinding>(FragmentDec
         private const val SKELETON_CELLS = 14
         private const val SKELETON_PACKS = 3
         private const val TAB_DEBOUNCE_MS = 150L
+        private const val HINT_ALPHA = 0x80
+        private const val LIGHT_LUMINANCE = 0.7
     }
 }

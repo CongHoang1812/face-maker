@@ -9,8 +9,8 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import com.conght.facemakerapp.R
 import com.conght.facemakerapp.core.common.DispatcherProvider
+import com.conght.facemakerapp.core.common.galleryAlbumName
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -84,7 +84,7 @@ class ImageFileStore @Inject constructor(
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "$baseName.png")
             put(MediaStore.Images.Media.MIME_TYPE, MIME_PNG)
-            put(MediaStore.Images.Media.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/${albumName()}")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/${context.galleryAlbumName()}")
             put(MediaStore.Images.Media.IS_PENDING, 1)
         }
         val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
@@ -103,7 +103,7 @@ class ImageFileStore @Inject constructor(
     @Suppress("DEPRECATION")
     private fun copyToPublicPictures(src: File, baseName: String) {
         val pictures = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        val dir = File(pictures, albumName())
+        val dir = File(pictures, context.galleryAlbumName())
         check(dir.isDirectory || dir.mkdirs()) { "Không tạo được thư mục: $dir" }
         var target = File(dir, "$baseName.png")
         var n = 1
@@ -114,10 +114,6 @@ class ImageFileStore @Inject constructor(
         src.copyTo(target)
         MediaScannerConnection.scanFile(context, arrayOf(target.absolutePath), arrayOf(MIME_PNG), null)
     }
-
-    /** Tên app có thể chứa ký tự không hợp lệ cho đường dẫn (vd `&`) nên chỉ giữ chữ, số, khoảng trắng. */
-    private fun albumName(): String =
-        context.getString(R.string.app_name).replace(Regex("[^\\p{L}\\p{N} ]"), "").trim()
 
     private companion object {
         const val DIR_CREATIONS = "creations"

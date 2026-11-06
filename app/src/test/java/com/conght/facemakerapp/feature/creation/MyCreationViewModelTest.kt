@@ -65,10 +65,12 @@ class MyCreationViewModelTest {
 
     private class FakeStickerRepo : StickerRepository {
         val calls = mutableListOf<Pair<StickerTarget, List<String>>>()
+        var lastPackName: String? = null
         var result: Result<StickerExport> = Result.success(StickerExport.Telegram(listOf("/s/1.webp"), listOf("😀")))
 
-        override suspend fun export(target: StickerTarget, imagePaths: List<String>): Result<StickerExport> {
+        override suspend fun export(target: StickerTarget, imagePaths: List<String>, packName: String?): Result<StickerExport> {
             calls += target to imagePaths
+            lastPackName = packName
             return result
         }
     }
@@ -97,6 +99,44 @@ class MyCreationViewModelTest {
         assertEquals(MyCreationEvent.InvalidWhatsAppStickerCount, vm.events.first())
         assertTrue(stickers.calls.isEmpty())
         assertFalse(vm.busy.value)
+    }
+
+    private fun FakeRepo.withThreeCharacters() = apply {
+        db.value = (1L..3L).map { Creation(it, CreationType.CHARACTER, "/c/$it.png", "{}", it) }
+    }
+
+    @Test
+    fun whatsAppStickers_askPackNameBeforeExport() = runTest {
+        val vm = viewModel(FakeRepo().withThreeCharacters())
+        vm.startSelection(1)
+        vm.toggle(2)
+        vm.toggle(3)
+        vm.exportStickers(StickerTarget.WHATSAPP)
+        assertEquals(MyCreationEvent.RequestPackName, vm.events.first())
+        assertTrue(stickers.calls.isEmpty())
+        assertFalse(vm.busy.value)
+    }
+
+    @Test
+    fun whatsAppStickers_exportWithTrimmedPackName() = runTest {
+        val vm = viewModel(FakeRepo().withThreeCharacters())
+        vm.startSelection(1)
+        vm.toggle(2)
+        vm.toggle(3)
+        vm.exportToWhatsApp("  My pack  ")
+        assertEquals(MyCreationEvent.StickersReady(stickers.result.getOrThrow()), vm.events.first())
+        assertEquals(StickerTarget.WHATSAPP, stickers.calls.single().first)
+        assertEquals("My pack", stickers.lastPackName)
+    }
+
+    @Test
+    fun whatsAppStickers_blankPackNameIgnored() = runTest {
+        val vm = viewModel(FakeRepo().withThreeCharacters())
+        vm.startSelection(1)
+        vm.toggle(2)
+        vm.toggle(3)
+        vm.exportToWhatsApp("   ")
+        assertTrue(stickers.calls.isEmpty())
     }
 
     @Test

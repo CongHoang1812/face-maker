@@ -18,10 +18,11 @@ import com.conght.facemakerapp.core.ui.registerGalleryDownload
 import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.core.ui.showAppToast
+import com.conght.facemakerapp.core.ui.showDownloadSuccessToast
 import com.conght.facemakerapp.core.ui.shareImages
-import com.conght.facemakerapp.data.model.CreationType
 import com.conght.facemakerapp.databinding.FragmentSuccessBinding
-import com.conght.facemakerapp.feature.creation.MyCreationFragment
+import com.conght.facemakerapp.feature.maker.customize.CustomizeFragment
+import com.conght.facemakerapp.feature.maker.customize.CustomizeMode
 import com.conght.facemakerapp.feature.dialog.setLoadingVisible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,12 +45,10 @@ class SuccessFragment : BaseFragment<FragmentSuccessBinding>(FragmentSuccessBind
         setLightStatusBar(true)
         setupSource()
 
-        binding.btnReEdit.setOnSingleClickListener { findNavController().popBackStack() }
+        binding.btnReEdit.setOnSingleClickListener { reEdit() }
         binding.btnShare.setOnSingleClickListener { share() }
-        binding.btnMyCreation.setOnSingleClickListener {
-            val tab = if (viewModel.source == Source.COSPLAY) CreationType.CHARACTER else CreationType.DESIGN
-            navigateSafe(R.id.action_success_to_myCreation, Bundle().apply { putString(MyCreationFragment.ARG_TAB, tab.name) })
-        }
+        // My Creation mở ở tab Character (mặc định)
+        binding.btnMyCreation.setOnSingleClickListener { navigateSafe(R.id.action_success_to_myCreation) }
         binding.btnHome.setOnSingleClickListener { goHome() }
         binding.btnDownload.setOnSingleClickListener { download() }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -67,7 +66,7 @@ class SuccessFragment : BaseFragment<FragmentSuccessBinding>(FragmentSuccessBind
         }
         collectWhenStarted(viewModel.events) { event ->
             when (event) {
-                SuccessEvent.Downloaded -> showAppToast(R.string.saved)
+                SuccessEvent.Downloaded -> showDownloadSuccessToast()
                 SuccessEvent.DownloadFailed -> showAppToast(R.string.save_failed)
             }
         }
@@ -97,6 +96,27 @@ class SuccessFragment : BaseFragment<FragmentSuccessBinding>(FragmentSuccessBind
         if (!requireContext().shareImages(listOf(path), getString(R.string.cd_share))) {
             showAppToast(R.string.error_generic)
         }
+    }
+
+    /**
+     * MAKER: quay lại Decor editor. COSPLAY: Success đã thay chỗ màn chơi trong back stack
+     * nên mở lại màn chơi với đúng đề bài vừa chơi (bắt đầu lại từ đầu).
+     */
+    private fun reEdit() {
+        val templateId = viewModel.cosplayTemplateId
+        val challengeJson = viewModel.cosplayChallengeJson
+        if (viewModel.source != Source.COSPLAY || templateId == null || challengeJson == null) {
+            findNavController().popBackStack()
+            return
+        }
+        navigateSafe(
+            R.id.action_success_to_cosplayPlay,
+            Bundle().apply {
+                putString(CustomizeFragment.ARG_MODE, CustomizeMode.COSPLAY.name)
+                putString(CustomizeFragment.ARG_TEMPLATE_ID, templateId)
+                putString(CustomizeFragment.ARG_CHALLENGE_JSON, challengeJson)
+            },
+        )
     }
 
     private fun goHome() {

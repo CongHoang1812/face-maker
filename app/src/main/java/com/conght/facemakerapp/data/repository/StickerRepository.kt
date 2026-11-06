@@ -14,8 +14,11 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface StickerRepository {
-    /** Tạo sticker từ [imagePaths] và cho biết bước tiếp theo với app đích. */
-    suspend fun export(target: StickerTarget, imagePaths: List<String>): Result<StickerExport>
+    /**
+     * Tạo sticker từ [imagePaths] và cho biết bước tiếp theo với app đích.
+     * [packName]: tên gói người dùng đặt (WhatsApp); `null` = tên mặc định.
+     */
+    suspend fun export(target: StickerTarget, imagePaths: List<String>, packName: String?): Result<StickerExport>
 }
 
 class StickerRepositoryImpl @Inject constructor(
@@ -24,12 +27,12 @@ class StickerRepositoryImpl @Inject constructor(
     private val dispatchers: DispatcherProvider,
 ) : StickerRepository {
 
-    override suspend fun export(target: StickerTarget, imagePaths: List<String>): Result<StickerExport> =
+    override suspend fun export(target: StickerTarget, imagePaths: List<String>, packName: String?): Result<StickerExport> =
         withContext(dispatchers.io) {
             try {
                 Result.success(
                     when (target) {
-                        StickerTarget.WHATSAPP -> exportToWhatsApp(imagePaths)
+                        StickerTarget.WHATSAPP -> exportToWhatsApp(imagePaths, packName)
                         StickerTarget.TELEGRAM -> StickerExport.Telegram(
                             paths = store.writeTelegramStickers(imagePaths),
                             emojis = imagePaths.map { StickerPackStore.DEFAULT_EMOJI },
@@ -43,13 +46,13 @@ class StickerRepositoryImpl @Inject constructor(
             }
         }
 
-    private fun exportToWhatsApp(imagePaths: List<String>): StickerExport {
+    private fun exportToWhatsApp(imagePaths: List<String>, packName: String?): StickerExport {
         val installed = WHATSAPP_PACKAGES.filter(::isInstalled)
         if (installed.isEmpty()) return StickerExport.WhatsAppNotInstalled
         val packId = stickerPackId(imagePaths)
         val missing = installed.filterNot { isPackAdded(it, packId) }
         if (missing.isEmpty()) return StickerExport.WhatsAppAlreadyAdded
-        val pack = store.getOrCreatePack(imagePaths)
+        val pack = store.getOrCreatePack(imagePaths, packName)
         return StickerExport.WhatsApp(pack.id, pack.name, missing)
     }
 

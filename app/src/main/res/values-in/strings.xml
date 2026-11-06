@@ -17,6 +17,7 @@
     <string name="saving">Menyimpan…</string>
     <string name="saved">Tersimpan</string>
     <string name="save_failed">Gagal menyimpan</string>
+    <string name="download_success">Berhasil diunduh ke album %1$s</string>
     <string name="save_permission_denied">Izinkan akses penyimpanan untuk menyimpan gambar</string>
     <string name="coming_soon">Segera hadir</string>
     <string name="error_generic">Terjadi kesalahan. Silakan coba lagi.</string>
@@ -114,6 +115,7 @@
     <string name="cd_confirm">Konfirmasi</string>
 
     <string name="rate_feedback_subject">Masukan untuk %1$s</string>
+    <string name="rate_thank_you">Terima kasih telah menilai aplikasi kami.</string>
     <plurals name="cd_rate_stars">
         <item quantity="other">%1$d bintang</item>
     </plurals>
@@ -129,4 +131,6 @@
     <string name="cd_re_edit">Edit lagi</string>
     <string name="cd_result_image">Kreasimu</string>
     <string name="cd_reference_image">Gambar referensi</string>
+    <string name="create_pack_name_title">Buat Nama Paket</string>
+    <string name="pack_name_hint">Masukkan nama paket Anda</string>
 </resources>

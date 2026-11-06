@@ -87,8 +87,11 @@ class CustomizeViewModelTest {
     @After
     fun tearDown() = Dispatchers.resetMain()
 
-    private fun TestScope.viewModel(handle: SavedStateHandle = SavedStateHandle(mapOf("templateId" to "t"))) =
-        CustomizeViewModel(makerRepository, creationRepository, gson, handle, onlineMonitor).also { vm ->
+    private fun TestScope.viewModel(
+        handle: SavedStateHandle = SavedStateHandle(mapOf("templateId" to "t")),
+        network: NetworkMonitor = onlineMonitor,
+    ) =
+        CustomizeViewModel(makerRepository, creationRepository, gson, handle, network).also { vm ->
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { vm.state.collect {} }
         }
 
@@ -245,6 +248,38 @@ class CustomizeViewModelTest {
         assertEquals(PanelMode.MOVE, second.state.value.panel)
         assertTrue(second.state.value.isDirty)
     }
+    @Test
+    fun offline_partItemNoneTabAndDice_areBlockedWithNoInternet() = runTest {
+        randomSelection = PartSelection("h2", "blue")
+        val vm = viewModel(network = offlineMonitor)
+        val before = vm.state.value
+        vm.events.test {
+            vm.runWhenOnline { selectItem("h1") }
+            assertEquals(CustomizeEvent.NoInternet, awaitItem())
+            vm.runWhenOnline { selectItem(null) }
+            assertEquals(CustomizeEvent.NoInternet, awaitItem())
+            vm.runWhenOnline { selectCategory("body") }
+            assertEquals(CustomizeEvent.NoInternet, awaitItem())
+            vm.runWhenOnline { randomCategory() }
+            assertEquals(CustomizeEvent.NoInternet, awaitItem())
+            vm.runWhenOnline { requestRandomAll() }
+            assertEquals(CustomizeEvent.NoInternet, awaitItem())
+        }
+        assertEquals(before.config, vm.state.value.config)
+        assertEquals(before.selectedCategoryId, vm.state.value.selectedCategoryId)
+    }
+
+    @Test
+    fun online_randomAllButton_asksForConfirm() = runTest {
+        val vm = viewModel()
+        vm.events.test {
+            vm.runWhenOnline { requestRandomAll() }
+            assertEquals(CustomizeEvent.ConfirmRandomAll, awaitItem())
+        }
+    }
 }
+
+private val offlineMonitor = object : NetworkMonitor { override val isOnline = flowOf(false) }
+
 
 private val onlineMonitor = object : NetworkMonitor { override val isOnline = flowOf(true) }

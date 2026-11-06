@@ -17,6 +17,7 @@
     <string name="saving">Enregistrement…</string>
     <string name="saved">Enregistré</string>
     <string name="save_failed">Échec de l\'enregistrement</string>
+    <string name="download_success">Téléchargement réussi dans l\'album %1$s</string>
     <string name="save_permission_denied">Autorisez l\'accès au stockage pour enregistrer les images</string>
     <string name="coming_soon">Bientôt disponible</string>
     <string name="error_generic">Une erreur s\'est produite. Veuillez réessayer.</string>
@@ -114,6 +115,7 @@
     <string name="cd_confirm">Confirmer</string>
 
     <string name="rate_feedback_subject">Avis sur %1$s</string>
+    <string name="rate_thank_you">Merci d\'avoir noté notre application.</string>
     <plurals name="cd_rate_stars">
         <item quantity="one">%1$d étoile</item>
         <item quantity="many">%1$d étoiles</item>
@@ -131,4 +133,6 @@
     <string name="cd_re_edit">Modifier à nouveau</string>
     <string name="cd_result_image">Ta création</string>
     <string name="cd_reference_image">Image de référence</string>
+    <string name="create_pack_name_title">Créer un nom de pack</string>
+    <string name="pack_name_hint">Saisissez le nom de votre pack</string>
 </resources>

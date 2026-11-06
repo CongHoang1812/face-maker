@@ -17,6 +17,9 @@ interface SettingsRepository {
     /** Người dùng đã đánh giá app chưa. Đã đánh giá thì Setting ẩn dòng Rate us. */
     val appRated: Flow<Boolean>
     suspend fun setAppRated()
+
+    /** Tăng số lần bấm Back ở Home (lưu qua các lần mở app), trả về giá trị mới. */
+    suspend fun incrementHomeBackCount(): Int
 }
 
 class SettingsRepositoryImpl @Inject constructor(
@@ -30,4 +33,5 @@ class SettingsRepositoryImpl @Inject constructor(
     override suspend fun setCosplayInstructionShown() = dataStore.setCosplayInstructionShown()
     override val appRated = dataStore.appRated
     override suspend fun setAppRated() = dataStore.setAppRated()
+    override suspend fun incrementHomeBackCount() = dataStore.incrementHomeBackCount()
 }

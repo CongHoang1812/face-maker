@@ -138,10 +138,10 @@ class CosplayModeTest {
         val vm = viewModel(h)
         advanceTimeBy(5_000)
         runCurrent()
-        assertEquals(3 * 60 - 5, vm.state.value.cosplay?.remainingSeconds)
-        assertEquals(3 * 60 - 5, h.get<Int>("cosplay_remaining")) // giữ được khi recreate
+        assertEquals(COSPLAY_SECONDS - 5, vm.state.value.cosplay?.remainingSeconds)
+        assertEquals(COSPLAY_SECONDS - 5, h.get<Int>("cosplay_remaining")) // giữ được khi recreate
 
-        advanceTimeBy(3 * 60 * 1_000L)
+        advanceTimeBy(COSPLAY_SECONDS * 1_000L)
         runCurrent()
         assertEquals(0, vm.state.value.cosplay?.remainingSeconds)
         assertEquals(0, vm.state.value.cosplay?.scorePercent)
@@ -157,14 +157,17 @@ class CosplayModeTest {
         runCurrent()
         advanceTimeBy(60_000)
         runCurrent()
-        assertEquals(3 * 60 - 5, vm.state.value.cosplay?.remainingSeconds)
+        assertEquals(COSPLAY_SECONDS - 5, vm.state.value.cosplay?.remainingSeconds)
 
         vm.setCountdownPaused(false)
         runCurrent()
         advanceTimeBy(3_000)
         runCurrent()
-        assertEquals(3 * 60 - 8, vm.state.value.cosplay?.remainingSeconds)
+        assertEquals(COSPLAY_SECONDS - 8, vm.state.value.cosplay?.remainingSeconds)
     }
 }
+
+/** Khớp CustomizeViewModel.COSPLAY_SECONDS (10 phút). */
+private const val COSPLAY_SECONDS = 10 * 60
 
 private val onlineMonitor = object : NetworkMonitor { override val isOnline = flowOf(true) }

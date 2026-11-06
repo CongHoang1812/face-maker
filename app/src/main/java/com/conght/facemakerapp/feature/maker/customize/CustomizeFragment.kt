@@ -3,6 +3,7 @@ package com.conght.facemakerapp.feature.maker.customize
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -123,11 +124,17 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
                         putLong(SuccessFragment.ARG_CREATION_ID, event.creationId)
                         putString(SuccessFragment.ARG_SOURCE, SuccessFragment.Source.COSPLAY.name)
                         putInt(SuccessFragment.ARG_STARS, event.stars)
+                        // Re-edit ở Success mở lại đúng đề bài này
+                        putString(ARG_TEMPLATE_ID, requireArguments().getString(ARG_TEMPLATE_ID))
+                        putString(ARG_CHALLENGE_JSON, requireArguments().getString(ARG_CHALLENGE_JSON))
                     },
                 )
 
                 CustomizeEvent.SaveFailed ->
                     showAppToast(R.string.save_failed)
+
+                CustomizeEvent.ConfirmRandomAll ->
+                    ConfirmDialogs.random(KEY_RANDOM).show(childFragmentManager, ConfirmDialogFragment.TAG)
 
                 CustomizeEvent.NoInternet ->
                     NoInternetDialogFragment.showOnce(childFragmentManager, KEY_NO_INTERNET)
@@ -143,7 +150,7 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
     private fun setupLists() {
         val gap = resources.getDimensionPixelSize(R.dimen.grid_gap)
         val columns = resources.getInteger(R.integer.part_grid_columns)
-        noneAdapter = NoneAdapter(R.layout.item_none_part) { viewModel.selectItem(null) }
+        noneAdapter = NoneAdapter(R.layout.item_none_part) { viewModel.runWhenOnline { selectItem(null) } }
         val diceAdapter = NoneAdapter(R.layout.item_dice_part) { viewModel.runWhenOnline { randomCategory() } }
         partAdapter = PartItemAdapter { viewModel.runWhenOnline { selectItem(it.id) } }
         loadingParts = noneFirst(noneAdapter, diceAdapter, SkeletonAdapter(R.layout.item_skeleton_part, SKELETON_PARTS))
@@ -157,7 +164,7 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
             LinearSpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.color_dot_gap)),
         )
 
-        tabAdapter = CategoryTabAdapter { viewModel.selectCategory(it.id) }
+        tabAdapter = CategoryTabAdapter { viewModel.runWhenOnline { selectCategory(it.id) } }
         loadingTabs = SkeletonAdapter(R.layout.item_skeleton_category_tab, SKELETON_TABS)
         binding.rvTabs.addItemDecoration(
             LinearSpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.category_tab_gap)),
@@ -183,9 +190,7 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         }
         binding.btnFlip.setOnSingleClickListener { viewModel.flip() }
         binding.btnMove.setOnSingleClickListener { viewModel.setPanel(PanelMode.MOVE) }
-        binding.btnRandomAll.setOnSingleClickListener {
-            ConfirmDialogs.random(KEY_RANDOM).show(childFragmentManager, ConfirmDialogFragment.TAG)
-        }
+        binding.btnRandomAll.setOnSingleClickListener { viewModel.runWhenOnline { requestRandomAll() } }
         binding.errorState.setOnRetryClickListener { viewModel.retry() }
 
         binding.movePanel.listener = object : MovePanelView.Listener {
@@ -263,6 +268,8 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
 
         if (!ready) {
             noneAdapter.isSelected = false
+            // Chưa có detail: chưa chọn tab = đang ở layer đầu tiên → ẩn None luôn để khỏi nháy
+            noneAdapter.isVisible = state.selectedCategoryId != null
             binding.colorBar.isInvisible = false
             listsDetail = null
             return
@@ -282,14 +289,19 @@ class CustomizeFragment : BaseFragment<FragmentCustomizeBinding>(FragmentCustomi
         listsSelections = config.selections
 
         val selection = state.selection
+        // Layer đầu tiên (tab đầu) không có ô None
+        noneAdapter.isVisible = state.selectedCategoryId != detail.categories.firstOrNull()?.id
         noneAdapter.isSelected = selection?.itemId == null
         tabAdapter.submitList(detail.categories.map { Selectable(it, it.id == state.selectedCategoryId) })
         partAdapter.submitList(state.selectedCategory?.items.orEmpty().map { Selectable(it, it.id == selection?.itemId) }) {
             scrollToPendingSelection()
         }
 
-        val colors = state.selectedItem?.colors.orEmpty()
-        binding.colorBar.isInvisible = colors.isEmpty()
+        // Đang None → vẫn hiện bảng màu của tab (không chấm nào được chọn).
+        // Tab không có màu → bỏ hẳn thanh màu, lưới dâng lên chiếm chỗ.
+        val colors = state.selectedItem?.colors
+            ?: state.selectedCategory?.items?.firstOrNull { it.colors.isNotEmpty() }?.colors.orEmpty()
+        binding.colorBar.isGone = colors.isEmpty()
         colorAdapter.submitList(colors.map { Selectable(it, it.id == selection?.colorId) }) {
             scrollToPendingSelection()
         }

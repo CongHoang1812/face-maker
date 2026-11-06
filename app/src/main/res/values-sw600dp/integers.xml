@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Tablet ≥600dp: số cột lưới.
+     FILE SINH TỰ ĐỘNG bởi scripts/gen_tablet_dimens.py, đừng sửa tay. -->
 <resources>
-    <integer name="template_grid_columns">3</integer>
-    <integer name="creation_grid_columns">3</integer>
-    <integer name="part_grid_columns">8</integer>
+    <integer name="template_grid_columns">2</integer>
+    <integer name="creation_grid_columns">2</integer>
+    <integer name="part_grid_columns">5</integer>
+    <integer name="decor_grid_columns">6</integer>
 </resources>

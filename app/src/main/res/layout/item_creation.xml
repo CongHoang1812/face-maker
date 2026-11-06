@@ -47,7 +47,8 @@
             android:layout_height="@dimen/small_icon"
             android:background="@drawable/bg_small_icon"
             android:contentDescription="@string/cd_delete"
-            android:scaleType="centerInside"
+            android:padding="@dimen/small_icon_padding"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_trash_card" />
 
         <ImageButton
@@ -57,7 +58,8 @@
             android:layout_marginStart="@dimen/screen_padding"
             android:background="@drawable/bg_small_icon"
             android:contentDescription="@string/cd_edit"
-            android:scaleType="centerInside"
+            android:padding="@dimen/small_icon_padding"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_pencil" />
 
         <ImageView

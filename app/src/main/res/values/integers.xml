@@ -2,9 +2,12 @@
 <resources>
     <integer name="press_anim_ms">100</integer>
     <integer name="fragment_slide_ms">250</integer>
+    <!-- WhatsApp giới hạn tên gói sticker (khớp PACK_NAME_MAX_LENGTH) -->
+    <integer name="pack_name_max_length">128</integer>
 
     <!-- Số cột lưới; tablet ghi đè trong values-sw600dp -->
     <integer name="template_grid_columns">2</integer>
     <integer name="creation_grid_columns">2</integer>
     <integer name="part_grid_columns">5</integer>
+    <integer name="decor_grid_columns">5</integer>
 </resources>

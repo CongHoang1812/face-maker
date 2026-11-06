@@ -37,6 +37,8 @@ class LoadingDialogFragment : BaseDialogFragment<DialogLoadingBinding>(DialogLoa
 /** Hiện / ẩn [LoadingDialogFragment] (idempotent, an toàn khi recreate). */
 fun Fragment.setLoadingVisible(visible: Boolean, @StringRes message: Int = R.string.saving) {
     val fm = childFragmentManager
+    // show() commit bất đồng bộ: chạy transaction đang chờ để bật/tắt nhanh không làm dialog kẹt lại.
+    fm.executePendingTransactions()
     val current = fm.findFragmentByTag(LoadingDialogFragment.TAG) as? LoadingDialogFragment
     if (visible && current == null) {
         LoadingDialogFragment.newInstance(message).show(fm, LoadingDialogFragment.TAG)

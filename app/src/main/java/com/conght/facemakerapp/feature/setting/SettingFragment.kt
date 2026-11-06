@@ -47,6 +47,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
 
         childFragmentManager.setFragmentResultListener(RateUsDialogFragment.KEY_RATED, viewLifecycleOwner) { _, _ ->
             viewModel.markAppRated()
+            showAppToast(R.string.rate_thank_you)
         }
         collectWhenStarted(viewModel.appRated) { rated -> binding.rowRate.isVisible = !rated }
     }

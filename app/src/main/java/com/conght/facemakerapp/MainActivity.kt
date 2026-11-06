@@ -7,6 +7,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import com.conght.facemakerapp.core.ui.applyNavigationBarMode
 import com.conght.facemakerapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,5 +29,12 @@ class MainActivity : AppCompatActivity() {
             v.updatePadding(left = systemBars.left, right = systemBars.right, bottom = systemBars.bottom)
             insets
         }
+        window.applyNavigationBarMode()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        // Đóng dialog / bàn phím / quay lại app có thể làm thanh điều hướng hiện lại
+        if (hasFocus) window.applyNavigationBarMode()
     }
 }

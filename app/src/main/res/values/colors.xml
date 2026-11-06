@@ -28,6 +28,7 @@
     <!-- Phụ (lấy từ Figma) -->
     <color name="brown_text_60">#99B25324</color>
     <color name="hint_gray">#808080</color>
+    <color name="hint_gray_light">#B3B3B3</color>
     <color name="lucky_frame_bg">#666666</color>
     <color name="lucky_frame_stroke">#166086</color>
     <color name="transparent">#00000000</color>

@@ -18,6 +18,7 @@
     <string name="saving">Saving…</string>
     <string name="saved">Saved</string>
     <string name="save_failed">Save failed</string>
+    <string name="download_success">Download successful to the %1$s album</string>
     <string name="save_permission_denied">Allow storage access to save images</string>
     <string name="coming_soon">Coming soon</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
@@ -135,6 +136,7 @@
     <string name="cd_confirm">Confirm</string>
 
     <string name="rate_feedback_subject">Feedback for %1$s</string>
+    <string name="rate_thank_you">Thank you for rating our app.</string>
     <plurals name="cd_rate_stars">
         <item quantity="one">%1$d star</item>
         <item quantity="other">%1$d stars</item>
@@ -151,4 +153,6 @@
     <string name="cd_re_edit">Edit again</string>
     <string name="cd_result_image">Your creation</string>
     <string name="cd_reference_image">Reference image</string>
+    <string name="create_pack_name_title">Create Package Name</string>
+    <string name="pack_name_hint">Enter your package name</string>
 </resources>

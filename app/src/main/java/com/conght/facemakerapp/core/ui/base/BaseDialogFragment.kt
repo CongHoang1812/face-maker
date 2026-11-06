@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 import com.conght.facemakerapp.R
+import com.conght.facemakerapp.core.ui.applyNavigationBarMode
 
 /** DialogFragment nền trong suốt (Theme.FaceMaker.Dialog), nội dung tự vẽ bằng ViewBinding. */
 abstract class BaseDialogFragment<VB : ViewBinding>(
@@ -31,6 +32,12 @@ abstract class BaseDialogFragment<VB : ViewBinding>(
         _binding = inflate(inflater, host, false)
         host.addView(binding.root)
         return host
+    }
+
+    /** Dialog có window riêng: không ẩn thì thanh điều hướng hiện lại khi dialog mở. */
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.applyNavigationBarMode()
     }
 
     override fun onDestroyView() {

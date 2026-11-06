@@ -26,6 +26,7 @@ import com.conght.facemakerapp.core.ui.registerGalleryDownload
 import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.core.ui.showAppToast
+import com.conght.facemakerapp.core.ui.showDownloadSuccessToast
 import com.conght.facemakerapp.core.ui.shareImages
 import com.conght.facemakerapp.core.ui.startTelegramStickerImport
 import com.conght.facemakerapp.core.ui.whatsAppAddStickerIntent
@@ -38,6 +39,7 @@ import com.conght.facemakerapp.data.model.WHATSAPP_PACK_MIN_STICKERS
 import com.conght.facemakerapp.databinding.FragmentMyCreationBinding
 import com.conght.facemakerapp.feature.dialog.ConfirmDialogFragment
 import com.conght.facemakerapp.feature.dialog.ConfirmDialogs
+import com.conght.facemakerapp.feature.dialog.PackNameDialogFragment
 import com.conght.facemakerapp.feature.dialog.setLoadingVisible
 import com.conght.facemakerapp.feature.maker.customize.CustomizeFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -105,6 +107,9 @@ class MyCreationFragment : BaseFragment<FragmentMyCreationBinding>(FragmentMyCre
         childFragmentManager.setFragmentResultListener(KEY_DELETE, viewLifecycleOwner) { _, result ->
             viewModel.onDeleteConfirmed(ConfirmDialogFragment.isConfirmed(result))
         }
+        childFragmentManager.setFragmentResultListener(KEY_PACK_NAME, viewLifecycleOwner) { _, result ->
+            viewModel.exportToWhatsApp(PackNameDialogFragment.packName(result))
+        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() = onBack()
         })
@@ -113,12 +118,13 @@ class MyCreationFragment : BaseFragment<FragmentMyCreationBinding>(FragmentMyCre
         collectWhenStarted(viewModel.busy) { setLoadingVisible(it) }
         collectWhenStarted(viewModel.events) { event ->
             when (event) {
-                is MyCreationEvent.Downloaded -> showAppToast(if (event.success) R.string.saved else R.string.save_failed)
+                is MyCreationEvent.Downloaded -> if (event.success) showDownloadSuccessToast() else showAppToast(R.string.save_failed)
                 MyCreationEvent.InvalidWhatsAppStickerCount -> binding.root.showAppToast(
                     getString(R.string.whatsapp_sticker_count, WHATSAPP_PACK_MIN_STICKERS, WHATSAPP_PACK_MAX_STICKERS),
                 )
                 MyCreationEvent.StickerExportFailed -> showAppToast(R.string.sticker_export_failed)
                 is MyCreationEvent.StickersReady -> onStickersReady(event.export)
+                MyCreationEvent.RequestPackName -> showPackNameDialog()
             }
         }
     }
@@ -207,6 +213,11 @@ class MyCreationFragment : BaseFragment<FragmentMyCreationBinding>(FragmentMyCre
         }
     }
 
+    private fun showPackNameDialog() {
+        if (childFragmentManager.findFragmentByTag(PackNameDialogFragment.TAG) != null) return
+        PackNameDialogFragment.newInstance(KEY_PACK_NAME).show(childFragmentManager, PackNameDialogFragment.TAG)
+    }
+
     private fun confirmDelete(ids: Collection<Long>) {
         if (ids.isEmpty()) return
         viewModel.requestDelete(ids)
@@ -232,10 +243,8 @@ class MyCreationFragment : BaseFragment<FragmentMyCreationBinding>(FragmentMyCre
     }
 
     companion object {
-        /** Tab mở đầu: [CreationType] name (mặc định CHARACTER). */
-        const val ARG_TAB = "tab"
-
         private const val KEY_DELETE = "creation_delete"
+        private const val KEY_PACK_NAME = "creation_pack_name"
         private const val DISABLED_ALPHA = 0.5f
         private const val TAG = "MyCreation"
         private const val EXTRA_VALIDATION_ERROR = "validation_error"

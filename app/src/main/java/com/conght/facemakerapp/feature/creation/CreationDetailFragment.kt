@@ -15,6 +15,7 @@ import com.conght.facemakerapp.core.ui.registerGalleryDownload
 import com.conght.facemakerapp.core.ui.setLightStatusBar
 import com.conght.facemakerapp.core.ui.setOnSingleClickListener
 import com.conght.facemakerapp.core.ui.showAppToast
+import com.conght.facemakerapp.core.ui.showDownloadSuccessToast
 import com.conght.facemakerapp.core.ui.shareImages
 import com.conght.facemakerapp.data.model.CreationType
 import com.conght.facemakerapp.databinding.FragmentCreationDetailBinding
@@ -64,7 +65,7 @@ class CreationDetailFragment : BaseFragment<FragmentCreationDetailBinding>(Fragm
         collectWhenStarted(viewModel.events) { event ->
             when (event) {
                 CreationDetailEvent.Deleted -> findNavController().popBackStack()
-                is CreationDetailEvent.Downloaded -> showAppToast(if (event.success) R.string.saved else R.string.save_failed)
+                is CreationDetailEvent.Downloaded -> if (event.success) showDownloadSuccessToast() else showAppToast(R.string.save_failed)
             }
         }
     }

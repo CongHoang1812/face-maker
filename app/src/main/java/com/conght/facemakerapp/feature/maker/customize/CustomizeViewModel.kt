@@ -115,6 +115,9 @@ sealed interface CustomizeEvent {
     data object SaveFailed : CustomizeEvent
     data object NoInternet : CustomizeEvent
 
+    /** Có mạng: hiện dialog xác nhận Random cả nhân vật. */
+    data object ConfirmRandomAll : CustomizeEvent
+
     /** Vừa random: cuộn lưới item và thanh màu tới lựa chọn mới của category đang mở. */
     data class ScrollToSelection(val selection: PartSelection) : CustomizeEvent
 }
@@ -400,8 +403,13 @@ class CustomizeViewModel @Inject constructor(
 
     fun selectColor(colorId: String) {
         val categoryId = current.selectedCategoryId ?: return
-        val selection = current.selection ?: return
-        if (selection.itemId == null) return
+        val selection = current.selection
+        if (selection?.itemId == null) {
+            // Đang None: chọn màu = chọn item đầu tiên có màu đó
+            val item = current.selectedCategory?.items?.firstOrNull { i -> i.colors.any { it.id == colorId } } ?: return
+            updateConfig { it.copy(selections = it.selections + (categoryId to PartSelection(item.id, colorId))) }
+            return
+        }
         updateConfig { it.copy(selections = it.selections + (categoryId to selection.copy(colorId = colorId))) }
     }
 
@@ -449,6 +457,11 @@ class CustomizeViewModel @Inject constructor(
             _events.send(CustomizeEvent.ScrollToSelection(selection))
             prepareRandomCategory(categoryId)
         }
+    }
+
+    /** Bấm nút Random cả nhân vật (đã qua [runWhenOnline]) → Fragment hiện dialog xác nhận. */
+    fun requestRandomAll() {
+        viewModelScope.launch { _events.send(CustomizeEvent.ConfirmRandomAll) }
     }
 
     /** Gọi sau khi Random dialog (Watch Ad) xác nhận: random cả nhân vật, giữ transform. */
@@ -543,7 +556,7 @@ class CustomizeViewModel @Inject constructor(
         const val KEY_REMAINING = "cosplay_remaining"
         const val KEY_SCORE = "cosplay_score"
         const val KEY_RESULT_PATH = "cosplay_result_path"
-        const val COSPLAY_SECONDS = 3 * 60
+        const val COSPLAY_SECONDS = 10 * 60
         const val COMPLETE_PERCENT = 100
         const val TICK_MS = 1_000L
         const val STOP_TIMEOUT_MS = 5_000L

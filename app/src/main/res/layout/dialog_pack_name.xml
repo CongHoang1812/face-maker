@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Create Package Name: đặt tên gói sticker trước khi thêm vào WhatsApp -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dialog_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_pack_name_dialog"
+    android:orientation="vertical"
+    android:padding="@dimen/dialog_padding">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/create_pack_name_title"
+        android:textAppearance="@style/Text.DialogTitle" />
+
+    <EditText
+        android:id="@+id/et_pack_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pack_name_input_h"
+        android:layout_marginTop="@dimen/dialog_padding"
+        android:autofillHints=""
+        android:background="@drawable/bg_pack_name_input"
+        android:hint="@string/pack_name_hint"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences"
+        android:maxLength="@integer/pack_name_max_length"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/dialog_padding"
+        android:textAppearance="@style/Text.Caption"
+        android:textColorHint="@color/hint_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rate_button_h"
+        android:layout_marginTop="@dimen/dialog_content_gap"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btn_yes"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_primary"
+            android:gravity="center"
+            android:text="@string/yes"
+            android:textAppearance="@style/Text.Rate.Button"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/btn_no"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dialog_padding"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_outline"
+            android:gravity="center"
+            android:text="@string/no"
+            android:textAppearance="@style/Text.Rate.Button"
+            android:textColor="@color/brown_primary" />
+    </LinearLayout>
+</LinearLayout>
