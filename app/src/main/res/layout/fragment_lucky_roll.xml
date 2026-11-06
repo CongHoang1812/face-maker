@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:background="@color/overlay_20" />
 
-    <com.conght.facemakerapp.core.widget.ShimmerFrameLayout
+    <com.fantasy.oc.maker.customize.core.widget.ShimmerFrameLayout
         android:id="@+id/shimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,7 +40,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.conght.facemakerapp.core.widget.WoodButton
+            <com.fantasy.oc.maker.customize.core.widget.WoodButton
                 android:id="@+id/btn_edit"
                 style="@style/Widget.FaceMaker.WoodButton"
                 android:layout_marginEnd="@dimen/screen_padding"
@@ -117,7 +117,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.FaceMaker.DecorItem" />
 
-            <com.conght.facemakerapp.core.widget.ErrorStateView
+            <com.fantasy.oc.maker.customize.core.widget.ErrorStateView
                 android:id="@+id/error_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/result_area" />
 
-            <com.conght.facemakerapp.core.widget.WoodButton
+            <com.fantasy.oc.maker.customize.core.widget.WoodButton
                 android:id="@+id/btn_random"
                 style="@style/Widget.FaceMaker.WoodButton"
                 android:layout_marginTop="@dimen/lucky_random_top"
@@ -137,5 +137,5 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.conght.facemakerapp.core.widget.ShimmerFrameLayout>
+    </com.fantasy.oc.maker.customize.core.widget.ShimmerFrameLayout>
 </FrameLayout>

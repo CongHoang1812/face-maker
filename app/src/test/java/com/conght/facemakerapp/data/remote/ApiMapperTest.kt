@@ -1,11 +1,11 @@
-package com.conght.facemakerapp.data.remote
+package com.fantasy.oc.maker.customize.data.remote
 
-import com.conght.facemakerapp.data.model.DecorType
-import com.conght.facemakerapp.data.model.PartSelection
-import com.conght.facemakerapp.data.model.layerUrlFor
-import com.conght.facemakerapp.data.remote.dto.DecorCategoryDto
-import com.conght.facemakerapp.data.remote.dto.DecorConfigDto
-import com.conght.facemakerapp.data.remote.dto.PartDto
+import com.fantasy.oc.maker.customize.data.model.DecorType
+import com.fantasy.oc.maker.customize.data.model.PartSelection
+import com.fantasy.oc.maker.customize.data.model.layerUrlFor
+import com.fantasy.oc.maker.customize.data.remote.dto.DecorCategoryDto
+import com.fantasy.oc.maker.customize.data.remote.dto.DecorConfigDto
+import com.fantasy.oc.maker.customize.data.remote.dto.PartDto
 import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

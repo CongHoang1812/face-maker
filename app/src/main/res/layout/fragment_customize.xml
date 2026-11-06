@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Maker – Customize (Figma 3:335) + Move (8:24). Cả màn nằm trong 1 ShimmerFrameLayout để
      mọi skeleton (canvas, màu, lưới, tab) quét đồng bộ; ô None / Xúc xắc là view thật nên không bị phủ. -->
-<com.conght.facemakerapp.core.widget.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.fantasy.oc.maker.customize.core.widget.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shimmer"
@@ -28,7 +28,7 @@
         android:layout_height="match_parent">
 
         <!-- Canvas nhân vật rộng tối đa 352, kéo dài xuống sát panel dưới -->
-        <com.conght.facemakerapp.core.widget.CharacterCanvasView
+        <com.fantasy.oc.maker.customize.core.widget.CharacterCanvasView
             android:id="@+id/canvas"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -54,7 +54,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.conght.facemakerapp.core.widget.ErrorStateView
+        <com.fantasy.oc.maker.customize.core.widget.ErrorStateView
             android:id="@+id/error_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.conght.facemakerapp.core.widget.WoodButton
+        <com.fantasy.oc.maker.customize.core.widget.WoodButton
             android:id="@+id/btn_next"
             style="@style/Widget.FaceMaker.WoodButton"
             android:layout_marginEnd="@dimen/screen_padding"
@@ -142,7 +142,7 @@
             app:strokeWidth="@dimen/cosplay_reference_border" />
 
         <!-- Cột tool trái: reset / flip / move -->
-        <com.conght.facemakerapp.core.widget.RoundIconButton
+        <com.fantasy.oc.maker.customize.core.widget.RoundIconButton
             android:id="@+id/btn_reset"
             android:layout_width="@dimen/icon_button"
             android:layout_height="@dimen/icon_button"
@@ -153,7 +153,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.conght.facemakerapp.core.widget.RoundIconButton
+        <com.fantasy.oc.maker.customize.core.widget.RoundIconButton
             android:id="@+id/btn_flip"
             android:layout_width="@dimen/icon_button"
             android:layout_height="@dimen/icon_button"
@@ -163,7 +163,7 @@
             app:layout_constraintStart_toStartOf="@id/btn_reset"
             app:layout_constraintTop_toBottomOf="@id/btn_reset" />
 
-        <com.conght.facemakerapp.core.widget.RoundIconButton
+        <com.fantasy.oc.maker.customize.core.widget.RoundIconButton
             android:id="@+id/btn_move"
             android:layout_width="@dimen/icon_button"
             android:layout_height="@dimen/icon_button"
@@ -262,11 +262,11 @@
                     tools:listitem="@layout/item_category_tab" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.conght.facemakerapp.feature.maker.move.MovePanelView
+            <com.fantasy.oc.maker.customize.feature.maker.move.MovePanelView
                 android:id="@+id/move_panel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone" />
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.conght.facemakerapp.core.widget.ShimmerFrameLayout>
+</com.fantasy.oc.maker.customize.core.widget.ShimmerFrameLayout>

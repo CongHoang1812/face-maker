@@ -1,16 +1,16 @@
-package com.conght.facemakerapp.feature.decor.editor
+package com.fantasy.oc.maker.customize.feature.decor.editor
 
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
-import com.conght.facemakerapp.core.common.Resource
-import com.conght.facemakerapp.data.model.CharacterConfig
-import com.conght.facemakerapp.data.model.Creation
-import com.conght.facemakerapp.data.model.CreationType
-import com.conght.facemakerapp.data.model.DecorPack
-import com.conght.facemakerapp.data.model.DecorType
-import com.conght.facemakerapp.data.repository.CreationRepository
-import com.conght.facemakerapp.data.repository.DecorRepository
+import com.fantasy.oc.maker.customize.core.common.Resource
+import com.fantasy.oc.maker.customize.data.model.CharacterConfig
+import com.fantasy.oc.maker.customize.data.model.Creation
+import com.fantasy.oc.maker.customize.data.model.CreationType
+import com.fantasy.oc.maker.customize.data.model.DecorPack
+import com.fantasy.oc.maker.customize.data.model.DecorType
+import com.fantasy.oc.maker.customize.data.repository.CreationRepository
+import com.fantasy.oc.maker.customize.data.repository.DecorRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

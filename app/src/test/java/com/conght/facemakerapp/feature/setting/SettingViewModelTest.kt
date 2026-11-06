@@ -1,6 +1,6 @@
-package com.conght.facemakerapp.feature.setting
+package com.fantasy.oc.maker.customize.feature.setting
 
-import com.conght.facemakerapp.testutil.FakeSettingsRepository
+import com.fantasy.oc.maker.customize.testutil.FakeSettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first

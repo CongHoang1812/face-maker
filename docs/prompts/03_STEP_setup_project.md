@@ -4,7 +4,7 @@
 
 ## Bối cảnh
 
-Project Android có sẵn tại thư mục gốc, package `com.conght.facemakerapp`, AGP 9.4.1 (Kotlin built-in – **không** apply plugin `org.jetbrains.kotlin.android`), Gradle 9.6, version catalog `gradle/libs.versions.toml`, minSdk 24, compile/targetSdk 37, Java 11. Hiện chỉ có `MainActivity` + `activity_main.xml` mẫu.
+Project Android có sẵn tại thư mục gốc, package `com.fantasy.oc.maker.customize`, AGP 9.4.1 (Kotlin built-in – **không** apply plugin `org.jetbrains.kotlin.android`), Gradle 9.6, version catalog `gradle/libs.versions.toml`, minSdk 24, compile/targetSdk 37, Java 11. Hiện chỉ có `MainActivity` + `activity_main.xml` mẫu.
 
 ## Yêu cầu
 

@@ -1,6 +1,6 @@
-package com.conght.facemakerapp.core.ui.skeleton
+package com.fantasy.oc.maker.customize.core.ui.skeleton
 
-import com.conght.facemakerapp.R
+import com.fantasy.oc.maker.customize.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Test

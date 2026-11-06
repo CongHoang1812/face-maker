@@ -1,4 +1,4 @@
-package com.conght.facemakerapp.core.common
+package com.fantasy.oc.maker.customize.core.common
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

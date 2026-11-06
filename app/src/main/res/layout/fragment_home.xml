@@ -40,7 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.conght.facemakerapp.core.widget.OutlinedTextView
+        <com.fantasy.oc.maker.customize.core.widget.OutlinedTextView
             android:id="@+id/tv_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

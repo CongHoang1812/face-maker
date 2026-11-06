@@ -5,7 +5,7 @@
     android:layout_width="@dimen/category_tab_w"
     android:layout_height="@dimen/category_tab_selected_h">
 
-    <com.conght.facemakerapp.core.widget.SkeletonView
+    <com.fantasy.oc.maker.customize.core.widget.SkeletonView
         android:layout_width="match_parent"
         android:layout_height="@dimen/category_tab_h"
         android:layout_gravity="bottom"

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "249833208264",
+    "project_id": "st237-dd-character-maker",
+    "storage_bucket": "st237-dd-character-maker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:249833208264:android:132de48d5b7da6ef22e8fd",
+        "android_client_info": {
+          "package_name": "com.fantasy.oc.maker.customize"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAvfrIkF21_s9t_cKitn6QEySuwXnVmrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

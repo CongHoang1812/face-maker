@@ -5,7 +5,7 @@ Mỗi file `NN_*.md` là **một prompt độc lập**: copy toàn bộ nội du
 
 - Figma: https://www.figma.com/design/QDVSAOgH3rY4DuocNmN8nM/ST237_D-D-Character-Maker--Copy-
 - fileKey: `QDVSAOgH3rY4DuocNmN8nM`
-- Project: `com.conght.facemakerapp`, minSdk 24, compile/targetSdk 37, AGP 9.4.1 (Kotlin tích hợp sẵn trong AGP 9), Gradle 9.6
+- Project: `com.fantasy.oc.maker.customize`, minSdk 24, compile/targetSdk 37, AGP 9.4.1 (Kotlin tích hợp sẵn trong AGP 9), Gradle 9.6
 
 ## Thứ tự thực hiện
 

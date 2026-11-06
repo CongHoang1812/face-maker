@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:background="@color/overlay_20" />
 
-    <com.conght.facemakerapp.core.widget.ShimmerFrameLayout
+    <com.fantasy.oc.maker.customize.core.widget.ShimmerFrameLayout
         android:id="@+id/shimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -73,7 +73,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.conght.facemakerapp.core.widget.ErrorStateView
+            <com.fantasy.oc.maker.customize.core.widget.ErrorStateView
                 android:id="@+id/error_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <com.conght.facemakerapp.core.widget.WoodButton
+            <com.fantasy.oc.maker.customize.core.widget.WoodButton
                 android:id="@+id/btn_random"
                 style="@style/Widget.FaceMaker.WoodButton"
                 android:layout_marginEnd="@dimen/cosplay_buttons_half_gap"
@@ -100,7 +100,7 @@
                 app:layout_constraintEnd_toStartOf="@id/guide_center"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.conght.facemakerapp.core.widget.WoodButton
+            <com.fantasy.oc.maker.customize.core.widget.WoodButton
                 android:id="@+id/btn_cosplay"
                 style="@style/Widget.FaceMaker.WoodButton"
                 android:layout_marginStart="@dimen/cosplay_buttons_half_gap"
@@ -110,5 +110,5 @@
                 app:layout_constraintStart_toEndOf="@id/guide_center"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.conght.facemakerapp.core.widget.ShimmerFrameLayout>
+    </com.fantasy.oc.maker.customize.core.widget.ShimmerFrameLayout>
 </FrameLayout>

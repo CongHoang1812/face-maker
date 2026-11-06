@@ -1,6 +1,6 @@
-package com.conght.facemakerapp.testutil
+package com.fantasy.oc.maker.customize.testutil
 
-import com.conght.facemakerapp.data.repository.SettingsRepository
+import com.fantasy.oc.maker.customize.data.repository.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /** SettingsRepository trong bộ nhớ cho unit test. */

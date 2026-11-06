@@ -23,7 +23,7 @@
         android:text="@string/error_generic"
         android:textAppearance="@style/Text.Body.White" />
 
-    <com.conght.facemakerapp.core.widget.WoodButton
+    <com.fantasy.oc.maker.customize.core.widget.WoodButton
         android:id="@+id/btn_retry"
         style="@style/Widget.FaceMaker.WoodButton"
         android:layout_marginTop="@dimen/screen_padding"

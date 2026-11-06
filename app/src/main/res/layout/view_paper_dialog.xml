@@ -51,13 +51,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.conght.facemakerapp.core.widget.WoodButton
+            <com.fantasy.oc.maker.customize.core.widget.WoodButton
                 android:id="@+id/btn_start"
                 style="@style/Widget.FaceMaker.WoodButton"
                 android:text="@string/yes"
                 app:buttonWidth="@dimen/dialog_button_w" />
 
-            <com.conght.facemakerapp.core.widget.WoodButton
+            <com.fantasy.oc.maker.customize.core.widget.WoodButton
                 android:id="@+id/btn_end"
                 style="@style/Widget.FaceMaker.WoodButton"
                 android:layout_marginStart="@dimen/indicator_gap"

@@ -1,14 +1,14 @@
-package com.conght.facemakerapp.feature.maker.template
+package com.fantasy.oc.maker.customize.feature.maker.template
 
 import app.cash.turbine.test
-import com.conght.facemakerapp.core.common.NetworkMonitor
-import com.conght.facemakerapp.core.common.Resource
-import com.conght.facemakerapp.core.common.resourceFlow
-import com.conght.facemakerapp.data.model.CharacterConfig
-import com.conght.facemakerapp.data.model.CharacterTemplate
-import com.conght.facemakerapp.data.model.PartSelection
-import com.conght.facemakerapp.data.model.TemplateDetail
-import com.conght.facemakerapp.data.repository.MakerRepository
+import com.fantasy.oc.maker.customize.core.common.NetworkMonitor
+import com.fantasy.oc.maker.customize.core.common.Resource
+import com.fantasy.oc.maker.customize.core.common.resourceFlow
+import com.fantasy.oc.maker.customize.data.model.CharacterConfig
+import com.fantasy.oc.maker.customize.data.model.CharacterTemplate
+import com.fantasy.oc.maker.customize.data.model.PartSelection
+import com.fantasy.oc.maker.customize.data.model.TemplateDetail
+import com.fantasy.oc.maker.customize.data.repository.MakerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

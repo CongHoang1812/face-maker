@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:clipChildren="false">
 
-        <com.conght.facemakerapp.core.widget.OutlinedTextView
+        <com.fantasy.oc.maker.customize.core.widget.OutlinedTextView
             android:id="@+id/tv_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

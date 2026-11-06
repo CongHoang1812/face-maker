@@ -1,0 +1,37 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.fantasy.oc.maker.customize",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1,
+      "versionName": "1.0.0",
+      "outputFile": "ST279_Anime_OC_Maker_Avatar_Creatorv1.0.011.06.2026-release.apk"
+    }
+  ],
+  "elementType": "File",
+  "baselineProfiles": [
+    {
+      "minApi": 28,
+      "maxApi": 30,
+      "baselineProfiles": [
+        "baselineProfiles/1/ST279_Anime_OC_Maker_Avatar_Creatorv1.0.011.06.2026-release.dm"
+      ]
+    },
+    {
+      "minApi": 31,
+      "maxApi": 2147483647,
+      "baselineProfiles": [
+        "baselineProfiles/0/ST279_Anime_OC_Maker_Avatar_Creatorv1.0.011.06.2026-release.dm"
+      ]
+    }
+  ],
+  "minSdkVersionForDexing": 24
+}

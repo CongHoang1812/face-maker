@@ -1,3 +1,6 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
@@ -5,18 +8,18 @@ plugins {
 }
 
 android {
-    namespace = "com.conght.facemakerapp"
+    namespace = "com.fantasy.oc.maker.customize"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.conght.facemakerapp"
+        applicationId = "com.fantasy.oc.maker.customize"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
-        versionName = "1.0"
-
+        versionName = "1.0.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Máy chủ chính + dự phòng (chỉ gọi khi máy chủ chính lỗi)
         buildConfigField("String", "BASE_URL", "\"https://lvtglobal.tech/\"")
         buildConfigField("String", "BACKUP_BASE_URL", "\"https://lvt-api-tech.io.vn/\"")
@@ -48,6 +51,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+// Tên file APK/AAB: ST279_Anime_OC_Maker_Avatar_Creatorv<version><MM.dd.yyyy>
+val formattedDate: String = SimpleDateFormat("MM.dd.yyyy").format(Date())
+base {
+    archivesName = "ST279_Anime_OC_Maker_Avatar_Creatorv${android.defaultConfig.versionName}$formattedDate"
 }
 
 dependencies {

@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <!-- Top bar: re-edit | share, my creation, home -->
-        <com.conght.facemakerapp.core.widget.RoundIconButton
+        <com.fantasy.oc.maker.customize.core.widget.RoundIconButton
             android:id="@+id/btn_re_edit"
             android:layout_width="@dimen/icon_button_large"
             android:layout_height="@dimen/icon_button_large"
@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.conght.facemakerapp.core.widget.RoundIconButton
+        <com.fantasy.oc.maker.customize.core.widget.RoundIconButton
             android:id="@+id/btn_home"
             android:layout_width="@dimen/icon_button_large"
             android:layout_height="@dimen/icon_button_large"
@@ -45,7 +45,7 @@
             app:layout_constraintEnd_toStartOf="@id/btn_home"
             app:layout_constraintTop_toTopOf="@id/btn_home" />
 
-        <com.conght.facemakerapp.core.widget.RoundIconButton
+        <com.fantasy.oc.maker.customize.core.widget.RoundIconButton
             android:id="@+id/btn_share"
             android:layout_width="@dimen/icon_button_large"
             android:layout_height="@dimen/icon_button_large"
@@ -110,7 +110,7 @@
                 android:src="@drawable/img_star_off" />
         </LinearLayout>
 
-        <com.conght.facemakerapp.core.widget.WoodButton
+        <com.fantasy.oc.maker.customize.core.widget.WoodButton
             android:id="@+id/btn_download"
             style="@style/Widget.FaceMaker.WoodButton"
             android:layout_marginTop="@dimen/screen_padding"

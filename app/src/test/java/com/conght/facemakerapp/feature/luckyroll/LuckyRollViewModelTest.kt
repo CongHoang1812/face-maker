@@ -1,12 +1,12 @@
-package com.conght.facemakerapp.feature.luckyroll
+package com.fantasy.oc.maker.customize.feature.luckyroll
 
 import androidx.lifecycle.SavedStateHandle
-import com.conght.facemakerapp.core.common.NetworkMonitor
-import com.conght.facemakerapp.core.common.Resource
-import com.conght.facemakerapp.data.model.CharacterConfig
-import com.conght.facemakerapp.data.model.LuckyRollResult
-import com.conght.facemakerapp.data.model.PartSelection
-import com.conght.facemakerapp.data.repository.LuckyRollRepository
+import com.fantasy.oc.maker.customize.core.common.NetworkMonitor
+import com.fantasy.oc.maker.customize.core.common.Resource
+import com.fantasy.oc.maker.customize.data.model.CharacterConfig
+import com.fantasy.oc.maker.customize.data.model.LuckyRollResult
+import com.fantasy.oc.maker.customize.data.model.PartSelection
+import com.fantasy.oc.maker.customize.data.repository.LuckyRollRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

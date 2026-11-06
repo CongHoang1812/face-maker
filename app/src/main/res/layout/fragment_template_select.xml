@@ -50,7 +50,7 @@
             tools:listitem="@layout/item_template" />
 
         <!-- Error -->
-        <com.conght.facemakerapp.core.widget.ErrorStateView
+        <com.fantasy.oc.maker.customize.core.widget.ErrorStateView
             android:id="@+id/error_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

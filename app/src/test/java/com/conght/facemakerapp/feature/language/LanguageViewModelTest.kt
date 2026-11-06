@@ -1,8 +1,8 @@
-package com.conght.facemakerapp.feature.language
+package com.fantasy.oc.maker.customize.feature.language
 
 import androidx.lifecycle.SavedStateHandle
-import com.conght.facemakerapp.core.common.AppLanguage
-import com.conght.facemakerapp.testutil.FakeSettingsRepository
+import com.fantasy.oc.maker.customize.core.common.AppLanguage
+import com.fantasy.oc.maker.customize.testutil.FakeSettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

@@ -1,7 +1,7 @@
-package com.conght.facemakerapp.feature.home
+package com.fantasy.oc.maker.customize.feature.home
 
-import com.conght.facemakerapp.core.common.NetworkMonitor
-import com.conght.facemakerapp.testutil.FakeSettingsRepository
+import com.fantasy.oc.maker.customize.core.common.NetworkMonitor
+import com.fantasy.oc.maker.customize.testutil.FakeSettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

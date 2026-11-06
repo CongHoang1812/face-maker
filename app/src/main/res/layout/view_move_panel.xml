@@ -6,7 +6,7 @@
     tools:parentTag="android.widget.LinearLayout"
     tools:orientation="vertical">
 
-    <com.conght.facemakerapp.core.widget.WoodButton
+    <com.fantasy.oc.maker.customize.core.widget.WoodButton
         android:id="@+id/btn_exit"
         style="@style/Widget.FaceMaker.WoodButton"
         android:layout_marginStart="@dimen/screen_padding"

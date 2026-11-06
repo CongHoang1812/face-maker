@@ -1,10 +1,10 @@
-package com.conght.facemakerapp.data.remote
+package com.fantasy.oc.maker.customize.data.remote
 
-import com.conght.facemakerapp.core.common.AppConfig
-import com.conght.facemakerapp.data.model.DecorType
-import com.conght.facemakerapp.data.remote.dto.DecorCategoryDto
-import com.conght.facemakerapp.data.remote.dto.DecorConfigDto
-import com.conght.facemakerapp.data.remote.dto.PartDto
+import com.fantasy.oc.maker.customize.core.common.AppConfig
+import com.fantasy.oc.maker.customize.data.model.DecorType
+import com.fantasy.oc.maker.customize.data.remote.dto.DecorCategoryDto
+import com.fantasy.oc.maker.customize.data.remote.dto.DecorConfigDto
+import com.fantasy.oc.maker.customize.data.remote.dto.PartDto
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

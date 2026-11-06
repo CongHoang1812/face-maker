@@ -5,7 +5,7 @@
 ## Cấu trúc package
 
 ```
-com.conght.facemakerapp
+com.fantasy.oc.maker.customize
 ├─ FaceMakerApp.kt, MainActivity.kt
 ├─ core/
 │  ├─ common/        Resource.kt, AppConfig.kt, DispatcherProvider.kt, Event helpers

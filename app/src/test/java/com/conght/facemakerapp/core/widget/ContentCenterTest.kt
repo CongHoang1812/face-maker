@@ -1,4 +1,4 @@
-package com.conght.facemakerapp.core.widget
+package com.fantasy.oc.maker.customize.core.widget
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

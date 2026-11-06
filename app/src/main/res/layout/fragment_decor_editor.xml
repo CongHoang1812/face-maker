@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Decor editor (Figma 3:773 / 3:843 / 3:913 / 3:993 / 3:1155). Cả màn trong 1 ShimmerFrameLayout:
      pack (API) là skeleton, ô None / Color / Image / font / màu là view thật. -->
-<com.conght.facemakerapp.core.widget.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.fantasy.oc.maker.customize.core.widget.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shimmer"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.conght.facemakerapp.feature.decor.editor.DecorCanvasView
+        <com.fantasy.oc.maker.customize.feature.decor.editor.DecorCanvasView
             android:id="@+id/canvas"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -220,4 +220,4 @@
                 tools:listitem="@layout/item_decor_cell" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.conght.facemakerapp.core.widget.ShimmerFrameLayout>
+</com.fantasy.oc.maker.customize.core.widget.ShimmerFrameLayout>

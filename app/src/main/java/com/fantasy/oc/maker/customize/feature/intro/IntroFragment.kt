@@ -1,0 +1,79 @@
+package com.fantasy.oc.maker.customize.feature.intro
+
+import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
+import androidx.core.view.children
+import androidx.core.view.updateLayoutParams
+import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.fantasy.oc.maker.customize.R
+import com.fantasy.oc.maker.customize.core.ui.base.BaseFragment
+import com.fantasy.oc.maker.customize.core.ui.setLightStatusBar
+import com.fantasy.oc.maker.customize.core.ui.setOnSingleClickListener
+import com.fantasy.oc.maker.customize.databinding.FragmentIntroBinding
+
+/**
+ * 3 trang intro, hiện mỗi lần mở app. [ARG_ONBOARDING_DONE] = false: lần đầu (→ permission), true: → home.
+ */
+class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::inflate) {
+
+    private val onboardingDone by lazy { arguments?.getBoolean(ARG_ONBOARDING_DONE, false) ?: false }
+
+    private val pageCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) = updateIndicator(position)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setLightStatusBar(true)
+
+        val adapter = IntroPageAdapter()
+        binding.pager.adapter = adapter
+        createIndicator(adapter.itemCount)
+        binding.pager.registerOnPageChangeCallback(pageCallback)
+
+        binding.tvNext.setOnSingleClickListener {
+            val current = binding.pager.currentItem
+            if (current < adapter.itemCount - 1) {
+                binding.pager.currentItem = current + 1
+            } else {
+                findNavController().navigate(
+                    if (onboardingDone) R.id.action_intro_to_home else R.id.action_intro_to_permission,
+                )
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        binding.pager.unregisterOnPageChangeCallback(pageCallback)
+        super.onDestroyView()
+    }
+
+    private fun createIndicator(count: Int) {
+        val size = resources.getDimensionPixelSize(R.dimen.indicator_dot)
+        val gap = resources.getDimensionPixelSize(R.dimen.indicator_gap)
+        repeat(count) { index ->
+            val dot = View(requireContext())
+            binding.indicator.addView(dot, LinearLayout.LayoutParams(size, size).apply {
+                if (index > 0) marginStart = gap
+            })
+        }
+        updateIndicator(binding.pager.currentItem)
+    }
+
+    /** Chấm đang chọn là thanh 16×8 màu cam, còn lại chấm trắng 8×8. */
+    private fun updateIndicator(position: Int) {
+        val dot = resources.getDimensionPixelSize(R.dimen.indicator_dot)
+        val active = resources.getDimensionPixelSize(R.dimen.indicator_active_w)
+        binding.indicator.children.forEachIndexed { index, view ->
+            val selected = index == position
+            view.setBackgroundResource(if (selected) R.drawable.bg_indicator_active else R.drawable.bg_indicator_dot)
+            view.updateLayoutParams { width = if (selected) active else dot }
+        }
+    }
+
+    companion object {
+        const val ARG_ONBOARDING_DONE = "onboardingDone"
+    }
+}
